@@ -3,5 +3,6 @@ node_modules/
 tmp/
 backend/myapp
 .DS_Store
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 .metals
