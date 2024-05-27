@@ -3,9 +3,10 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
+
+	"github.com/gin-gonic/gin"
 )
 
 func HelloWorld(ctx *gin.Context) {
