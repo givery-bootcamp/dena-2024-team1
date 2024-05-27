@@ -1,11 +1,12 @@
 import { AppRoute } from './AppRoute';
-
 import './App.scss';
+
+import { Header } from '../shared/components/Header';
 
 function App() {
   return (
     <div>
-      <header className="bg-primary">サンプルアプリケーション</header>
+      <Header />
       <main>
         <AppRoute />
       </main>
