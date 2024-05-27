@@ -4,9 +4,9 @@ import './App.scss';
 
 function App() {
   return (
-    <div className="app-root">
-      <header className="app-header">サンプルアプリケーション</header>
-      <main className="app-body container">
+    <div>
+      <header className="bg-blue-700">サンプルアプリケーション</header>
+      <main>
         <AppRoute />
       </main>
     </div>
