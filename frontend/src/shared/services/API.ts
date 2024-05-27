@@ -16,12 +16,14 @@ export const getPosts = createAsyncThunk<Post[]>('getPosts', async () => {
   const posts: Post[] = [{
     title: 'バナナはおやつに含まれますか？',
     userName: 'Tadashi',
-    updatedAt: '5/27 14:23'
+    updatedAt: '5/27 14:23',
+    id: '1',
   },
   {
     title: 'りんごはおやつに含まれますか？',
     userName: 'Tadashi',
-    updatedAt: '5/27 14:23'
+    updatedAt: '5/27 14:23',
+    id: '2',
   },
 ];
   return posts;
