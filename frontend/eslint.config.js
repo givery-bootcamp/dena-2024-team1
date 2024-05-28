@@ -20,6 +20,7 @@ export default [
       "semi": "error",
       "quotes": "error",
       "comma-dangle": ["error", "always-multiline"],
+      "object-curly-spacing": ["error", "always"],
       "eol-last": "error",
       "import/order": [
         "error",
