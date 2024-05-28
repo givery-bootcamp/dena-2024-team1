@@ -36,3 +36,17 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=training
+  prism:
+    build:
+      context: ./docker
+      dockerfile: openapi.Dockerfile
+    ports:
+      - "3030:3030"
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/openapi/openapi.yml
+    volumes:
+      - ./openapi/openapi.yml:/openapi/openapi.yml
+    ports:
+      - "3031:8080"
