@@ -5,6 +5,7 @@ import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 import { fixupConfigRules } from "@eslint/compat";
 import tailwind from "eslint-plugin-tailwindcss";
 import importPlugin from "eslint-plugin-import";
+import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 
 export default [
   { languageOptions: { globals: globals.browser } },
@@ -12,7 +13,12 @@ export default [
   ...tseslint.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),
   ...tailwind.configs["flat/recommended"],
-  { plugins: { import: importPlugin } },
+  {
+    plugins: {
+      import: importPlugin,
+      "no-relative-import-paths": noRelativeImportPaths,
+    },
+  },
   {
     rules: {
       "react/jsx-uses-react": "off",
@@ -29,6 +35,10 @@ export default [
           groups: ["builtin", "external", "internal", "sibling", "parent", "index", "object"],
           "newlines-between": "always",
         },
+      ],
+      "no-relative-import-paths/no-relative-import-paths": [
+        "error",
+        { "allowSameFolder": true, "rootDir": "src", "prefix": "~" },
       ],
     },
     settings: { react: { version: "detect" } },

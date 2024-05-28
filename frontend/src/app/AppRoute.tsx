@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
-import { PostListPage } from "../pages/PostListPage";
-import { PostDetailPage } from "../pages/PostDetailPage";
+import { PostListPage } from "~/pages/PostListPage";
+import { PostDetailPage } from "~/pages/PostDetailPage";
 
 export const AppRoute = () => {
   return (

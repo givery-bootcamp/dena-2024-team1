@@ -1,10 +1,10 @@
 import { useEffect,Fragment } from "react";
 
-import { useAppDispatch, useAppSelector } from "../shared/hooks";
-import { APIService } from "../shared/services";
-import { Container } from "../shared/components/Container";
-import { PostItem } from "../features/posts/PostItem";
-import { BorderLine } from "../shared/components/BorderLine";
+import { useAppDispatch, useAppSelector } from "~/shared/hooks";
+import { APIService } from "~/shared/services";
+import { Container } from "~/shared/components/Container";
+import { PostItem } from "~/features/posts/PostItem";
+import { BorderLine } from "~/shared/components/BorderLine";
 
 export function PostListPage() {
   const { posts } = useAppSelector((state) => state.posts);

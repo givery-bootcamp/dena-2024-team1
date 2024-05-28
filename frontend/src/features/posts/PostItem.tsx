@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { Post } from "../../shared/models";
+import { Post } from "~/shared/models";
 
 type PostItemProps = {post: Post};
 
