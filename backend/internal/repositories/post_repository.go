@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 	"myapp/internal/entities"
 
 	"gorm.io/gorm"
@@ -30,30 +29,42 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 
 func (r *PostRepository) GetAll() ([]entities.Post, error) {
 	var posts []Post
-	// ここってポインタじゃなくてもいいんだっけ？
-	result := r.Conn.Find(&posts)
-	fmt.Printf("%+v\n", result)
-	fmt.Printf("%+v\n", posts)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	postResult := r.Conn.Find(&posts)
+	if postResult.Error != nil {
+		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
-		return nil, result.Error
+		return nil, postResult.Error
 	}
-	return convertPostRepositoryModelToEntity(posts), nil
+	var users []User
+	userResult := r.Conn.Find(&users)
+	if userResult.Error != nil {
+		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, userResult.Error
+	}
+	return convertPostRepositoryModelToEntity(posts, users), nil
 }
 
-func convertPostRepositoryModelToEntity(ps []Post) []entities.Post {
+func convertPostRepositoryModelToEntity(ps []Post, us []User) []entities.Post {
 	var posts []entities.Post
 
 	for _, p := range ps {
-		posts = append(posts, entities.Post{
-			UserID:    p.UserID,
+		post := entities.Post{
+			ID:        int(p.ID),
 			Title:     p.Title,
 			Body:      p.Body,
 			CreatedAt: p.CreatedAt,
 			UpdatedAt: p.UpdatedAt,
-		})
+		}
+		for _, u := range us {
+			if p.UserID == int(u.ID) {
+				post.UserName = u.Name
+				break
+			}
+		}
+		posts = append(posts, post)
 	}
 	return posts
 }

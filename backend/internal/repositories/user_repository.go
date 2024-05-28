@@ -28,7 +28,7 @@ func NewUserRepository(conn *gorm.DB) *UserRepository {
 
 func (r *UserRepository) GetAll() ([]entities.User, error) {
 	var users []User
-	result := r.Conn.Find(users)
+	result := r.Conn.Find(&users)
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", users)
 	if result.Error != nil {

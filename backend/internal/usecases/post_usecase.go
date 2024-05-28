@@ -18,6 +18,5 @@ func NewPostUsecase(ur interfaces.UserRepository, pr interfaces.PostRepository) 
 }
 
 func (u *PostUsecase) GetPosts() ([]entities.Post, error) {
-	// TODO: ユーザー情報と投稿情報を結合する
 	return u.postRepository.GetAll()
 }
