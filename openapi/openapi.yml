@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Simple User API
+  description: A simple API to retrieve user information.
+  version: 1.0.0
+
+paths:
+  /hello:
+    get:
+      description: Returns a simple hello message.
+      responses:
+        "200":
+          description: Hello message returned successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello, world!
+  /posts:
+    get:
+      description: Retrieve all posts.
+      responses:
+        "200":
+          description: Posts retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    title:
+                      type: string
+                    body:
+                      type: string
+  /posts/{postId}:
+    get:
+      description: Retrieve post information by ID.
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Post information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  title:
+                    type: string
+                  body:
+                    type: string
+        "404":
+          description: Post not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
