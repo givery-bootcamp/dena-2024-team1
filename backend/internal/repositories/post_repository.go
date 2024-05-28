@@ -30,7 +30,8 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 
 func (r *PostRepository) GetAll() ([]entities.Post, error) {
 	var posts []Post
-	result := r.Conn.Find(posts)
+	// ここってポインタじゃなくてもいいんだっけ？
+	result := r.Conn.Find(&posts)
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", posts)
 	if result.Error != nil {
