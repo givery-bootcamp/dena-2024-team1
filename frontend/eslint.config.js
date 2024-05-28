@@ -3,7 +3,7 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 import { fixupConfigRules } from "@eslint/compat";
-import tailwind from "eslint-plugin-tailwindcss"
+import tailwind from "eslint-plugin-tailwindcss";
 import importPlugin from "eslint-plugin-import";
 
 export default [
@@ -14,8 +14,8 @@ export default [
   ...tailwind.configs["flat/recommended"],
   {
     plugins: {
-      import: importPlugin
-    }
+      import: importPlugin,
+    },
   },
   {
     rules: {
@@ -28,15 +28,15 @@ export default [
       "import/order": [
         "error",
         {
-          groups: ['builtin', 'external', 'internal', 'sibling', 'parent', 'index', 'object'],
-          'newlines-between': 'always',
-        }
-      ]
+          groups: ["builtin", "external", "internal", "sibling", "parent", "index", "object"],
+          "newlines-between": "always",
+        },
+      ],
     },
     settings: {
       react: {
-        version: 'detect',
+        version: "detect",
       },
     },
-  }
+  },
 ];
