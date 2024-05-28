@@ -16,7 +16,8 @@ export default [
     rules: {
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
-      "semi": "error"
+      "semi": "error",
+      "quotes": "error"
     },
     settings: {
       react: {

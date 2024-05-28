@@ -1,7 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
-import { HelloWorld } from '../features/helloworld';
-import { PostDetailPage } from '../pages/PostDetailPage';
+import { HelloWorld } from "../features/helloworld";
+import { PostDetailPage } from "../pages/PostDetailPage";
 
 export const AppRoute = () => {
   return (
