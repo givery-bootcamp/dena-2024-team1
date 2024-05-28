@@ -17,6 +17,7 @@ export default [
     rules: {
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
+      "react/jsx-indent" : ["error", 2],
       "semi": "error",
       "quotes": "error",
       "comma-dangle": ["error", "always-multiline"],
