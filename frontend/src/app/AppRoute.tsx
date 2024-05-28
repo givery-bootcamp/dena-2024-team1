@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 
-import { Posts } from "../pages/Posts";
+import { Posts } from "../pages/PostListPage";
 import { PostDetailPage } from "../pages/PostDetailPage";
 
 
