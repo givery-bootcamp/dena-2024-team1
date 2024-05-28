@@ -23,6 +23,7 @@ export default [
       "react/react-in-jsx-scope": "off",
       "semi": "error",
       "quotes": "error",
+      "comma-dangle": ["error", "always-multiline"],
       "import/order": [
         "error",
         {

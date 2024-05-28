@@ -29,6 +29,6 @@ const mockPost = {
   createdAt: "2024/05/27 09:00",
   updatedAt: "2024/05/27 15:30",
   user: {
-    username: "watapon"
-  }
+    username: "watapon",
+  },
 };
