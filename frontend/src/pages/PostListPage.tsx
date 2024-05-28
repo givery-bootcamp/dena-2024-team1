@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../shared/hooks";
 import { APIService } from "../shared/services";
 import { Container } from "../shared/components/Container";
+import { Post } from "../shared/models";
 
-export function Posts() {
+export function PostListPage() {
   const { posts } = useAppSelector((state) => state.posts);
   const dispatch = useAppDispatch();
 
@@ -17,7 +18,19 @@ export function Posts() {
   <Container className='mt-10'>
     {posts?.map((post,index)=>(
     <Fragment key={index}>
-    <Link to={`/posts/${post.id}`} className="flex items-center justify-between">
+      <PostItem post={post}/>
+    {index === posts.length - 1 ? null : <BorderLine/>}
+    </Fragment>
+    ))}
+  </Container>
+  );
+}
+
+type PostItemProps = {post: Post};
+
+function PostItem({ post }: PostItemProps) {
+  return(
+  <Link to={`/posts/${post.id}`} className="flex items-center justify-between">
       <div className="text-xl font-bold">
         {post.title}
       </div>
@@ -30,9 +43,13 @@ export function Posts() {
         </div>
       </div>
     </Link>
-    {index === posts.length - 1 ? null : <div className='flex items-center justify-center py-3'><hr className="w-full border-border" /></div>}
-    </Fragment>
-    ))}
-  </Container>
+  );
+}
+
+function BorderLine() {
+  return(
+  <div className='flex items-center justify-center py-3'>
+    <hr className="w-full border-border" />
+  </div>
   );
 }

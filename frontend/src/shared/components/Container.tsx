@@ -7,6 +7,6 @@ type Props = {
 }
 
 export function Container({ children, className }: Props) {
-  const containerClassName = "max-w-[1020px] mx-auto ";
+  const containerClassName = "max-w-[1020px] mx-auto";
   return <div className={classNames(containerClassName, className)}>{children}</div>;
 }
