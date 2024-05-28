@@ -44,10 +44,10 @@ func (r *PostRepository) GetAll() ([]entities.Post, error) {
 		}
 		return nil, userResult.Error
 	}
-	return convertPostRepositoryModelToEntity(posts, users), nil
+	return convertPostsRepositoryModelToEntities(posts, users), nil
 }
 
-func convertPostRepositoryModelToEntity(ps []Post, us []User) []entities.Post {
+func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entities.Post {
 	var posts []entities.Post
 
 	for _, p := range ps {
@@ -67,4 +67,36 @@ func convertPostRepositoryModelToEntity(ps []Post, us []User) []entities.Post {
 		posts = append(posts, post)
 	}
 	return posts
+}
+
+func (r *PostRepository) Get(id int) (*entities.Post, error) {
+	var post Post
+	postResult := r.Conn.Where("id = ?", id).First(&post)
+	if postResult.Error != nil {
+		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, postResult.Error
+	}
+	var user User
+	userResult := r.Conn.Where("id = ?", post.UserID).First(&user)
+	if userResult.Error != nil {
+		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, userResult.Error
+	}
+
+	return convertPostRepositoryModelToEntity(&post, &user), nil
+}
+
+func convertPostRepositoryModelToEntity(p *Post, u *User) *entities.Post {
+	return &entities.Post{
+		ID:        int(p.ID),
+		Title:     p.Title,
+		Body:      p.Body,
+		UserName:  u.Name,
+		CreatedAt: p.CreatedAt,
+		UpdatedAt: p.UpdatedAt,
+	}
 }
