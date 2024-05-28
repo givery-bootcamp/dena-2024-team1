@@ -20,3 +20,7 @@ func NewPostUsecase(ur interfaces.UserRepository, pr interfaces.PostRepository) 
 func (u *PostUsecase) GetPosts() ([]entities.Post, error) {
 	return u.postRepository.GetAll()
 }
+
+func (u *PostUsecase) GetPost() (*entities.Post, error) {
+	return u.postRepository.Get()
+}
