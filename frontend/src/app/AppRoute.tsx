@@ -1,7 +1,9 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
+
 
 import { Posts } from '../pages/Posts';
 import { PostDetailPage } from '../pages/PostDetailPage';
+
 
 export const AppRoute = () => {
   return (
