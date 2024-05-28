@@ -6,7 +6,7 @@ type PostItemProps = {post: Post};
 
 export function PostItem({ post }: PostItemProps) {
   return(
-  <Link to={`/posts/${post.id}`} className="flex items-center justify-between">
+    <Link to={`/posts/${post.id}`} className="flex items-center justify-between">
       <div className="text-xl font-bold">
         {post.title}
       </div>

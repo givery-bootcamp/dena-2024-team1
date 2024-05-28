@@ -15,13 +15,13 @@ export function PostListPage() {
   }, [dispatch]);
 
   return (
-  <Container className='mt-10'>
-    {posts?.map((post,index)=>(
-    <Fragment key={index}>
-      <PostItem post={post}/>
-    {index === posts.length - 1 ? null : <BorderLine/>}
-    </Fragment>
+    <Container className='mt-10'>
+      {posts?.map((post,index)=>(
+        <Fragment key={index}>
+          <PostItem post={post}/>
+          {index === posts.length - 1 ? null : <BorderLine/>}
+        </Fragment>
     ))}
-  </Container>
+    </Container>
   );
 }
