@@ -12,10 +12,10 @@ export default {
       primary: "#007295",
       gray: {
         100: "#535353",
-        200: "#818181"
+        200: "#818181",
       },
-      border: "#CACACA"
-    }
+      border: "#CACACA",
+    },
   },
   plugins: [],
-}
+};
