@@ -6,13 +6,11 @@ import (
 )
 
 type PostUsecase struct {
-	userRepository interfaces.UserRepository
 	postRepository interfaces.PostRepository
 }
 
-func NewPostUsecase(ur interfaces.UserRepository, pr interfaces.PostRepository) *PostUsecase {
+func NewPostUsecase(pr interfaces.PostRepository) *PostUsecase {
 	return &PostUsecase{
-		userRepository: ur,
 		postRepository: pr,
 	}
 }

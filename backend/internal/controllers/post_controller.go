@@ -11,8 +11,7 @@ import (
 func GetPosts(ctx *gin.Context) {
 
 	postRepository := repositories.NewPostRepository(DB(ctx))
-	userRepository := repositories.NewUserRepository(DB(ctx))
-	usecase := usecases.NewPostUsecase(userRepository, postRepository)
+	usecase := usecases.NewPostUsecase(postRepository)
 	result, err := usecase.GetPosts()
 	if err != nil {
 		handleError(ctx, 500, err)
