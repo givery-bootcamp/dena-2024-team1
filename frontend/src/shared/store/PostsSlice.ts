@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { Post } from '../models';
-import { APIService } from '../services';
+import { Post } from "../models";
+import { APIService } from "../services";
 
 export type PostsState = {
   posts?: Post[];
@@ -10,7 +10,7 @@ export type PostsState = {
 export const initialState: PostsState = {};
 
 export const postsSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
