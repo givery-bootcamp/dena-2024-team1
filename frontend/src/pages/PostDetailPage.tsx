@@ -3,9 +3,9 @@ import { Container } from "../shared/components/Container"
 export function PostDetailPage() {
   return (
     <Container>
-      <div className="flex flex-col gap-7 mt-10">
+      <div className="mt-10 flex flex-col gap-7">
         <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-xl">{mockPost.title}</h1>
+          <h1 className="text-xl font-bold">{mockPost.title}</h1>
           <div className="flex flex-col gap-0.5 text-sm text-gray-200">
             <p>作成日時: {mockPost.createdAt}</p>
             <p>更新日時: {mockPost.updatedAt}</p>
