@@ -5,5 +5,5 @@ type Props = {
 }
 
 export function Container({ children }: Props) {
-  return <p className="max-w-[1020px] mx-auto">{children}</p>
+  return <div className="max-w-[1020px] mx-auto">{children}</div>
 }
