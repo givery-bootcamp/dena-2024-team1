@@ -24,6 +24,7 @@ export default [
       "semi": "error",
       "quotes": "error",
       "comma-dangle": ["error", "always-multiline"],
+      "eol-last": "error",
       "import/order": [
         "error",
         {
