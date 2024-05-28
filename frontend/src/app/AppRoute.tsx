@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
-
-import { Posts } from '../features/posts';
+import { Posts } from '../pages/Posts';
 import { PostDetailPage } from '../pages/PostDetailPage';
 
 export const AppRoute = () => {

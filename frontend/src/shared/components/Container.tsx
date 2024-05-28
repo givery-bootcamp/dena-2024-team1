@@ -1,9 +1,11 @@
 import type { ReactNode } from "react"
 
 type Props = {
-  children: ReactNode
+  children: ReactNode,
+  className?: string
 }
 
-export function Container({ children }: Props) {
-  return <div className="max-w-[1020px] mx-auto">{children}</div>
+export function Container({ children, className }: Props) {
+  const containerClassName = "max-w-[1020px] mx-auto ";
+  return <div className={containerClassName + (className === undefined ? "" : className)}>{children}</div>
 }
