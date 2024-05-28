@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
+import classNames from "classnames";
 
 type Props = {
-  children: ReactNode
+  children: ReactNode,
+  className?: string
 }
 
-export function Container({ children }: Props) {
-  return <div className="mx-auto max-w-[1020px]">{children}</div>;
+export function Container({ children, className }: Props) {
+  const containerClassName = "max-w-[1020px] mx-auto";
+  return <div className={classNames(containerClassName, className)}>{children}</div>;
 }
