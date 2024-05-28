@@ -7,16 +7,12 @@ import tailwind from "eslint-plugin-tailwindcss";
 import importPlugin from "eslint-plugin-import";
 
 export default [
-  {languageOptions: { globals: globals.browser }},
+  { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),
   ...tailwind.configs["flat/recommended"],
-  {
-    plugins: {
-      import: importPlugin,
-    },
-  },
+  { plugins: { import: importPlugin } },
   {
     rules: {
       "react/jsx-uses-react": "off",
@@ -33,10 +29,6 @@ export default [
         },
       ],
     },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
+    settings: { react: { version: "detect" } },
   },
 ];
