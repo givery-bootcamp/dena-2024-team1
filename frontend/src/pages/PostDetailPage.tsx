@@ -1,4 +1,4 @@
-import { Container } from "../shared/components/Container"
+import { Container } from "../shared/components/Container";
 
 export function PostDetailPage() {
   return (
@@ -18,7 +18,7 @@ export function PostDetailPage() {
         </div>
       </div>
     </Container>
-  )
+  );
 }
 
 // APIから以下のレスポンスが返ってくる想定
@@ -31,4 +31,4 @@ const mockPost = {
   user: {
     username: "watapon"
   }
-}
+};

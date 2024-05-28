@@ -6,5 +6,5 @@ export function Header() {
       <p className="text-white">サンプルアプリケーション</p>
       <Link to="/">Top</Link>
     </header>
-  )
+  );
 }
