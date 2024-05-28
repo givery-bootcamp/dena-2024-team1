@@ -1,10 +1,10 @@
 import { useEffect,Fragment } from "react";
-import { Link } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../shared/hooks";
 import { APIService } from "../shared/services";
 import { Container } from "../shared/components/Container";
-import { Post } from "../shared/models";
+import { PostItem } from "../features/posts/PostItem";
+import { BorderLine } from "../shared/components/BorderLine";
 
 export function PostListPage() {
   const { posts } = useAppSelector((state) => state.posts);
@@ -23,33 +23,5 @@ export function PostListPage() {
     </Fragment>
     ))}
   </Container>
-  );
-}
-
-type PostItemProps = {post: Post};
-
-function PostItem({ post }: PostItemProps) {
-  return(
-  <Link to={`/posts/${post.id}`} className="flex items-center justify-between">
-      <div className="text-xl font-bold">
-        {post.title}
-      </div>
-      <div>
-        <div className='text-sm font-semibold text-gray-100'>
-          {post.userName}
-        </div>
-        <div className='text-sm text-gray-200'>
-          更新日時: {post.updatedAt}
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function BorderLine() {
-  return(
-  <div className='flex items-center justify-center py-3'>
-    <hr className="w-full border-border" />
-  </div>
   );
 }
