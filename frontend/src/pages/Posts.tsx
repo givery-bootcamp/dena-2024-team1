@@ -22,7 +22,7 @@ export function Posts() {
         {post.title}
       </div>
       <div>
-        <div className='font-semi-bold text-sm text-gray-100'>
+        <div className='text-sm font-semibold text-gray-100'>
           {post.userName}
         </div>
         <div className='text-sm text-gray-200'>
