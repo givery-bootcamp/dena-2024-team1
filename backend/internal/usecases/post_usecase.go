@@ -19,6 +19,6 @@ func (u *PostUsecase) GetPosts() ([]entities.Post, error) {
 	return u.postRepository.GetAll()
 }
 
-func (u *PostUsecase) GetPost() (*entities.Post, error) {
-	return u.postRepository.Get()
+func (u *PostUsecase) GetPost(id int) (*entities.Post, error) {
+	return u.postRepository.Get(id)
 }
