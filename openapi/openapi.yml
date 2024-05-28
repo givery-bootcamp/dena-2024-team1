@@ -16,9 +16,16 @@ paths:
               schema:
                 type: object
                 properties:
+                  lang:
+                    type: string
                   message:
                     type: string
-                    example: Hello, world!
+              examples:
+                default:
+                  value:
+                    lang: ja
+                    message: こんにちは 世界
+                
   /posts:
     get:
       description: Retrieve all posts.
@@ -39,6 +46,29 @@ paths:
                       type: string
                     body:
                       type: string
+                    userName:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+              examples:
+                default:
+                  value:
+                    - id: 1
+                      title: "Hello, World!"
+                      body: "This is my first post."
+                      userName: "John Doe"
+                      createdAt: "2021-01-01T00:00:00Z"
+                      updatedAt: "2021-01-01T00:00:00Z"
+                    - id: 2
+                      title: "Hello, World! (2)"
+                      body: "This is my second post."
+                      userName: "John Doe"
+                      createdAt: "2021-01-02T00:00:00Z"
+                      updatedAt: "2021-01-02T00:00:00Z"
   /posts/{postId}:
     get:
       description: Retrieve post information by ID.
@@ -50,6 +80,7 @@ paths:
           schema:
             type: integer
             format: int64
+            example: 1
       responses:
         "200":
           description: Post information retrieved successfully.
@@ -65,6 +96,23 @@ paths:
                     type: string
                   body:
                     type: string
+                  userName:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+              examples:
+                default:
+                  value:
+                    id: 1
+                    title: "Hello, World!"
+                    body: "This is my first post."
+                    userName: "John Doe"
+                    createdAt: "2021-01-01T00:00:00Z"
+                    updatedAt: "2021-01-01T00:00:00Z"
         "404":
           description: Post not found.
           content:
