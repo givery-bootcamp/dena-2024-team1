@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/entities"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -16,12 +15,9 @@ type UserRepository struct {
 // This struct is same as entity model
 // However define again for training
 type User struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
-	DeletedAt time.Time `json:"deleted_at"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	gorm.Model
 }
 
 func NewUserRepository(conn *gorm.DB) *UserRepository {
@@ -30,7 +26,7 @@ func NewUserRepository(conn *gorm.DB) *UserRepository {
 	}
 }
 
-func (r *UserRepository) GetAll() ([]entities.Usr, error) {
+func (r *UserRepository) GetAll() ([]entities.User, error) {
 	var users []User
 	result := r.Conn.Find(users)
 	fmt.Printf("%+v\n", result)
@@ -49,12 +45,10 @@ func convertUserRepositoryModelToEntity(ps []User) []entities.User {
 
 	for _, p := range ps {
 		users = append(users, entities.User{
-			ID:        p.ID,
 			Name:      p.Name,
 			Password:  p.Password,
 			CreatedAt: p.CreatedAt,
 			UpdatedAt: p.UpdatedAt,
-			DeletedAt: p.DeletedAt,
 		})
 	}
 	return users

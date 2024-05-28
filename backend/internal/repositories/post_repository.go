@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/entities"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -16,13 +15,11 @@ type PostRepository struct {
 // This struct is same as entity model
 // However define again for training
 type Post struct {
-	ID        int       `json:"id"`
-	UserID    int       `json:"user_id"`
-	Title     string    `json:"title"`
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
-	DeletedAt time.Time `json:"deleted_at"`
+	UserID int    `json:"user_id"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+
+	gorm.Model
 }
 
 func NewPostRepository(conn *gorm.DB) *PostRepository {
@@ -50,13 +47,11 @@ func convertPostRepositoryModelToEntity(ps []Post) []entities.Post {
 
 	for _, p := range ps {
 		posts = append(posts, entities.Post{
-			ID:        p.ID,
 			UserID:    p.UserID,
 			Title:     p.Title,
 			Body:      p.Body,
 			CreatedAt: p.CreatedAt,
 			UpdatedAt: p.UpdatedAt,
-			DeletedAt: p.DeletedAt,
 		})
 	}
 	return posts
