@@ -1,5 +1,5 @@
 // DIコンテナ。各層の依存関係を解決する。
-package registory
+package registry
 
 import (
 	"myapp/internal/controller/handler"

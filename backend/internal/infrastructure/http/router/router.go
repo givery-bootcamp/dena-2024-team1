@@ -3,7 +3,7 @@ package router
 import (
 	"myapp/internal/infrastructure/database"
 	"myapp/internal/infrastructure/http/middleware"
-	"myapp/internal/registory"
+	"myapp/internal/registry"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +21,7 @@ func NewRouter() *gin.Engine {
 }
 
 func setupEndpoints(router *gin.Engine) {
-	apiHandler := registory.NewAPIHandler()
+	apiHandler := registry.NewAPIHandler()
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "It works")
