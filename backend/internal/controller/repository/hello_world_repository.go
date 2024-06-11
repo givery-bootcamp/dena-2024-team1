@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"myapp/internal/entity"
 
+	repositoryIF "myapp/internal/usecase/repository"
+
 	"gorm.io/gorm"
 )
 
@@ -19,7 +21,7 @@ type HelloWorld struct {
 	Message string
 }
 
-func NewHelloWorldRepository(conn *gorm.DB) *HelloWorldRepository {
+func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
 	return &HelloWorldRepository{
 		Conn: conn,
 	}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/entity"
+	repositoryIF "myapp/internal/usecase/repository"
 
 	"gorm.io/gorm"
 )
@@ -20,7 +21,7 @@ type User struct {
 	gorm.Model
 }
 
-func NewUserRepository(conn *gorm.DB) *UserRepository {
+func NewUserRepository(conn *gorm.DB) repositoryIF.UserRepository {
 	return &UserRepository{
 		Conn: conn,
 	}

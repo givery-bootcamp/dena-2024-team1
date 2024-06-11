@@ -1,4 +1,4 @@
-package api
+package handler
 
 import (
 	"errors"
@@ -9,7 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HelloWorld(ctx *gin.Context) {
+type HelloWorldHandler struct {
+	h usecase.HelloWorldUsecase
+}
+
+func NewHelloWorldHandler(h usecase.HelloWorldUsecase) HelloWorldHandler {
+	return HelloWorldHandler{
+		h: h,
+	}
+}
+
+func (h *HelloWorldHandler) HelloWorld(ctx *gin.Context) {
 	lang := ctx.DefaultQuery("lang", "ja")
 	if err := validateHelloWorldParameters(lang); err != nil {
 		handleError(ctx, 400, err)

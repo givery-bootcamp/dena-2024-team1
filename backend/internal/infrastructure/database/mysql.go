@@ -9,11 +9,9 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 // Database Setup
 // !!! You have to call this function after config setup
-func SetupDB() {
+func SetupDB() *gorm.DB {
 	host := config.DBHostName
 	port := config.DBPort
 	dbname := config.DBName
@@ -23,5 +21,5 @@ func SetupDB() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	DB = db
+	return db
 }

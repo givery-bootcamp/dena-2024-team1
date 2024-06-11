@@ -1,14 +1,12 @@
 package middleware
 
 import (
-	"myapp/internal/infrastructure/database"
-
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func Transaction() gin.HandlerFunc {
+func Transaction(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := database.DB.Begin()
 		defer func() {
 			if 400 <= ctx.Writer.Status() {
 				db.Rollback()

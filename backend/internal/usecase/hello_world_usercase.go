@@ -9,8 +9,8 @@ type HelloWorldUsecase struct {
 	repository repository.HelloWorldRepository
 }
 
-func NewHelloWorldUsecase(r repository.HelloWorldRepository) *HelloWorldUsecase {
-	return &HelloWorldUsecase{
+func NewHelloWorldUsecase(r repository.HelloWorldRepository) HelloWorldUsecase {
+	return HelloWorldUsecase{
 		repository: r,
 	}
 }

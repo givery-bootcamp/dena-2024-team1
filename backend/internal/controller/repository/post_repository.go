@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"myapp/internal/entity"
+	repositoryIF "myapp/internal/usecase/repository"
 
 	"gorm.io/gorm"
 )
@@ -21,7 +22,7 @@ type Post struct {
 	gorm.Model
 }
 
-func NewPostRepository(conn *gorm.DB) *PostRepository {
+func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 	return &PostRepository{
 		Conn: conn,
 	}
