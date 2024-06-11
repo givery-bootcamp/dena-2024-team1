@@ -1,10 +1,10 @@
-package controllers
+package api
 
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/repositories"
-	"myapp/internal/usecases"
+	"myapp/internal/controller/repository"
+	"myapp/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,8 +15,8 @@ func HelloWorld(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
-	repository := repositories.NewHelloWorldRepository(DB(ctx))
-	usecase := usecases.NewHelloWorldUsecase(repository)
+	repository := repository.NewHelloWorldRepository(DB(ctx))
+	usecase := usecase.NewHelloWorldUsecase(repository)
 	result, err := usecase.Execute(lang)
 	if err != nil {
 		handleError(ctx, 500, err)

@@ -1,9 +1,9 @@
-package repositories
+package repository
 
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/entities"
+	"myapp/internal/entity"
 
 	"gorm.io/gorm"
 )
@@ -26,7 +26,7 @@ func NewUserRepository(conn *gorm.DB) *UserRepository {
 	}
 }
 
-func (r *UserRepository) GetAll() ([]entities.User, error) {
+func (r *UserRepository) GetAll() ([]entity.User, error) {
 	var users []User
 	result := r.Conn.Find(&users)
 	fmt.Printf("%+v\n", result)
@@ -40,11 +40,11 @@ func (r *UserRepository) GetAll() ([]entities.User, error) {
 	return convertUserRepositoryModelToEntity(users), nil
 }
 
-func convertUserRepositoryModelToEntity(ps []User) []entities.User {
-	var users []entities.User
+func convertUserRepositoryModelToEntity(ps []User) []entity.User {
+	var users []entity.User
 
 	for _, p := range ps {
-		users = append(users, entities.User{
+		users = append(users, entity.User{
 			Name:      p.Name,
 			Password:  p.Password,
 			CreatedAt: p.CreatedAt,

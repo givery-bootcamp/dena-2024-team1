@@ -1,24 +1,23 @@
-package repositories
+package repository_test
 
 import (
 	"fmt"
-	"myapp/internal/external"
-	"myapp/internal/interfaces"
-	"myapp/internal/repositories"
+	"myapp/internal/controller/repository"
+	"myapp/internal/infrastructure/database"
 	"testing"
 )
 
 func init() {
-	external.SetupDB()
+	database.SetupDB()
 }
 
-func setupHelloWorld() (interfaces.HelloWorldRepository, func()) {
-	db := external.DB.Begin()
-	repo := repositories.NewHelloWorldRepository(db)
+func setupHelloWorld() (repository.HelloWorldRepository, func()) {
+	db := database.DB.Begin()
+	repo := repository.NewHelloWorldRepository(db)
 	teardown := func() {
 		db.Rollback()
 	}
-	return repo, teardown
+	return *repo, teardown
 }
 
 func TestHelloWorld(t *testing.T) {

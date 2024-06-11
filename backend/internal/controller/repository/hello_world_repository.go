@@ -1,9 +1,9 @@
-package repositories
+package repository
 
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/entities"
+	"myapp/internal/entity"
 
 	"gorm.io/gorm"
 )
@@ -25,7 +25,7 @@ func NewHelloWorldRepository(conn *gorm.DB) *HelloWorldRepository {
 	}
 }
 
-func (r *HelloWorldRepository) Get(lang string) (*entities.HelloWorld, error) {
+func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
 	var obj HelloWorld
 	result := r.Conn.Where("lang = ?", lang).First(&obj)
 	fmt.Printf("%+v\n", result)
@@ -39,8 +39,8 @@ func (r *HelloWorldRepository) Get(lang string) (*entities.HelloWorld, error) {
 	return convertHelloWorldRepositoryModelToEntity(&obj), nil
 }
 
-func convertHelloWorldRepositoryModelToEntity(v *HelloWorld) *entities.HelloWorld {
-	return &entities.HelloWorld{
+func convertHelloWorldRepositoryModelToEntity(v *HelloWorld) *entity.HelloWorld {
+	return &entity.HelloWorld{
 		Lang:    v.Lang,
 		Message: v.Message,
 	}

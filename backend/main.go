@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"myapp/internal/config"
-	"myapp/internal/external"
+	"myapp/internal/infrastructure/database"
+	"myapp/internal/infrastructure/http"
 	"myapp/internal/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -11,12 +12,12 @@ import (
 
 func main() {
 	// Initialize database
-	external.SetupDB()
+	database.SetupDB()
 
 	// Setup webserver
 	app := gin.Default()
 	app.Use(middleware.Transaction())
 	app.Use(middleware.Cors())
-	middleware.SetupRoutes(app)
+	http.SetupRoutes(app)
 	app.Run(fmt.Sprintf("%s:%d", config.HostName, config.Port))
 }

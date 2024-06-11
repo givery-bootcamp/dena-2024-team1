@@ -1,9 +1,9 @@
-package controllers
+package api
 
 import (
 	"errors"
-	"myapp/internal/repositories"
-	"myapp/internal/usecases"
+	"myapp/internal/controller/repository"
+	"myapp/internal/usecase"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +11,8 @@ import (
 
 func GetPosts(ctx *gin.Context) {
 
-	postRepository := repositories.NewPostRepository(DB(ctx))
-	usecase := usecases.NewPostUsecase(postRepository)
+	postRepository := repository.NewPostRepository(DB(ctx))
+	usecase := usecase.NewPostUsecase(postRepository)
 	result, err := usecase.GetPosts()
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -29,8 +29,8 @@ func GetPost(ctx *gin.Context) {
 	if err != nil {
 		handleError(ctx, 400, err)
 	}
-	postRepository := repositories.NewPostRepository(DB(ctx))
-	usecase := usecases.NewPostUsecase(postRepository)
+	postRepository := repository.NewPostRepository(DB(ctx))
+	usecase := usecase.NewPostUsecase(postRepository)
 	result, err := usecase.GetPost(id)
 	if err != nil {
 		handleError(ctx, 500, err)

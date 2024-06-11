@@ -1,8 +1,8 @@
-package repositories
+package repository
 
 import (
 	"errors"
-	"myapp/internal/entities"
+	"myapp/internal/entity"
 
 	"gorm.io/gorm"
 )
@@ -27,7 +27,7 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 	}
 }
 
-func (r *PostRepository) GetAll() ([]entities.Post, error) {
+func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	var posts []Post
 	postResult := r.Conn.Find(&posts)
 	if postResult.Error != nil {
@@ -47,11 +47,11 @@ func (r *PostRepository) GetAll() ([]entities.Post, error) {
 	return convertPostsRepositoryModelToEntities(posts, users), nil
 }
 
-func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entities.Post {
-	var posts []entities.Post
+func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entity.Post {
+	var posts []entity.Post
 
 	for _, p := range ps {
-		post := entities.Post{
+		post := entity.Post{
 			ID:        int(p.ID),
 			Title:     p.Title,
 			Body:      p.Body,
@@ -69,7 +69,7 @@ func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entities.Post
 	return posts
 }
 
-func (r *PostRepository) Get(id int) (*entities.Post, error) {
+func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	var post Post
 	postResult := r.Conn.Where("id = ?", id).First(&post)
 	if postResult.Error != nil {
@@ -90,8 +90,8 @@ func (r *PostRepository) Get(id int) (*entities.Post, error) {
 	return convertPostRepositoryModelToEntity(&post, &user), nil
 }
 
-func convertPostRepositoryModelToEntity(p *Post, u *User) *entities.Post {
-	return &entities.Post{
+func convertPostRepositoryModelToEntity(p *Post, u *User) *entity.Post {
+	return &entity.Post{
 		ID:        int(p.ID),
 		Title:     p.Title,
 		Body:      p.Body,
