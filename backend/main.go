@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"myapp/internal/config"
 	"myapp/internal/infrastructure/database"
-	"myapp/internal/infrastructure/http/middleware"
 	"myapp/internal/infrastructure/http/router"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -15,9 +12,6 @@ func main() {
 	database.SetupDB()
 
 	// Setup webserver
-	app := gin.Default()
-	app.Use(middleware.Transaction())
-	app.Use(middleware.Cors())
-	router.SetupRoutes(app)
-	app.Run(fmt.Sprintf("%s:%d", config.HostName, config.Port))
+	router := router.NewRouter()
+	router.Run(fmt.Sprintf("%s:%d", config.HostName, config.Port))
 }
