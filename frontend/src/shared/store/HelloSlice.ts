@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { Hello } from '../models';
-import { APIService } from '../services';
+import { Hello } from "~/shared/models";
+import { APIService } from "~/shared/services";
 
 export type HelloState = {
   hello?: Hello;
@@ -10,7 +10,7 @@ export type HelloState = {
 export const initialState: HelloState = {};
 
 export const helloSlice = createSlice({
-  name: 'hello',
+  name: "hello",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

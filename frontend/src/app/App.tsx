@@ -1,12 +1,13 @@
-import { AppRoute } from './AppRoute';
+import { AppRoute } from "./AppRoute";
+import "./App.scss";
 
-import './App.scss';
+import { Header } from "~/shared/components/Header";
 
 function App() {
   return (
-    <div className="app-root">
-      <header className="app-header">サンプルアプリケーション</header>
-      <main className="app-body container">
+    <div>
+      <Header />
+      <main>
         <AppRoute />
       </main>
     </div>
