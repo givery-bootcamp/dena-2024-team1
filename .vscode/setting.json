@@ -1,0 +1,18 @@
+{
+	"go.useLanguageServer": true,
+	"go.lintTool": "golangci-lint",
+	"go.lintFlags": [
+		"--config=${workspaceFolder}/backend/.golangci.yaml",
+		"--fast"
+	],
+	"go.formatTool": "gofumpt",
+	"go.formatFlags": [
+		"-w"
+	],
+	"gopls": {
+		"formatting.gofumpt": true
+	},
+	"[go]": {
+		"editor.tabSize": 2
+	}
+}
