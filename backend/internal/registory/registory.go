@@ -1,3 +1,4 @@
+// DIコンテナ。各層の依存関係を解決する。
 package registory
 
 import (
