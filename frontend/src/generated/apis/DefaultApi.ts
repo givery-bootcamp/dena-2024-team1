@@ -15,22 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  HelloGet200Response,
-  PostsGet200ResponseInner,
-  PostsPostIdGet404Response,
+  GetHello200Response,
 } from '../models/index';
 import {
-    HelloGet200ResponseFromJSON,
-    HelloGet200ResponseToJSON,
-    PostsGet200ResponseInnerFromJSON,
-    PostsGet200ResponseInnerToJSON,
-    PostsPostIdGet404ResponseFromJSON,
-    PostsPostIdGet404ResponseToJSON,
+    GetHello200ResponseFromJSON,
+    GetHello200ResponseToJSON,
 } from '../models/index';
-
-export interface PostsPostIdGetRequest {
-    postId: number;
-}
 
 /**
  * 
@@ -40,7 +30,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Returns a simple hello message.
      */
-    async helloGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HelloGet200Response>> {
+    async getHelloRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetHello200Response>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -52,73 +42,14 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => HelloGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetHello200ResponseFromJSON(jsonValue));
     }
 
     /**
      * Returns a simple hello message.
      */
-    async helloGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelloGet200Response> {
-        const response = await this.helloGetRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve all posts.
-     */
-    async postsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PostsGet200ResponseInner>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/posts`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PostsGet200ResponseInnerFromJSON));
-    }
-
-    /**
-     * Retrieve all posts.
-     */
-    async postsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PostsGet200ResponseInner>> {
-        const response = await this.postsGetRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve post information by ID.
-     */
-    async postsPostIdGetRaw(requestParameters: PostsPostIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostsGet200ResponseInner>> {
-        if (requestParameters['postId'] == null) {
-            throw new runtime.RequiredError(
-                'postId',
-                'Required parameter "postId" was null or undefined when calling postsPostIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/posts/{postId}`.replace(`{${"postId"}}`, encodeURIComponent(String(requestParameters['postId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostsGet200ResponseInnerFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve post information by ID.
-     */
-    async postsPostIdGet(requestParameters: PostsPostIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostsGet200ResponseInner> {
-        const response = await this.postsPostIdGetRaw(requestParameters, initOverrides);
+    async getHello(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetHello200Response> {
+        const response = await this.getHelloRaw(initOverrides);
         return await response.value();
     }
 

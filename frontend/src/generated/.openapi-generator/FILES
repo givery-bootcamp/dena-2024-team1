@@ -1,8 +1,10 @@
 apis/DefaultApi.ts
+apis/PostApi.ts
 apis/index.ts
 index.ts
-models/HelloGet200Response.ts
-models/PostsGet200ResponseInner.ts
-models/PostsPostIdGet404Response.ts
+models/GetHello200Response.ts
+models/GetPostById404Response.ts
+models/Post.ts
+models/User.ts
 models/index.ts
 runtime.ts
