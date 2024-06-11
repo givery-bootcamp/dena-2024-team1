@@ -3,19 +3,18 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/controller/repository"
 	"myapp/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 type HelloWorldHandler struct {
-	h usecase.HelloWorldUsecase
+	hu usecase.HelloWorldUsecase
 }
 
-func NewHelloWorldHandler(h usecase.HelloWorldUsecase) HelloWorldHandler {
+func NewHelloWorldHandler(hu usecase.HelloWorldUsecase) HelloWorldHandler {
 	return HelloWorldHandler{
-		h: h,
+		hu: hu,
 	}
 }
 
@@ -25,9 +24,7 @@ func (h *HelloWorldHandler) HelloWorld(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
-	repository := repository.NewHelloWorldRepository(DB(ctx))
-	usecase := usecase.NewHelloWorldUsecase(repository)
-	result, err := usecase.Execute(lang)
+	result, err := h.hu.Execute(lang)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else if result != nil {
