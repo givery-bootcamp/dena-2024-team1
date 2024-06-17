@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 import { Post } from "~/shared/models";
 
@@ -25,5 +26,5 @@ export function PostItem({ post }: PostItemProps) {
 // バックエンドから受け取った時間をフォーマットする関数
 export function formatDateTime(dateTime: string): string {
   const date = new Date(dateTime);
-  return date.toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+  return dayjs(date).format("YYYY/MM/DD HH:mm");
 }
