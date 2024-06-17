@@ -54,3 +54,15 @@ func convertUserRepositoryModelToEntity(ps []User) []entity.User {
 	}
 	return users
 }
+
+func (r *UserRepository) CreateUser(username, password string) error {
+	user := User{
+		Name:     username,
+		Password: password,
+	}
+	result := r.Conn.Create(&user)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

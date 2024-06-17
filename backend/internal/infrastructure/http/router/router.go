@@ -29,4 +29,5 @@ func setupEndpoints(router *gin.Engine) {
 	router.GET("/hello", apiHandler.HelloWorldHandler.HelloWorld)
 	router.GET("/posts", apiHandler.PostHandler.GetPosts)
 	router.GET("/posts/:id", apiHandler.PostHandler.GetPost)
+	router.POST("/signup", apiHandler.UserHandler.Signup)
 }

@@ -6,4 +6,5 @@ import (
 
 type UserRepository interface {
 	GetAll() ([]entity.User, error)
+	CreateUser(username, password string) error
 }
