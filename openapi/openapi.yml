@@ -81,7 +81,7 @@ paths:
                   type: string
                 body:
                   type: string
-                userName:
+                user_name:
                   type: string
               required:
                 - title
@@ -90,7 +90,7 @@ paths:
               example:
                 title: "Hello, World!"
                 body: "This is my first post."
-                userName: "John Doe"
+                user_name: "John Doe"
       responses:
         "201":
           description: Post created successfully.
@@ -106,7 +106,7 @@ paths:
                     type: string
                   body:
                     type: string
-                  userName:
+                  user_name:
                     type: string
                   createdAt:
                     type: string
@@ -120,7 +120,7 @@ paths:
                     id: 1
                     title: "Hello, World!"
                     body: "This is my first post."
-                    userName: "John Doe"
+                    user_name: "John Doe"
                     createdAt: "2021-01-01T00:00:00Z"
                     updatedAt: "2021-01-01T00:00:00Z"
 
