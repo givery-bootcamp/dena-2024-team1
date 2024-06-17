@@ -43,3 +43,18 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 		handleError(ctx, 404, errors.New("not found"))
 	}
 }
+
+func (h *PostHandler) CreatePost(ctx *gin.Context) {
+	var post usecase.PostUsecase
+	if err := ctx.ShouldBindJSON(&post); err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+	createdPost, err := h.pu.CreatePost(post)
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	} else {
+		ctx.JSON(201, createdPost)
+	}
+}
