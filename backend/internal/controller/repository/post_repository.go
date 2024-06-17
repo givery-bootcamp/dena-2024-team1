@@ -28,6 +28,14 @@ func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 	}
 }
 
+func (r *PostRepository) CreatePost(post entity.Post) (entity.Post, error) {
+	postResult := r.Conn.Create(&post)
+	if postResult.Error != nil {
+		return entity.Post{}, postResult.Error
+	}
+	return post, nil
+}
+
 func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	var posts []Post
 	postResult := r.Conn.Find(&posts)
