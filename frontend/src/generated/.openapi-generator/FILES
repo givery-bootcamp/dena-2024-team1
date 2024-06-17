@@ -1,10 +1,8 @@
-apis/DefaultApi.ts
-apis/PostApi.ts
-apis/index.ts
+.gitignore
+.npmignore
+api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
 index.ts
-models/GetHello200Response.ts
-models/GetPostById404Response.ts
-models/Post.ts
-models/User.ts
-models/index.ts
-runtime.ts
