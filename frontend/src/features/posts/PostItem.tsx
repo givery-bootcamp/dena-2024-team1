@@ -15,7 +15,7 @@ export function PostItem({ post }: PostItemProps) {
           {post.userName}
         </div>
         <div className='text-sm text-gray-200'>
-          更新日時: {formatDateTime(post.updateAt)}
+          更新日時: {formatDateTime(post.updatedAt)}
         </div>
       </div>
     </Link>

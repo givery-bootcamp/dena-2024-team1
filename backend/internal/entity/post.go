@@ -8,5 +8,5 @@ type Post struct {
 	Body      string    `json:"body"`
 	UserName  string    `json:"user_name"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

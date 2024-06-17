@@ -3,7 +3,7 @@ export type Post= {
     body: string;
     userName: string;
     createdAt: string;
-    updateAt: string;
+    updatedAt: string;
     id: string;
 };
   
