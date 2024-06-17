@@ -102,68 +102,40 @@ components:
   schemas:
     Post:
       title: Post
-      x-stoplight:
-        id: hj9bme3vgahy1
       type: object
       properties:
         id:
           type: number
-          x-stoplight:
-            id: c9g5l8ge8l3ge
         title:
           type: string
-          x-stoplight:
-            id: vg92e13m8yxcc
         body:
           type: string
-          x-stoplight:
-            id: 05k7m4ngjsfno
         userName:
           type: string
-          x-stoplight:
-            id: 7rhepi8aiwyw6
         createdAt:
           type: string
-          x-stoplight:
-            id: m6p2rziqtbhqe
         updatedAt:
           type: string
-          x-stoplight:
-            id: 6v7jk8gkrrd4y
     User:
       title: User
-      x-stoplight:
-        id: drgvswrqymdqc
       type: object
       properties:
         id:
           type: integer
-          x-stoplight:
-            id: nu795mv9xfj6q
         name:
           type: string
-          x-stoplight:
-            id: 5y8q2ug02vgas
         password:
           type: string
-          x-stoplight:
-            id: 1nmbr7ntg0gby
         createdAt:
           type: string
-          x-stoplight:
-            id: wce1sclnefiey
           format: date-time
         updatedAt:
           type: string
-          x-stoplight:
-            id: wcwxnu83ad5f6
           format: date-time
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:
       title: GetAllPostsResponse
-      x-stoplight:
-        id: so8ngu35yoxlo
       type: array
       items:
         $ref: '#/components/schemas/Post'
