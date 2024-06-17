@@ -3,13 +3,12 @@ info:
   title: Simple User API
   description: A simple API to retrieve user information.
   version: 1.0.0
-
 paths:
   /hello:
     get:
       description: Returns a simple hello message.
       responses:
-        "200":
+        '200':
           description: Hello message returned successfully.
           content:
             application/json:
@@ -24,50 +23,37 @@ paths:
                 default:
                   value:
                     lang: ja
-                    message: こんにちは 世界         
+                    message: こんにちは 世界
+      operationId: getHello
   /posts:
     get:
       description: Retrieve all posts.
       responses:
-        "200":
+        '200':
           description: Posts retrieved successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      format: int64
-                    title:
-                      type: string
-                    body:
-                      type: string
-                    userName:
-                      type: string
-                    createdAt:
-                      type: string
-                      format: date-time
-                    updatedAt:
-                      type: string
-                      format: date-time
+                $ref: '#/components/schemas/GetAllPostsResponse'
               examples:
                 default:
                   value:
                     - id: 1
-                      title: "Hello, World!"
-                      body: "This is my first post."
-                      userName: "John Doe"
-                      createdAt: "2021-01-01T00:00:00Z"
-                      updatedAt: "2021-01-01T00:00:00Z"
+                      title: 'Hello, World!'
+                      body: This is my first post.
+                      userName: John Doe
+                      createdAt: '2021-01-01T00:00:00Z'
+                      updatedAt: '2021-01-01T00:00:00Z'
                     - id: 2
-                      title: "Hello, World! (2)"
-                      body: "This is my second post."
-                      userName: "John Doe"
-                      createdAt: "2021-01-02T00:00:00Z"
-                      updatedAt: "2021-01-02T00:00:00Z"
+                      title: 'Hello, World! (2)'
+                      body: This is my second post.
+                      userName: John Doe
+                      createdAt: '2021-01-02T00:00:00Z'
+                      updatedAt: '2021-01-02T00:00:00Z'
+      operationId: getAllPosts
+      tags:
+        - post
+      summary: ''
     post:
       description: Create a new post.
       requestBody:
@@ -123,8 +109,12 @@ paths:
                     user_name: "John Doe"
                     createdAt: "2021-01-01T00:00:00Z"
                     updatedAt: "2021-01-01T00:00:00Z"
+      operationId: postPost
+      tags:
+        - post
+      summary: ''
 
-  /posts/{postId}:
+  '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
       parameters:
@@ -137,38 +127,22 @@ paths:
             format: int64
             example: 1
       responses:
-        "200":
+        '200':
           description: Post information retrieved successfully.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    format: int64
-                  title:
-                    type: string
-                  body:
-                    type: string
-                  userName:
-                    type: string
-                  createdAt:
-                    type: string
-                    format: date-time
-                  updatedAt:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/Post'
               examples:
                 default:
                   value:
                     id: 1
-                    title: "Hello, World!"
-                    body: "This is my first post."
-                    userName: "John Doe"
-                    createdAt: "2021-01-01T00:00:00Z"
-                    updatedAt: "2021-01-01T00:00:00Z"
-        "404":
+                    title: 'Hello, World!'
+                    body: This is my first post.
+                    userName: John Doe
+                    createdAt: '2021-01-01T00:00:00Z'
+                    updatedAt: '2021-01-01T00:00:00Z'
+        '404':
           description: Post not found.
           content:
             application/json:
@@ -177,3 +151,55 @@ paths:
                 properties:
                   message:
                     type: string
+      operationId: getPostById
+      summary: ''
+      tags:
+        - post
+tags:
+  - name: post
+    description: Tag for post
+components:
+  schemas:
+    Post:
+      title: Post
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        userName:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        password:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    GetPostResponse:
+      $ref: '#/components/schemas/Post'
+    GetAllPostsResponse:
+      title: GetAllPostsResponse
+      type: array
+      items:
+        $ref: '#/components/schemas/Post'
+  responses: {}
+servers:
+  - url: 'http://localhost:9000'
+    description: local server

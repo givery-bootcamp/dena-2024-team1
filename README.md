@@ -105,6 +105,8 @@ backend/
 
 ### Frontend
 
+#### ディレクトリ構成
+
 ```
 frontend/
   index.html
@@ -128,4 +130,12 @@ frontend/
         共有Model
       store/
         Redux Store関連
+```
+
+#### openapi-generator-cliによるコード生成
+
+以下のコードを実行すると、openapi-generator-cliを使ってモデルやAPIインターフェースのコードを自動生成できます。
+
+```shell
+docker compose -f docker-compose.openapi.yml up
 ```
