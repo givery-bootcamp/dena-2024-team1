@@ -1,4 +1,4 @@
-package external
+package database
 
 import (
 	"fmt"
@@ -9,19 +9,19 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 // Database Setup
 // !!! You have to call this function after config setup
-func SetupDB() {
+func SetupDB() *gorm.DB {
 	host := config.DBHostName
 	port := config.DBPort
 	dbname := config.DBName
-	dsn := fmt.Sprintf("root@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", host, port, dbname)
+	user := config.DBUsername
+	password := config.DBPassword
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbname)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	DB = db
+	return db
 }

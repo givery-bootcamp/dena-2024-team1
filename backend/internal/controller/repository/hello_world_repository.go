@@ -1,9 +1,11 @@
-package repositories
+package repository
 
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/entities"
+	"myapp/internal/entity"
+
+	repositoryIF "myapp/internal/usecase/repository"
 
 	"gorm.io/gorm"
 )
@@ -19,13 +21,13 @@ type HelloWorld struct {
 	Message string
 }
 
-func NewHelloWorldRepository(conn *gorm.DB) *HelloWorldRepository {
+func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
 	return &HelloWorldRepository{
 		Conn: conn,
 	}
 }
 
-func (r *HelloWorldRepository) Get(lang string) (*entities.HelloWorld, error) {
+func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
 	var obj HelloWorld
 	result := r.Conn.Where("lang = ?", lang).First(&obj)
 	fmt.Printf("%+v\n", result)
@@ -39,8 +41,8 @@ func (r *HelloWorldRepository) Get(lang string) (*entities.HelloWorld, error) {
 	return convertHelloWorldRepositoryModelToEntity(&obj), nil
 }
 
-func convertHelloWorldRepositoryModelToEntity(v *HelloWorld) *entities.HelloWorld {
-	return &entities.HelloWorld{
+func convertHelloWorldRepositoryModelToEntity(v *HelloWorld) *entity.HelloWorld {
+	return &entity.HelloWorld{
 		Lang:    v.Lang,
 		Message: v.Message,
 	}

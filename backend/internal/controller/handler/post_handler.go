@@ -1,19 +1,25 @@
-package controllers
+package handler
 
 import (
 	"errors"
-	"myapp/internal/repositories"
-	"myapp/internal/usecases"
+	"myapp/internal/usecase"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetPosts(ctx *gin.Context) {
+type PostHandler struct {
+	pu usecase.PostUsecase
+}
 
-	postRepository := repositories.NewPostRepository(DB(ctx))
-	usecase := usecases.NewPostUsecase(postRepository)
-	result, err := usecase.GetPosts()
+func NewPostHandler(pu usecase.PostUsecase) PostHandler {
+	return PostHandler{
+		pu: pu,
+	}
+}
+
+func (h *PostHandler) GetPosts(ctx *gin.Context) {
+	result, err := h.pu.GetPosts()
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else if result != nil {
@@ -23,15 +29,12 @@ func GetPosts(ctx *gin.Context) {
 	}
 }
 
-func GetPost(ctx *gin.Context) {
-
+func (h *PostHandler) GetPost(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		handleError(ctx, 400, err)
 	}
-	postRepository := repositories.NewPostRepository(DB(ctx))
-	usecase := usecases.NewPostUsecase(postRepository)
-	result, err := usecase.GetPost(id)
+	result, err := h.pu.GetPost(id)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else if result != nil {
