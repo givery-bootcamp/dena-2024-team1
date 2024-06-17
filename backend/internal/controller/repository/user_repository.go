@@ -66,3 +66,20 @@ func (r *UserRepository) CreateUser(username, password string) error {
 	}
 	return nil
 }
+
+func (r *UserRepository) GetUserByUsername(username string) (entity.User, error) {
+	var user User
+	result := r.Conn.Where("name = ?", username).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return entity.User{}, nil
+		}
+		return entity.User{}, result.Error
+	}
+	return entity.User{
+		Name:      user.Name,
+		Password:  user.Password,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
+}

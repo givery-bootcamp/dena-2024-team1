@@ -36,3 +36,24 @@ func (h UserHandler) Signup(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"message": "success"})
 	}
 }
+
+type SigninRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+func (h UserHandler) Signin(ctx *gin.Context) {
+	var req SigninRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+
+	err := h.uu.Signin(req.Username, req.Password)
+
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(200, gin.H{"message": "success"})
+	}
+}

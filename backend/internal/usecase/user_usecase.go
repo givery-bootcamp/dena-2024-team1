@@ -43,3 +43,28 @@ func encryptPassword(password string) (string, error) {
 
 	return string(hash), nil
 }
+
+func (u UserUsecase) Signin(username, password string) error {
+	if username == "" {
+		return errors.New("username is empty")
+	}
+	if password == "" {
+		return errors.New("password is empty")
+	}
+
+	user, err := u.userRepository.GetUserByUsername(username)
+
+	if err != nil {
+		return err
+	}
+
+	if user.Name == "" {
+		return errors.New("user is not found")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return errors.New("password is incorrect")
+	}
+
+	return nil
+}
