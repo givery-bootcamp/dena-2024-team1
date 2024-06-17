@@ -5,7 +5,6 @@ import (
 	"myapp/internal/entity"
 	"myapp/internal/usecase"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,23 +46,24 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 }
 
 // ここに追加して良いのか？？？自信ねぇ
-type Post struct {
-	ID        int       `json:"id"`
-	Title     string    `json:"title"`
-	Body      string    `json:"body"`
-	UserName  string    `json:"user_name"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
+type PostRequest struct {
+	Title    string `json:"title"`
+	Body     string `json:"body"`
+	UserName string `json:"user_name"`
 }
 
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
-	var post usecase.PostUsecase
+	var post PostRequest
 	if err := ctx.ShouldBindJSON(&post); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
 
-	createdPost, err := h.pu.CreatePost(entity.Post{})
+	createdPost, err := h.pu.CreatePost(entity.Post{
+		Title:    post.Title,
+		Body:     post.Body,
+		UserName: post.UserName,
+	})
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
