@@ -22,3 +22,7 @@ func (u *PostUsecase) GetPosts() ([]entity.Post, error) {
 func (u *PostUsecase) GetPost(id int) (*entity.Post, error) {
 	return u.postRepository.Get(id)
 }
+
+func (u *PostUsecase) CreatePost(post entity.Post) (entity.Post, error) {
+	return u.postRepository.CreatePost(&post)
+}
