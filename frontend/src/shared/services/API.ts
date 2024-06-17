@@ -1,7 +1,6 @@
-import axios from "axios";
-import { mapKeys,camelCase,mapValues,isArray,isObject } from "lodash";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { client } from "~/shared/services/client";
 import { Hello, Post } from "~/shared/models";
 
 /**
@@ -13,52 +12,13 @@ import { Hello, Post } from "~/shared/models";
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
 
-const myAxios = axios.create({ baseURL: API_ENDPOINT_PATH });
-
-// eslint-disable-next-line
-const mapKeysDeep = (data: any, callback: any) => {
-  if (isArray(data)) {
-    return data.map(innerData => mapKeysDeep(innerData, callback));
-  } else if (isObject(data)) {
-    return mapValues(mapKeys(data, callback), val =>
-      mapKeysDeep(val, callback),
-    );
-  } else {
-    return data;
-  }
-};
-
-const mapKeysCamelCase = data =>
-  mapKeysDeep(data, (_, key: string) => camelCase(key));
-
-/*
-myAxios.interceptors.request.use(
-  request => {
-    return request;
-    return mapKeys(request.data, (_: string, key: string) => snakeCase(key));
-});
-*/
-
-myAxios.interceptors.response.use(
-  response => {
-    const { data } = response;
-    const convertedData = mapKeysCamelCase(data);
-    return { ...response, data: convertedData };
-  },
-  error => {
-    console.log(error);
-    return Promise.reject(error);
-  },
-);
-
 export const getHello = createAsyncThunk<Hello>("getHello", async () => {
   const response = await fetch(`${API_ENDPOINT_PATH}/hello`);
   return await response.json();
 });
 
 export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
-  const response = await myAxios.get("/posts");
-  //console.log(response.data);
+  const response = await client.get("/posts");
   return response.data;
   //return await response.json();
   /*
