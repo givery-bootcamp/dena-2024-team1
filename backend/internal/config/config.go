@@ -15,6 +15,10 @@ var DBName = "training"
 var DBUsername = "root"
 var DBPassword = ""
 
+var SessionSecret = "session"
+var SessionName = "session-name"
+var SessionKey = "username"
+
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
 		HostName = v
@@ -39,5 +43,14 @@ func init() {
 	}
 	if v := os.Getenv("DB_PASSWORD"); v != "" {
 		DBPassword = v
+	}
+	if v := os.Getenv("SESSION_SECRET"); v != "" {
+		SessionSecret = v
+	}
+	if v := os.Getenv("SESSION_NAME"); v != "" {
+		SessionName = v
+	}
+	if v := os.Getenv("SESSION_KEY"); v != "" {
+		SessionKey = v
 	}
 }

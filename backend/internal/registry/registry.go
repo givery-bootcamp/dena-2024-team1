@@ -5,6 +5,7 @@ import (
 	"myapp/internal/controller/handler"
 	repoImp "myapp/internal/controller/repository"
 	"myapp/internal/infrastructure/database"
+	sessionstore "myapp/internal/infrastructure/session_store"
 	"myapp/internal/usecase"
 	repoIf "myapp/internal/usecase/repository"
 )
@@ -60,10 +61,11 @@ type apiRepository struct {
 
 func newAPIRepository() *apiRepository {
 	db := database.SetupDB()
+	sessionStore := sessionstore.GetStore()
 
 	hr := repoImp.NewHelloWorldRepository(db)
 	pr := repoImp.NewPostRepository(db)
-	ur := repoImp.NewUserRepository(db)
+	ur := repoImp.NewUserRepository(db, sessionStore)
 
 	return &apiRepository{
 		hr: hr,

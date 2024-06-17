@@ -49,7 +49,7 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 		return
 	}
 
-	err := h.uu.Signin(req.Username, req.Password)
+	err := h.uu.Signin(req.Username, req.Password, ctx.Request, ctx.Writer)
 
 	if err != nil {
 		handleError(ctx, 500, err)

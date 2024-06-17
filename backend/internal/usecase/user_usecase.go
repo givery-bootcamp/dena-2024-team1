@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"myapp/internal/usecase/repository"
+	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -55,7 +56,7 @@ func encryptPassword(password string) (string, error) {
 	return string(hash), nil
 }
 
-func (u UserUsecase) Signin(username, password string) error {
+func (u UserUsecase) Signin(username, password string, r *http.Request, w http.ResponseWriter) error {
 	if username == "" {
 		return errors.New("username is empty")
 	}
@@ -75,6 +76,13 @@ func (u UserUsecase) Signin(username, password string) error {
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return errors.New("password is incorrect")
+	}
+
+	// セッションにユーザーネームを保存
+	err = u.userRepository.SaveSession(r, w, username)
+
+	if err != nil {
+		return err
 	}
 
 	return nil

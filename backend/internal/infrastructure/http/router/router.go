@@ -3,6 +3,7 @@ package router
 import (
 	"myapp/internal/infrastructure/database"
 	"myapp/internal/infrastructure/http/middleware"
+	sessionstore "myapp/internal/infrastructure/session_store"
 	"myapp/internal/registry"
 
 	"github.com/gin-gonic/gin"
@@ -22,11 +23,13 @@ func NewRouter() *gin.Engine {
 
 func setupEndpoints(router *gin.Engine) {
 	apiHandler := registry.NewAPIHandler()
+	sessionStore := sessionstore.GetStore()
+	authMiddleware := middleware.Auth(sessionStore)
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "It works")
 	})
-	router.GET("/hello", apiHandler.HelloWorldHandler.HelloWorld)
+	router.GET("/hello", authMiddleware, apiHandler.HelloWorldHandler.HelloWorld)
 	router.GET("/posts", apiHandler.PostHandler.GetPosts)
 	router.GET("/posts/:id", apiHandler.PostHandler.GetPost)
 	router.POST("/signup", apiHandler.UserHandler.Signup)

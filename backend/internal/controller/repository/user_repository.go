@@ -3,14 +3,18 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"myapp/internal/config"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
+	"net/http"
 
+	"github.com/gorilla/sessions"
 	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	Conn *gorm.DB
+	Conn         *gorm.DB
+	SessionStore *sessions.CookieStore
 }
 
 // This struct is same as entity model
@@ -21,9 +25,10 @@ type User struct {
 	gorm.Model
 }
 
-func NewUserRepository(conn *gorm.DB) repositoryIF.UserRepository {
+func NewUserRepository(conn *gorm.DB, sessionStore *sessions.CookieStore) repositoryIF.UserRepository {
 	return &UserRepository{
-		Conn: conn,
+		Conn:         conn,
+		SessionStore: sessionStore,
 	}
 }
 
@@ -82,4 +87,17 @@ func (r *UserRepository) GetUserByUsername(username string) (entity.User, error)
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil
+}
+
+func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, username string) error {
+	session, err := r.SessionStore.Get(req, config.SessionName)
+	if err != nil {
+		return err
+	}
+	session.Values[config.SessionKey] = username
+	err = session.Save(req, w)
+	if err != nil {
+		return err
+	}
+	return nil
 }
