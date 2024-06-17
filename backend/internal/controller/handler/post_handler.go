@@ -2,8 +2,10 @@ package handler
 
 import (
 	"errors"
+	"myapp/internal/entity"
 	"myapp/internal/usecase"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,13 +46,24 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 	}
 }
 
+// ここに追加して良いのか？？？自信ねぇ
+type Post struct {
+	ID        int       `json:"id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	UserName  string    `json:"user_name"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"update_at"`
+}
+
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
 	var post usecase.PostUsecase
 	if err := ctx.ShouldBindJSON(&post); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
-	createdPost, err := h.pu.CreatePost(post)
+
+	createdPost, err := h.pu.CreatePost(entity.Post{})
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
