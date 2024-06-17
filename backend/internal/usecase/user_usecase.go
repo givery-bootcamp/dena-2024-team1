@@ -25,8 +25,19 @@ func (u UserUsecase) Signup(username, password string) error {
 		return errors.New("password is empty")
 	}
 
+	// ユーザー名が既に存在するかチェック
+	user, err := u.userRepository.GetUserByUsername(username)
+
+	if err != nil {
+		return err
+	}
+
+	if user.Name != "" {
+		return errors.New("username is already taken")
+	}
+
 	// パスワードを暗号化
-	password, err := encryptPassword(password)
+	password, err = encryptPassword(password)
 
 	if err != nil {
 		return err
