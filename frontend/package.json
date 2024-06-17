@@ -8,8 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint .",
     "format": "eslint . --fix",
-    "preview": "vite preview",
-    "generate": "docker-compose -f ../docker-compose.openapi.yml up"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
