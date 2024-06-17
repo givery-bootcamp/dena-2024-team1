@@ -1,32 +1,36 @@
-/* eslint-disable */
-import axios from "axios";
-import { mapKeys,camelCase,mapValues,isArray,isObject } from "lodash";
+import axios, { AxiosResponse , AxiosInstance } from "axios";
+import { mapKeys, camelCase, mapValues, isArray, isObject } from "lodash";
 
-const API_ENDPOINT_PATH = import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
-export const client = axios.create({ baseURL: API_ENDPOINT_PATH });
-const mapKeysDeep = (data: any, callback: any) => {
-    if (isArray(data)) {
-      return data.map(innerData => mapKeysDeep(innerData, callback));
-    } else if (isObject(data)) {
-      return mapValues(mapKeys(data, callback), val =>
-        mapKeysDeep(val, callback),
-      );
-    } else {
-      return data;
-    }
-  };
-  
-  const mapKeysCamelCase = data =>
-    mapKeysDeep(data, (_, key: string) => camelCase(key));
-  
+type ApiResponse<T> = {
+  data: T
+} & AxiosResponse
+
+const API_ENDPOINT_PATH: string = import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
+export const client: AxiosInstance = axios.create({ baseURL: API_ENDPOINT_PATH });
+
+const mapKeysDeep = <T>(data: T, callback: (value: unknown, key: string) => string): T => {
+  if (isArray(data)) {
+    return data.map(innerData => mapKeysDeep(innerData, callback)) as T;
+  } else if (isObject(data)) {
+    return mapValues(mapKeys(data, callback), val =>
+      mapKeysDeep(val, callback),
+    ) as T;
+  } else {
+    return data;
+  }
+};
+
+const mapKeysCamelCase = <T>(data: T): T =>
+  mapKeysDeep(data, (_: unknown, key: string) => camelCase(key));
+
 client.interceptors.response.use(
-    response => {
-      const { data } = response;
-      const convertedData = mapKeysCamelCase(data);
-      return { ...response, data: convertedData };
-    },
-    error => {
-      console.log(error);
-      return Promise.reject(error);
-    },
+  (response: AxiosResponse<unknown, unknown>) => {
+    const { data } = response;
+    const convertedData = mapKeysCamelCase(data);
+    return { ...response, data: convertedData } as ApiResponse<unknown>;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  },
 );
