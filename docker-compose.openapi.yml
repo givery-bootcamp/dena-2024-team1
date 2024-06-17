@@ -1,5 +1,5 @@
 services:
-  openapi-generator:
+  openapi-generator-fe:
     image: openapitools/openapi-generator-cli
     volumes:
       - ./:/local
