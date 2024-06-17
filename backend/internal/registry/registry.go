@@ -12,6 +12,7 @@ import (
 type APIHandler struct {
 	HelloWorldHandler handler.HelloWorldHandler
 	PostHandler       handler.PostHandler
+	UserHandler       handler.UserHandler
 }
 
 func NewAPIHandler() *APIHandler {
@@ -24,25 +25,30 @@ func NewAPIHandler() *APIHandler {
 func newAPIHandler(u apiUsecase) *APIHandler {
 	hh := handler.NewHelloWorldHandler(u.hu)
 	ph := handler.NewPostHandler(u.ph)
+	uh := handler.NewUserHandler(u.uh)
 
 	return &APIHandler{
 		HelloWorldHandler: hh,
 		PostHandler:       ph,
+		UserHandler:       uh,
 	}
 }
 
 type apiUsecase struct {
 	hu usecase.HelloWorldUsecase
 	ph usecase.PostUsecase
+	uh usecase.UserUsecase
 }
 
 func newAPIUsecase(r apiRepository) *apiUsecase {
 	hu := usecase.NewHelloWorldUsecase(r.hr)
 	ph := usecase.NewPostUsecase(r.pr)
+	uh := usecase.NewUserUsecase(r.ur)
 
 	return &apiUsecase{
 		hu: hu,
 		ph: ph,
+		uh: uh,
 	}
 }
 
