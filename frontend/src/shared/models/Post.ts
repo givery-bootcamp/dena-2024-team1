@@ -1,7 +1,9 @@
 export type Post= {
     title: string;
+    body: string;
     userName: string;
-    updatedAt: string;
+    createdAt: string;
+    updateAt: string;
     id: string;
 };
   

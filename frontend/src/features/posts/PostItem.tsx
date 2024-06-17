@@ -15,9 +15,15 @@ export function PostItem({ post }: PostItemProps) {
           {post.userName}
         </div>
         <div className='text-sm text-gray-200'>
-          更新日時: {post.updatedAt}
+          更新日時: {formatDateTime(post.updateAt)}
         </div>
       </div>
     </Link>
   );
+}
+
+// バックエンドから受け取った時間をフォーマットする関数
+export function formatDateTime(dateTime: string): string {
+  const date = new Date(dateTime);
+  return date.toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
