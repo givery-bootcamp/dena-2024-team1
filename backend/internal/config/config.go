@@ -15,6 +15,8 @@ var DBName = "training"
 var DBUsername = "root"
 var DBPassword = ""
 
+// セッションストアのシークレットキー
+// 本番環境では、crypto/rand or securecookie.GenerateRandomKey(32)を実行して、その結果を環境変数に設定する
 var SessionSecret = "session"
 var SessionName = "session-name"
 var SessionKey = "username"
