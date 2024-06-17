@@ -1,23 +1,30 @@
-package controllers
+package handler
 
 import (
 	"errors"
 	"fmt"
-	"myapp/internal/repositories"
-	"myapp/internal/usecases"
+	"myapp/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
-func HelloWorld(ctx *gin.Context) {
+type HelloWorldHandler struct {
+	hu usecase.HelloWorldUsecase
+}
+
+func NewHelloWorldHandler(hu usecase.HelloWorldUsecase) HelloWorldHandler {
+	return HelloWorldHandler{
+		hu: hu,
+	}
+}
+
+func (h *HelloWorldHandler) HelloWorld(ctx *gin.Context) {
 	lang := ctx.DefaultQuery("lang", "ja")
 	if err := validateHelloWorldParameters(lang); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
-	repository := repositories.NewHelloWorldRepository(DB(ctx))
-	usecase := usecases.NewHelloWorldUsecase(repository)
-	result, err := usecase.Execute(lang)
+	result, err := h.hu.Execute(lang)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else if result != nil {
