@@ -9,5 +9,5 @@ type Post struct {
 	UserID    int       `json:"user_id"`
 	UserName  string    `json:"user_name"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
