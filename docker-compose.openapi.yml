@@ -9,5 +9,5 @@ services:
       context: .
       dockerfile: ./docker/backend-oas-gen.Dockerfile
     volumes:
-      - ./backend/internal/infrastructure/http/model:/go/src/model
+      - ./backend/internal/openapi:/go/src/openapi
     command: "oapi-codegen --config=config.yaml ../openapi.yml"
