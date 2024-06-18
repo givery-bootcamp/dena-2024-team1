@@ -13,6 +13,8 @@ export const getHello = createAsyncThunk<Hello>("getHello", async () => {
 
 export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
   const postApi = new PostApi();
-  const response = await postApi.getAllPosts();
+  const response = await postApi.getAllPosts({
+    withCredentials: true,
+  });
   return response.data;
 });

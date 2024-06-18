@@ -50,14 +50,14 @@ type User struct {
 
 // SignInJSONBody defines parameters for SignIn.
 type SignInJSONBody struct {
-	Name     *string `json:"name,omitempty"`
 	Password *string `json:"password,omitempty"`
+	Username *string `json:"username,omitempty"`
 }
 
 // SignUpJSONBody defines parameters for SignUp.
 type SignUpJSONBody struct {
-	Name     *string `json:"name,omitempty"`
 	Password *string `json:"password,omitempty"`
+	Username *string `json:"username,omitempty"`
 }
 
 // PostPostJSONRequestBody defines body for PostPost for application/json ContentType.
