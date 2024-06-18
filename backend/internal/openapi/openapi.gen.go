@@ -7,6 +7,23 @@ import (
 	"time"
 )
 
+// CreatePostRequest defines model for CreatePostRequest.
+type CreatePostRequest struct {
+	Body   string `json:"body"`
+	Title  string `json:"title"`
+	UserId int    `json:"user_id"`
+}
+
+// CreatePostResponse defines model for CreatePostResponse.
+type CreatePostResponse struct {
+	Body      *string    `json:"body,omitempty"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	Id        *int64     `json:"id,omitempty"`
+	Title     *string    `json:"title,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	UserId    *int       `json:"user_id,omitempty"`
+}
+
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 
@@ -31,3 +48,6 @@ type User struct {
 	Password  *string    `json:"password,omitempty"`
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
+
+// PostPostJSONRequestBody defines body for PostPost for application/json ContentType.
+type PostPostJSONRequestBody = CreatePostRequest
