@@ -22,8 +22,8 @@ export function PostDetailPage() {
         <div className="flex flex-col gap-2">
           <h1 className="text-xl font-bold">{post.title}</h1>
           <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-            <p>作成日時: { formatDateTime(post.createdAt) }</p>
-            <p>更新日時: { formatDateTime(post.updatedAt)}</p>
+            <p>作成日時: {formatDateTime(post.createdAt)}</p>
+            <p>更新日時: {formatDateTime(post.updatedAt)}</p>
           </div>
         </div>
         <hr className="border-border" />
