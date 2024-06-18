@@ -125,3 +125,31 @@ func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, u
 	}
 	return nil
 }
+
+func (r *UserRepository) GetSessionUser(req *http.Request) (entity.User, error) {
+	session, err := r.SessionStore.Get(req, config.SessionName)
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	// セッションからユーザー情報を取得
+	sessionUserJson, ok := session.Values[config.SessionKey].(string)
+	if !ok {
+		return entity.User{}, errors.New("session is empty")
+	}
+
+	// セッションから取得したユーザー情報を構造体に変換
+	var sessionUser SesssionUser
+	err = json.Unmarshal([]byte(sessionUserJson), &sessionUser)
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	// ユーザー情報を取得
+	user, err := r.GetUserByUsername(sessionUser.Name)
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
+}

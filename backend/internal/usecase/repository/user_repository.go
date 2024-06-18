@@ -10,4 +10,5 @@ type UserRepository interface {
 	CreateUser(username, password string) error
 	GetUserByUsername(username string) (entity.User, error)
 	SaveSession(r *http.Request, w http.ResponseWriter, user entity.User) error
+	GetSessionUser(r *http.Request) (entity.User, error)
 }

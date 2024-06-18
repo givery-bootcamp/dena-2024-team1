@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
 	"net/http"
 
@@ -86,4 +87,18 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 	}
 
 	return nil
+}
+
+func (u UserUsecase) GetSessionUser(r *http.Request) (*entity.User, error) {
+	user, err := u.userRepository.GetSessionUser(r)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if user.Name == "" {
+		return nil, errors.New("user is not found")
+	}
+
+	return &user, nil
 }

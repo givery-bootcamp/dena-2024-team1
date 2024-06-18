@@ -57,3 +57,13 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"message": "success"})
 	}
 }
+
+func (h UserHandler) GetSessionUser(ctx *gin.Context) {
+	user, err := h.uu.GetSessionUser(ctx.Request)
+
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(200, gin.H{"user": user})
+	}
+}
