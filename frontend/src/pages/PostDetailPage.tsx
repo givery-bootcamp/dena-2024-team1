@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-
-import { Button } from "~/shared/components/Button";
+import { PostActionButtons } from "~/features/posts/PostActionButtons";
+import { PostContent } from "~/features/posts/PostContent";
+import { PostHeading } from "~/features/posts/PostHeading";
 import { Container } from "~/shared/components/Container";
 
 export function PostDetailPage() {
@@ -8,25 +8,15 @@ export function PostDetailPage() {
     <Container>
       <div className="flex flex-col gap-6">
         <div className="mt-10 flex flex-col gap-7">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-bold">{mockPost.title}</h1>
-            <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-              <p>作成日時: {mockPost.createdAt}</p>
-              <p>更新日時: {mockPost.updatedAt}</p>
-            </div>
-          </div>
+          <PostHeading
+            title={mockPost.title}
+            createdAt={mockPost.createdAt}
+            updatedAt={mockPost.updatedAt}
+          />
           <hr className="border-border" />
-          <div className="flex flex-col gap-3 text-lg">
-            <p className="whitespace-pre-line leading-8">{mockPost.body}</p>
-            <p className="text-right">{mockPost.user.username}</p>
-          </div>
+          <PostContent body={mockPost.body} username={mockPost.user.username} />
         </div>
-        <div className="flex gap-2">
-          <Link to={`/posts/${mockPost.id}/edit`}>
-            <Button>編集</Button>
-          </Link>
-          <Button variant="alert">削除</Button>
-        </div>
+        <PostActionButtons postId={mockPost.id} />
       </div>
     </Container>
   );
