@@ -1,20 +1,27 @@
+import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
 
 export function PostDetailPage() {
   return (
     <Container>
-      <div className="mt-10 flex flex-col gap-7">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-bold">{mockPost.title}</h1>
-          <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-            <p>作成日時: {mockPost.createdAt}</p>
-            <p>更新日時: {mockPost.updatedAt}</p>
+      <div>
+        <div className="mt-10 flex flex-col gap-7">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-bold">{mockPost.title}</h1>
+            <div className="flex flex-col gap-0.5 text-sm text-gray-200">
+              <p>作成日時: {mockPost.createdAt}</p>
+              <p>更新日時: {mockPost.updatedAt}</p>
+            </div>
+          </div>
+          <hr className="border-border" />
+          <div className="flex flex-col gap-3 text-lg">
+            <p className="whitespace-pre-line leading-8">{mockPost.body}</p>
+            <p className="text-right">{mockPost.user.username}</p>
           </div>
         </div>
-        <hr className="border-border" />
-        <div className="flex flex-col gap-3 text-lg">
-          <p className="whitespace-pre-line leading-8">{mockPost.body}</p>
-          <p className="text-right">{mockPost.user.username}</p>
+        <div>
+          <Button>編集</Button>
+          <Button variant="alert">削除</Button>
         </div>
       </div>
     </Container>
