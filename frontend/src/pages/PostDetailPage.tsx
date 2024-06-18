@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "~/shared/hooks";
-import { APIService } from "~/shared/services";
+import { PostActionButtons } from "~/features/posts/PostActionButtons";
+import { PostContent } from "~/features/posts/PostContent";
+import { PostHeading } from "~/features/posts/PostHeading";
 import { Container } from "~/shared/components/Container";
+import { useAppSelector, useAppDispatch } from "~/shared/hooks";
+import { APIService } from "~/shared/services";
 import { formatDateTime } from "~/shared/utils";
 
 export function PostDetailPage() {
@@ -18,19 +21,17 @@ export function PostDetailPage() {
   if (!post) return <p>Loading...</p>;
   return (
     <Container>
-      <div className="mt-10 flex flex-col gap-7">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-bold">{post.title}</h1>
-          <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-            <p>作成日時: {formatDateTime(post.createdAt)}</p>
-            <p>更新日時: {formatDateTime(post.updatedAt)}</p>
-          </div>
+      <div className="flex flex-col gap-6">
+        <div className="mt-10 flex flex-col gap-7">
+          <PostHeading
+            title={post.title}
+            createdAt={formatDateTime(post.createdAt)}
+            updatedAt={formatDateTime(post.updatedAt)}
+          />
+          <hr className="border-border" />
+          <PostContent body={post.body} username={post.userName} />
         </div>
-        <hr className="border-border" />
-        <div className="flex flex-col gap-3 text-lg">
-          <p className="whitespace-pre-line leading-8">{post.body}</p>
-          <p className="text-right">{post.userName}</p>
-        </div>
+        <PostActionButtons postId={post.id} />
       </div>
     </Container>
   );
