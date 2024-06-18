@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
@@ -8,9 +9,9 @@ import { formatDateTime } from "~/shared/utils";
 export function PostDetailPage() {
   const { post } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
-
+  const { postId } = useParams<{postId: string}>();
   useEffect(() => {
-    dispatch(APIService.getPost(1));
+    dispatch(APIService.getPost(Number(postId)));
   }, [dispatch]);
   return (
     <Container>
