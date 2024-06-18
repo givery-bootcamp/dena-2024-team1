@@ -52,6 +52,7 @@ func convertUserRepositoryModelToEntity(ps []User) []entity.User {
 
 	for _, p := range ps {
 		users = append(users, entity.User{
+			ID:        int(p.ID),
 			Name:      p.Name,
 			CreatedAt: p.CreatedAt,
 			UpdatedAt: p.UpdatedAt,
@@ -82,6 +83,7 @@ func (r *UserRepository) GetUserByUsername(username string) (entity.User, error)
 		return entity.User{}, result.Error
 	}
 	return entity.User{
+		ID:        int(user.ID),
 		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
@@ -157,6 +159,8 @@ func (r *UserRepository) GetSessionUser(req *http.Request) (entity.User, error) 
 
 	// ユーザー情報を取得
 	user, err := r.GetUserByUsername(sessionUser.Name)
+	fmt.Printf("get session user: %+v\n", user)
+
 	if err != nil {
 		return entity.User{}, err
 	}
