@@ -8,4 +8,5 @@ type PostRepository interface {
 	GetAll() ([]entity.Post, error)
 	Get(int) (*entity.Post, error)
 	CreatePost(*entity.Post) (entity.Post, error)
+	UpdatePost(*entity.Post) (entity.Post, error)
 }
