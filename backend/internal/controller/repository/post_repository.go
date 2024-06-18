@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
@@ -45,8 +44,6 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 	if postResult.Error != nil {
 		return entity.Post{}, postResult.Error
 	}
-	createdPost := r.Conn.Last(&doPost)
-	fmt.Println(createdPost)
 
 	resultPost := entity.Post{
 		ID:        int(doPost.ID),
@@ -56,9 +53,6 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 		CreatedAt: doPost.CreatedAt,
 		UpdatedAt: doPost.UpdatedAt,
 	}
-
-	fmt.Println(resultPost)
-
 	return resultPost, nil
 }
 
