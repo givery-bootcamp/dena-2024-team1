@@ -24,12 +24,12 @@ func (h *PostHandler) GetPosts(ctx *gin.Context) {
 	var response openapi.GetAllPostsResponse
 	for _, p := range ps {
 		response = append(response, openapi.Post{
-			Body:      &p.Body,
-			CreatedAt: &p.CreatedAt,
-			Id:        &p.ID,
-			Title:     &p.Title,
-			UpdatedAt: &p.UpdatedAt,
-			UserName:  &p.UserName,
+			Body:      p.Body,
+			CreatedAt: p.CreatedAt,
+			Id:        p.ID,
+			Title:     p.Title,
+			UpdatedAt: p.UpdatedAt,
+			UserName:  p.UserName,
 		})
 	}
 
@@ -55,12 +55,12 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 
 	if p != nil {
 		response := openapi.GetPostResponse{
-			Body:      &p.Body,
-			CreatedAt: &p.CreatedAt,
-			Id:        &p.ID,
-			Title:     &p.Title,
-			UpdatedAt: &p.UpdatedAt,
-			UserName:  &p.UserName,
+			Body:      p.Body,
+			CreatedAt: p.CreatedAt,
+			Id:        p.ID,
+			Title:     p.Title,
+			UpdatedAt: p.UpdatedAt,
+			UserName:  p.UserName,
 		}
 		ctx.JSON(200, response)
 	} else {
