@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
@@ -12,16 +13,6 @@ type PostRepository struct {
 	Conn *gorm.DB
 }
 
-// This struct is same as entity model
-// However define again for training
-type Post struct {
-	UserID int    `json:"user_id"`
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-
-	gorm.Model
-}
-
 func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 	return &PostRepository{
 		Conn: conn,
@@ -29,7 +20,7 @@ func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 }
 
 func (r *PostRepository) GetAll() ([]entity.Post, error) {
-	var posts []Post
+	var posts []model.Post
 	postResult := r.Conn.Find(&posts)
 	if postResult.Error != nil {
 		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
@@ -37,7 +28,7 @@ func (r *PostRepository) GetAll() ([]entity.Post, error) {
 		}
 		return nil, postResult.Error
 	}
-	var users []User
+	var users []model.User
 	userResult := r.Conn.Find(&users)
 	if userResult.Error != nil {
 		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
@@ -48,7 +39,7 @@ func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	return convertPostsRepositoryModelToEntities(posts, users), nil
 }
 
-func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entity.Post {
+func convertPostsRepositoryModelToEntities(ps []model.Post, us []model.User) []entity.Post {
 	var posts []entity.Post
 
 	for _, p := range ps {
@@ -71,7 +62,7 @@ func convertPostsRepositoryModelToEntities(ps []Post, us []User) []entity.Post {
 }
 
 func (r *PostRepository) Get(id int) (*entity.Post, error) {
-	var post Post
+	var post model.Post
 	postResult := r.Conn.Where("id = ?", id).First(&post)
 	if postResult.Error != nil {
 		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
@@ -79,7 +70,7 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 		}
 		return nil, postResult.Error
 	}
-	var user User
+	var user model.User
 	userResult := r.Conn.Where("id = ?", post.UserID).First(&user)
 	if userResult.Error != nil {
 		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
@@ -91,7 +82,7 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	return convertPostRepositoryModelToEntity(&post, &user), nil
 }
 
-func convertPostRepositoryModelToEntity(p *Post, u *User) *entity.Post {
+func convertPostRepositoryModelToEntity(p *model.Post, u *model.User) *entity.Post {
 	return &entity.Post{
 		ID:        int(p.ID),
 		Title:     p.Title,
