@@ -69,29 +69,30 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 	}
 }
 
-// ここに追加して良いのか？？？自信ねぇ
-type PostRequest struct {
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-	UserID int    `json:"user_id"`
-}
-
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
-	var post PostRequest
-	if err := ctx.ShouldBindJSON(&post); err != nil {
+	var request openapi.CreatePostRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
 
 	createdPost, err := h.pu.CreatePost(entity.Post{
-		Title:  post.Title,
-		Body:   post.Body,
-		UserID: post.UserID,
+		Title:  request.Title,
+		Body:   request.Body,
+		UserID: request.UserId,
 	})
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
-	} else {
-		ctx.JSON(201, createdPost)
 	}
+	id := int64(createdPost.ID)
+	response := openapi.CreatePostResponse{
+		Body:      &createdPost.Body,
+		CreatedAt: &createdPost.CreatedAt,
+		Id:        &id,
+		Title:     &createdPost.Title,
+		UpdatedAt: &createdPost.UpdatedAt,
+		UserId:    &createdPost.UserID,
+	}
+	ctx.JSON(201, response)
 }
