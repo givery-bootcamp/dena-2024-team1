@@ -30,4 +30,5 @@ func setupEndpoints(router *gin.Engine) {
 	router.GET("/posts", apiHandler.PostHandler.GetPosts)
 	router.GET("/posts/:id", apiHandler.PostHandler.GetPost)
 	router.POST("/posts", apiHandler.PostHandler.CreatePost)
+	router.DELETE("/posts/:id", apiHandler.PostHandler.DeletePost)
 }
