@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import dayjs from "dayjs";
 
+import { formatDateTime } from "~/shared/utils";
 import { Post } from "~/shared/models";
 
 type PostItemProps = {post: Post};
@@ -21,10 +21,4 @@ export function PostItem({ post }: PostItemProps) {
       </div>
     </Link>
   );
-}
-
-// バックエンドから受け取った時間をフォーマットする関数
-export function formatDateTime(dateTime: string): string {
-  const date = new Date(dateTime);
-  return dayjs(date).format("YYYY/MM/DD HH:mm");
 }
