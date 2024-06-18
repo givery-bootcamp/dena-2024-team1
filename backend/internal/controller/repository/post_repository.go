@@ -119,6 +119,24 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	return convertPostRepositoryModelToEntity(&post, &user), nil
 }
 
+func (r *PostRepository) Delete(id int) error {
+	var post Post
+	postResult := r.Conn.Where("id = ?", id).First(&post)
+	if postResult.Error != nil {
+		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return postResult.Error
+	}
+
+	postUpdateResult := r.Conn.Model(&post).Update("deleted_at", gorm.Expr("NOW()"))
+	if postUpdateResult.Error != nil {
+		return postResult.Error
+	}
+
+	return nil
+}
+
 func convertPostRepositoryModelToEntity(p *Post, u *User) *entity.Post {
 	return &entity.Post{
 		ID:        int(p.ID),
