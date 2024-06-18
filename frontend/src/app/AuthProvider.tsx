@@ -67,5 +67,5 @@ export const AuthProvider = () => {
         <AppRouteNoAuth />
       </main>
     </>
-  )
+  );
 };
