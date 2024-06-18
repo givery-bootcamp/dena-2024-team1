@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { client } from "~/shared/services/client";
-import { Hello, Post } from "~/shared/models";
-
+import { Post, PostApi } from "~/generated";
+import { Hello } from "~/shared/models";
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
@@ -13,6 +12,7 @@ export const getHello = createAsyncThunk<Hello>("getHello", async () => {
 });
 
 export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
-  const response = await client.get("/posts");
+  const postApi = new PostApi();
+  const response = await postApi.getAllPosts();
   return response.data;
 });
