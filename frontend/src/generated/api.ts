@@ -165,6 +165,12 @@ export interface Post {
      * @memberof Post
      */
     'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    'deletedAt'?: string;
 }
 /**
  * 

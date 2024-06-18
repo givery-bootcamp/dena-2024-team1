@@ -32,12 +32,13 @@ type GetPostResponse = Post
 
 // Post defines model for Post.
 type Post struct {
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"createdAt"`
-	Id        int       `json:"id"`
-	Title     string    `json:"title"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserName  string    `json:"userName"`
+	Body      string     `json:"body"`
+	CreatedAt time.Time  `json:"createdAt"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	Id        int        `json:"id"`
+	Title     string     `json:"title"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	UserName  string     `json:"userName"`
 }
 
 // User defines model for User.
