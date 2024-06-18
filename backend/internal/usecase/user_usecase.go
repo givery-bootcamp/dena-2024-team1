@@ -65,18 +65,24 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 		return errors.New("password is empty")
 	}
 
-	user, err := u.userRepository.GetUserByUsername(username)
+	password, err := u.userRepository.GetUserPassword(username)
 
 	if err != nil {
 		return err
 	}
 
-	if user.Name == "" {
+	if password == "" {
 		return errors.New("user is not found")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(password), []byte(password)); err != nil {
 		return errors.New("password is incorrect")
+	}
+
+	user, err := u.userRepository.GetUserByUsername(username)
+
+	if err != nil {
+		return err
 	}
 
 	// セッションにユーザーを保存
@@ -101,4 +107,8 @@ func (u UserUsecase) GetSessionUser(r *http.Request) (*entity.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (u UserUsecase) Signout(r *http.Request, w http.ResponseWriter) error {
+	return u.userRepository.DeleteSessionUser(r, w)
 }

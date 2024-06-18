@@ -53,7 +53,6 @@ func convertUserRepositoryModelToEntity(ps []User) []entity.User {
 	for _, p := range ps {
 		users = append(users, entity.User{
 			Name:      p.Name,
-			Password:  p.Password,
 			CreatedAt: p.CreatedAt,
 			UpdatedAt: p.UpdatedAt,
 		})
@@ -84,10 +83,21 @@ func (r *UserRepository) GetUserByUsername(username string) (entity.User, error)
 	}
 	return entity.User{
 		Name:      user.Name,
-		Password:  user.Password,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil
+}
+
+func (r *UserRepository) GetUserPassword(username string) (string, error) {
+	var user User
+	result := r.Conn.Where("name = ?", username).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return "", nil
+		}
+		return "", result.Error
+	}
+	return user.Password, nil
 }
 
 // Sessionに保存するユーザー情報の構造体
@@ -152,4 +162,19 @@ func (r *UserRepository) GetSessionUser(req *http.Request) (entity.User, error) 
 	}
 
 	return user, nil
+}
+
+func (r *UserRepository) DeleteSessionUser(req *http.Request, w http.ResponseWriter) error {
+	session, err := r.SessionStore.Get(req, config.SessionName)
+	if err != nil {
+		return err
+	}
+
+	// セッションを削除
+	session.Options.MaxAge = -1
+	err = session.Save(req, w)
+	if err != nil {
+		return err
+	}
+	return nil
 }

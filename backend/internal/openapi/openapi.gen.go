@@ -45,9 +45,26 @@ type User struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	Id        *int       `json:"id,omitempty"`
 	Name      *string    `json:"name,omitempty"`
-	Password  *string    `json:"password,omitempty"`
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+}
+
+// SignInJSONBody defines parameters for SignIn.
+type SignInJSONBody struct {
+	Name     *string `json:"name,omitempty"`
+	Password *string `json:"password,omitempty"`
+}
+
+// SignUpJSONBody defines parameters for SignUp.
+type SignUpJSONBody struct {
+	Name     *string `json:"name,omitempty"`
+	Password *string `json:"password,omitempty"`
 }
 
 // PostPostJSONRequestBody defines body for PostPost for application/json ContentType.
 type PostPostJSONRequestBody = CreatePostRequest
+
+// SignInJSONRequestBody defines body for SignIn for application/json ContentType.
+type SignInJSONRequestBody SignInJSONBody
+
+// SignUpJSONRequestBody defines body for SignUp for application/json ContentType.
+type SignUpJSONRequestBody SignUpJSONBody
