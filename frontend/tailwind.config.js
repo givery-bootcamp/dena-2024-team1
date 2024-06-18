@@ -15,6 +15,7 @@ export default {
         200: "#818181",
       },
       border: "#CACACA",
+      alert: "#DD5757",
     },
   },
   plugins: [],
