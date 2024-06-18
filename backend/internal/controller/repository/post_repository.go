@@ -21,7 +21,7 @@ func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 
 func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 	// Convert entity.Post to repository.Post
-	doPost := Post{
+	doPost := model.Post{
 		UserID: post.UserID,
 		Title:  post.Title,
 		Body:   post.Body,
