@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Post } from "~/generated/models/Post";
+import { Post } from "~/generated";
 import { APIService } from "~/shared/services";
 
 export type PostsState = {
