@@ -29,12 +29,16 @@ func setupEndpoints(router *gin.Engine) {
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "It works")
 	})
+
+	// 認証が不要なエンドポイント
+	router.POST("/signup", apiHandler.UserHandler.Signup)
+	router.POST("/signin", apiHandler.UserHandler.Signin)
+
+	// 認証が必要なエンドポイント
 	router.GET("/hello", authMiddleware, apiHandler.HelloWorldHandler.HelloWorld)
 	router.GET("/posts", authMiddleware, apiHandler.PostHandler.GetPosts)
 	router.GET("/posts/:id", authMiddleware, apiHandler.PostHandler.GetPost)
-	router.POST("/signup", apiHandler.UserHandler.Signup)
-	router.POST("/signin", apiHandler.UserHandler.Signin)
 	router.POST("/signout", authMiddleware, apiHandler.UserHandler.Signout)
 	router.GET("/session_user", authMiddleware, apiHandler.UserHandler.GetSessionUser)
-	router.POST("/posts", apiHandler.PostHandler.CreatePost)
+	router.POST("/posts", authMiddleware, apiHandler.PostHandler.CreatePost)
 }
