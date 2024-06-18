@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"myapp/internal/config"
@@ -89,12 +90,35 @@ func (r *UserRepository) GetUserByUsername(username string) (entity.User, error)
 	}, nil
 }
 
-func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, username string) error {
+// Sessionに保存するユーザー情報の構造体
+type SesssionUser struct {
+	ID   int
+	Name string
+}
+
+func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, user entity.User) error {
 	session, err := r.SessionStore.Get(req, config.SessionName)
 	if err != nil {
 		return err
 	}
-	session.Values[config.SessionKey] = username
+
+	// セッションに保存するユーザー情報
+	sessionUser := SesssionUser{
+		ID:   user.ID,
+		Name: user.Name,
+	}
+
+	// セッションに保存するユーザー情報をJSONに変換
+	sessionUserJson, err := json.Marshal(sessionUser)
+
+	if err != nil {
+		return err
+	}
+
+	// セッションに保存
+	session.Values[config.SessionKey] = string(sessionUserJson)
+	fmt.Printf("save session: %+v\n", session.Values[config.SessionKey])
+
 	err = session.Save(req, w)
 	if err != nil {
 		return err

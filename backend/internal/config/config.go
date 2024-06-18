@@ -19,7 +19,7 @@ var DBPassword = ""
 // 本番環境では、crypto/rand or securecookie.GenerateRandomKey(32)を実行して、その結果を環境変数に設定する
 var SessionSecret = "session"
 var SessionName = "session-name"
-var SessionKey = "username"
+var SessionKey = "user"
 
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {

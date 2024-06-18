@@ -78,8 +78,8 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 		return errors.New("password is incorrect")
 	}
 
-	// セッションにユーザーネームを保存
-	err = u.userRepository.SaveSession(r, w, username)
+	// セッションにユーザーを保存
+	err = u.userRepository.SaveSession(r, w, user)
 
 	if err != nil {
 		return err
