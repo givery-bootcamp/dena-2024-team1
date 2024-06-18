@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "~/shared/components/Button";
 
 type Props = {
-  postId: string;
+  postId: number;
 }
 
 export const PostActionButtons: FC<Props> = ({ postId }) => {
