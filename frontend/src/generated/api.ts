@@ -26,6 +26,74 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CreatePostRequest
+ */
+export interface CreatePostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostRequest
+     */
+    'body': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePostRequest
+     */
+    'user_id': number;
+}
+/**
+ * 
+ * @export
+ * @interface CreatePostResponse
+ */
+export interface CreatePostResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePostResponse
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostResponse
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostResponse
+     */
+    'body'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePostResponse
+     */
+    'user_id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostResponse
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostResponse
+     */
+    'updatedAt'?: string;
+}
+/**
+ * 
+ * @export
  * @interface GetHello200Response
  */
 export interface GetHello200Response {
@@ -303,6 +371,42 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Create a new post.
+         * @summary 
+         * @param {CreatePostRequest} createPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postPost: async (createPostRequest: CreatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPostRequest' is not null or undefined
+            assertParamExists('postPost', 'createPostRequest', createPostRequest)
+            const localVarPath = `/posts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -338,6 +442,19 @@ export const PostApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['PostApi.getPostById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Create a new post.
+         * @summary 
+         * @param {CreatePostRequest} createPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postPost(createPostRequest: CreatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreatePostResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPost(createPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostApi.postPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -366,6 +483,16 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
          */
         getPostById(postId: number, options?: any): AxiosPromise<Post> {
             return localVarFp.getPostById(postId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a new post.
+         * @summary 
+         * @param {CreatePostRequest} createPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postPost(createPostRequest: CreatePostRequest, options?: any): AxiosPromise<CreatePostResponse> {
+            return localVarFp.postPost(createPostRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -398,6 +525,18 @@ export class PostApi extends BaseAPI {
      */
     public getPostById(postId: number, options?: RawAxiosRequestConfig) {
         return PostApiFp(this.configuration).getPostById(postId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a new post.
+     * @summary 
+     * @param {CreatePostRequest} createPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostApi
+     */
+    public postPost(createPostRequest: CreatePostRequest, options?: RawAxiosRequestConfig) {
+        return PostApiFp(this.configuration).postPost(createPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
