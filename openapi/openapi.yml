@@ -283,6 +283,13 @@ components:
         updatedAt:
           type: string
           format: date-time
+      required:
+        - id
+        - title
+        - body
+        - user_id
+        - createdAt
+        - updatedAt
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:
