@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
 
@@ -20,7 +22,9 @@ export function PostDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button>編集</Button>
+          <Link to={`/posts/${mockPost.id}/edit`}>
+            <Button>編集</Button>
+          </Link>
           <Button variant="alert">削除</Button>
         </div>
       </div>
