@@ -4,7 +4,7 @@ import { Container } from "~/shared/components/Container";
 export function PostDetailPage() {
   return (
     <Container>
-      <div>
+      <div className="flex flex-col gap-6">
         <div className="mt-10 flex flex-col gap-7">
           <div className="flex flex-col gap-2">
             <h1 className="text-xl font-bold">{mockPost.title}</h1>
@@ -19,7 +19,7 @@ export function PostDetailPage() {
             <p className="text-right">{mockPost.user.username}</p>
           </div>
         </div>
-        <div>
+        <div className="flex gap-2">
           <Button>編集</Button>
           <Button variant="alert">削除</Button>
         </div>
