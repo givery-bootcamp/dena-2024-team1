@@ -56,25 +56,25 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 	return resultPost, nil
 }
 
-func (r *PostRepository) UpdatePost(post *entity.Post) (entity.Post, error) {
+func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.Post, error) {
 	var existngPost Post
 
 	// postIDが存在するかを確認するためのクエリを作っている
-	q := r.Conn.Where("id = ?", post.ID)
+	q := r.Conn.Where("id = ?", id)
 	// クエリの内容を下にして、特定のIDの投稿を探している
 	err := q.Find(&existngPost).Error
 
 	if err != nil {
-		return entity.Post{}, err
+		return nil, err
 	}
 
 	// 既存の投稿に対して、引数のtitleとbodyを代入
-	existngPost.Title = post.Title
-	existngPost.Body = post.Body
+	existngPost.Title = title
+	existngPost.Body = body
 
 	// 存在していたら書き込み
-	if err := r.Conn.Save(&existngPost).Error; err != nil {
-		return entity.Post{}, err
+	if err := r.Conn.Model(&existngPost).Update("title", "body").Error; err != nil {
+		return nil, err
 	}
 
 	resultPost := entity.Post{
@@ -85,7 +85,7 @@ func (r *PostRepository) UpdatePost(post *entity.Post) (entity.Post, error) {
 		CreatedAt: existngPost.CreatedAt,
 		UpdatedAt: existngPost.UpdatedAt,
 	}
-	return resultPost, nil
+	return &resultPost, nil
 }
 
 func (r *PostRepository) GetAll() ([]entity.Post, error) {

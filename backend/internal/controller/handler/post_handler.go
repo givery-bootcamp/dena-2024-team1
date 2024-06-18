@@ -111,16 +111,8 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 	}
 
-	existngPost, err := h.pu.GetPost(id)
-	if err != nil {
-		handleError(ctx, 404, err)
-	}
-	// 既存の投稿に対して、引数のtitleとbodyを代入
-	existngPost.Title = request.Title
-	existngPost.Body = request.Body
-
 	// 代入したものでupdateする
-	updatePost, err := h.pu.UpdatePost(*existngPost)
+	updatePost, err := h.pu.UpdatePost(id, request.Title, request.Body)
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
