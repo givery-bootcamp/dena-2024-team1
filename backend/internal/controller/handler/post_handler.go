@@ -47,9 +47,9 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 
 // ここに追加して良いのか？？？自信ねぇ
 type PostRequest struct {
-	Title    string `json:"title"`
-	Body     string `json:"body"`
-	UserName string `json:"user_name"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+	UserID int    `json:"user_id"`
 }
 
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
@@ -60,9 +60,9 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 	}
 
 	createdPost, err := h.pu.CreatePost(entity.Post{
-		Title:    post.Title,
-		Body:     post.Body,
-		UserName: post.UserName,
+		Title:  post.Title,
+		Body:   post.Body,
+		UserID: post.UserID,
 	})
 	if err != nil {
 		handleError(ctx, 500, err)

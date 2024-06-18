@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
@@ -29,11 +30,36 @@ func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 }
 
 func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
-	postResult := r.Conn.Create(post)
+	// Convert entity.Post to repository.Post
+	doPost := Post{
+		UserID: post.UserID,
+		Title:  post.Title,
+		Body:   post.Body,
+		Model: gorm.Model{
+			CreatedAt: post.CreatedAt,
+			UpdatedAt: post.UpdatedAt,
+		},
+	}
+
+	postResult := r.Conn.Create(&doPost)
 	if postResult.Error != nil {
 		return entity.Post{}, postResult.Error
 	}
-	return *post, nil
+	createdPost := r.Conn.Last(&doPost)
+	fmt.Println(createdPost)
+
+	resultPost := entity.Post{
+		ID:        int(doPost.ID),
+		Title:     doPost.Title,
+		Body:      doPost.Body,
+		UserID:    doPost.UserID,
+		CreatedAt: doPost.CreatedAt,
+		UpdatedAt: doPost.UpdatedAt,
+	}
+
+	fmt.Println(resultPost)
+
+	return resultPost, nil
 }
 
 func (r *PostRepository) GetAll() ([]entity.Post, error) {

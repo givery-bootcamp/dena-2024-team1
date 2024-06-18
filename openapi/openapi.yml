@@ -67,16 +67,16 @@ paths:
                   type: string
                 body:
                   type: string
-                user_name:
-                  type: string
+                user_id:
+                  type: integer
               required:
                 - title
                 - body
-                - userName
+                - user_id
               example:
                 title: "Hello, World!"
                 body: "This is my first post."
-                user_name: "John Doe"
+                user_id: 0
       responses:
         "201":
           description: Post created successfully.
@@ -92,8 +92,8 @@ paths:
                     type: string
                   body:
                     type: string
-                  user_name:
-                    type: string
+                  user_id:
+                    type: integer
                   createdAt:
                     type: string
                     format: date-time
@@ -106,7 +106,7 @@ paths:
                     id: 1
                     title: "Hello, World!"
                     body: "This is my first post."
-                    user_name: "John Doe"
+                    user_id: 0
                     createdAt: "2021-01-01T00:00:00Z"
                     updatedAt: "2021-01-01T00:00:00Z"
       operationId: postPost
