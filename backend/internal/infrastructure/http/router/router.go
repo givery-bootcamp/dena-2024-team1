@@ -35,4 +35,5 @@ func setupEndpoints(router *gin.Engine) {
 	router.POST("/signup", apiHandler.UserHandler.Signup)
 	router.POST("/signin", apiHandler.UserHandler.Signin)
 	router.GET("/session_user", authMiddleware, apiHandler.UserHandler.GetSessionUser)
+	router.POST("/posts", apiHandler.PostHandler.CreatePost)
 }
