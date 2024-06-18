@@ -37,6 +37,18 @@ $ docker-compose up
 
 ### Initial setup
 
+データベースの作成を以下のコマンドで行ってください。
+
+```bash
+host$ docker-compose exec db sh -c "mysql < /sqlscripts/initialize.sql"
+```
+
+シードデータを入れたい場合は以下のコマンドで行ってください。
+
+```bash
+host$ docker-compose exec db sh -c "mysql training < /sqlscripts/seed.sql"
+```
+
 Reactを開発する人はブラウザの拡張機能をインストールしてください。(任意)
 
 - React Developer Tools
