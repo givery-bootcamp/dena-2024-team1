@@ -1,34 +1,37 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "~/shared/hooks";
+import { APIService } from "~/shared/services";
 import { Container } from "~/shared/components/Container";
+import { formatDateTime } from "~/shared/utils";
 
 export function PostDetailPage() {
+  const { post } = useAppSelector((state) => state.post);
+  const dispatch = useAppDispatch();
+  const { postId } = useParams<{postId: string}>();
+
+  useEffect(() => {
+    dispatch(APIService.getPost(Number(postId)));
+  }, [dispatch]);
+
+  if (!post) return <p>Loading...</p>;
   return (
     <Container>
       <div className="mt-10 flex flex-col gap-7">
         <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-bold">{mockPost.title}</h1>
+          <h1 className="text-xl font-bold">{post.title}</h1>
           <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-            <p>作成日時: {mockPost.createdAt}</p>
-            <p>更新日時: {mockPost.updatedAt}</p>
+            <p>作成日時: {formatDateTime(post.createdAt)}</p>
+            <p>更新日時: {formatDateTime(post.updatedAt)}</p>
           </div>
         </div>
         <hr className="border-border" />
         <div className="flex flex-col gap-3 text-lg">
-          <p className="whitespace-pre-line leading-8">{mockPost.body}</p>
-          <p className="text-right">{mockPost.user.username}</p>
+          <p className="whitespace-pre-line leading-8">{post.body}</p>
+          <p className="text-right">{post.userName}</p>
         </div>
       </div>
     </Container>
   );
 }
-
-// APIから以下のレスポンスが返ってくる想定
-const mockPost = {
-  id: "1",
-  title: "バナナはおやつに含まれますか？",
-  body: "来週の遠足の件で質問です。\n\nおやつは一人500円までと言われているのですが、バナナはおやつに含まれますか？\nそれとも弁当に含まれますか？",
-  createdAt: "2024/05/27 09:00",
-  updatedAt: "2024/05/27 15:30",
-  user: {
-    username: "watapon",
-  },
-};
