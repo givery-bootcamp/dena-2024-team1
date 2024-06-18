@@ -27,6 +27,6 @@ func (u *PostUsecase) CreatePost(post entity.Post) (entity.Post, error) {
 	return u.postRepository.CreatePost(&post)
 }
 
-func (u *PostUsecase) UpdatePost(post entity.Post) (entity.Post, error) {
-	return u.postRepository.UpdatePost(&post)
+func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Post, error) {
+	return u.postRepository.UpdatePost(id, title, body)
 }
