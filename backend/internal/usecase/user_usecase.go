@@ -65,7 +65,7 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 		return errors.New("password is empty")
 	}
 
-	password, err := u.userRepository.GetUserPassword(username)
+	hashedPassword, err := u.userRepository.GetUserPassword(username)
 
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 		return errors.New("user is not found")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(password), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
 		return errors.New("password is incorrect")
 	}
 
