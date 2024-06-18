@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
-import { Post } from "~/shared/models";
+import { formatDateTime } from "~/shared/utils";
+import { Post } from "~/generated";
 
 type PostItemProps = {post: Post};
 
@@ -15,7 +16,7 @@ export function PostItem({ post }: PostItemProps) {
           {post.userName}
         </div>
         <div className='text-sm text-gray-200'>
-          更新日時: {post.updatedAt}
+          更新日時: {formatDateTime(post.updatedAt)}
         </div>
       </div>
     </Link>
