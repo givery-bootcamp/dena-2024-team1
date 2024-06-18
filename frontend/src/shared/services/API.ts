@@ -21,6 +21,8 @@ export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
 });
 
 export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) => {
-  const response = await postApi.getPostById(postId);
+  const response = await postApi.getPostById(postId, {
+    withCredentials: true,
+  });
   return response.data;
 });
