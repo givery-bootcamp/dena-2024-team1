@@ -66,37 +66,37 @@ export interface Post {
      * @type {number}
      * @memberof Post
      */
-    'id'?: number;
+    'id': number;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'title'?: string;
+    'title': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'body'?: string;
+    'body': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'userName'?: string;
+    'userName': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'createdAt'?: string;
+    'createdAt': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'updatedAt'?: string;
+    'updatedAt': string;
 }
 /**
  * 

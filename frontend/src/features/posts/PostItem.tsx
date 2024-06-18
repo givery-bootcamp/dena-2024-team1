@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { formatDateTime } from "~/shared/utils";
-import { Post } from "~/shared/models";
+import { Post } from "~/generated";
 
 type PostItemProps = {post: Post};
 
