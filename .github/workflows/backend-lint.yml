@@ -3,6 +3,10 @@ name: GolangCI lint
 on:
   pull_request:
 
+defaults:
+  run:
+    working-directory: backend
+
 jobs:
   golangci-lint:
     # permissions:
@@ -19,6 +23,6 @@ jobs:
           reporter: github-pr-review
           # Github Status へのレポートレベルの指定
           level: error
-          golangci_lint_flags: "-v --config=backend/.golangci.yaml"
+          golangci_lint_flags: "-v --config=.golangci.yaml"
           filter_mode: diff_context
           fail_on_error: true
