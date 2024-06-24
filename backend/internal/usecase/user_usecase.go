@@ -4,9 +4,8 @@ import (
 	"errors"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
+	"myapp/internal/utils/crypt"
 	"net/http"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUsecase struct {
@@ -39,22 +38,13 @@ func (u UserUsecase) Signup(username, password string) error {
 	}
 
 	// パスワードを暗号化
-	password, err = encryptPassword(password)
+	password, err = crypt.EncryptPassword(password)
 
 	if err != nil {
 		return err
 	}
 
 	return u.userRepository.CreateUser(username, password)
-}
-
-func encryptPassword(password string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", errors.New("failed to encrypt password")
-	}
-
-	return string(hash), nil
 }
 
 func (u UserUsecase) Signin(username, password string, r *http.Request, w http.ResponseWriter) error {
@@ -75,7 +65,7 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 		return errors.New("user is not found")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
+	if err := crypt.DecryptPassword(hashedPassword, password); err != nil {
 		return errors.New("password is incorrect")
 	}
 
