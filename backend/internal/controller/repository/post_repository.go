@@ -152,7 +152,7 @@ func (r *PostRepository) Delete(id int) error {
 		return postResult.Error
 	}
 
-	postUpdateResult := r.Conn.Model(&post).Update("deleted_at", gorm.Expr("NOW()"))
+	postUpdateResult := r.Conn.Delete(post)
 	if postUpdateResult.Error != nil {
 		return postResult.Error
 	}
