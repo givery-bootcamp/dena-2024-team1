@@ -5,7 +5,7 @@ import { Hello } from "~/shared/models";
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
-const postApi = new PostApi();
+export const postApi = new PostApi();
 
 export const getHello = createAsyncThunk<Hello>("getHello", async () => {
   const response = await fetch(`${API_ENDPOINT_PATH}/hello`);
