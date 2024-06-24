@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 import { Container } from "~/shared/components/Container";
+import { APIService } from "~/shared/services";
 import { Button } from "~/shared/components/Button";
+import { CreatePostRequest } from "~/generated";
 
 export function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -14,11 +16,18 @@ export function CreatePostPage() {
   const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   };
-
+  
   return (
     <Container className="mt-20">
       <div>
-        <form>
+        <form onSubmit={(event) => {
+          console.log("createPost");
+          console.log(title);
+          console.log(content);
+          APIService.createPost({ title: title, body: content ,user_id: 1 } as CreatePostRequest);
+          event.preventDefault();
+        }
+        } >
           <div>
             <label className="text-2xl font-bold">
               タイトル
