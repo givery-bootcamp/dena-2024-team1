@@ -23,6 +23,8 @@ export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) 
 });
 
 export const createPost = createAsyncThunk<CreatePostResponse, CreatePostRequest>("createPost", async (createPostRequest) => {
-  const response = await postApi.postPost(createPostRequest);
+  const response = await postApi.postPost(createPostRequest, {
+    withCredentials: true,
+  });
   return response.data;
 });
