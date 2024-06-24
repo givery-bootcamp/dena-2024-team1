@@ -96,3 +96,35 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 	}
 	ctx.JSON(201, response)
 }
+
+func (h *PostHandler) UpdatePost(ctx *gin.Context) {
+	// リクエストのbodyを取得、バインドをすることで他のものが入ってきたらエラーを返すようにする
+	var request openapi.UpdatePostRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+	// idを取得、エラーがあればエラーを返す
+	// getPostからそのまま持ってきている
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		handleError(ctx, 400, err)
+	}
+
+	// 代入したものでupdateする
+	updatePost, err := h.pu.UpdatePost(id, request.Title, request.Body)
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	}
+
+	response := openapi.UpdatePostResponse{
+		Body:      updatePost.Body,
+		CreatedAt: updatePost.CreatedAt,
+		Id:        int64(updatePost.ID),
+		Title:     updatePost.Title,
+		UpdatedAt: updatePost.UpdatedAt,
+		UserId:    updatePost.UserID,
+	}
+	ctx.JSON(200, response)
+}

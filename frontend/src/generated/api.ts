@@ -169,6 +169,68 @@ export interface Post {
 /**
  * 
  * @export
+ * @interface UpdatePostRequest
+ */
+export interface UpdatePostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostRequest
+     */
+    'body': string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdatePostResponse
+ */
+export interface UpdatePostResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePostResponse
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostResponse
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostResponse
+     */
+    'body': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePostResponse
+     */
+    'user_id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostResponse
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostResponse
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface User
  */
 export interface User {
@@ -407,6 +469,46 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Update a post by ID.
+         * @summary 
+         * @param {number} postId The unique identifier of the post.
+         * @param {UpdatePostRequest} updatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPost: async (postId: number, updatePostRequest: UpdatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postId' is not null or undefined
+            assertParamExists('putPost', 'postId', postId)
+            // verify required parameter 'updatePostRequest' is not null or undefined
+            assertParamExists('putPost', 'updatePostRequest', updatePostRequest)
+            const localVarPath = `/posts/{postId}`
+                .replace(`{${"postId"}}`, encodeURIComponent(String(postId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -455,6 +557,20 @@ export const PostApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['PostApi.postPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Update a post by ID.
+         * @summary 
+         * @param {number} postId The unique identifier of the post.
+         * @param {UpdatePostRequest} updatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdatePostResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putPost(postId, updatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostApi.putPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -493,6 +609,17 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
          */
         postPost(createPostRequest: CreatePostRequest, options?: any): AxiosPromise<CreatePostResponse> {
             return localVarFp.postPost(createPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a post by ID.
+         * @summary 
+         * @param {number} postId The unique identifier of the post.
+         * @param {UpdatePostRequest} updatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: any): AxiosPromise<UpdatePostResponse> {
+            return localVarFp.putPost(postId, updatePostRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -537,6 +664,19 @@ export class PostApi extends BaseAPI {
      */
     public postPost(createPostRequest: CreatePostRequest, options?: RawAxiosRequestConfig) {
         return PostApiFp(this.configuration).postPost(createPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update a post by ID.
+     * @summary 
+     * @param {number} postId The unique identifier of the post.
+     * @param {UpdatePostRequest} updatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostApi
+     */
+    public putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: RawAxiosRequestConfig) {
+        return PostApiFp(this.configuration).putPost(postId, updatePostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

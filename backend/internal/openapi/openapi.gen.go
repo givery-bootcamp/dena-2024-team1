@@ -40,6 +40,22 @@ type Post struct {
 	UserName  string    `json:"userName"`
 }
 
+// UpdatePostRequest defines model for UpdatePostRequest.
+type UpdatePostRequest struct {
+	Body  string `json:"body"`
+	Title string `json:"title"`
+}
+
+// UpdatePostResponse defines model for UpdatePostResponse.
+type UpdatePostResponse struct {
+	Body      string    `json:"body"`
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int64     `json:"id"`
+	Title     string    `json:"title"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"user_id"`
+}
+
 // User defines model for User.
 type User struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -51,3 +67,6 @@ type User struct {
 
 // PostPostJSONRequestBody defines body for PostPost for application/json ContentType.
 type PostPostJSONRequestBody = CreatePostRequest
+
+// PutPostJSONRequestBody defines body for PutPost for application/json ContentType.
+type PutPostJSONRequestBody = UpdatePostRequest
