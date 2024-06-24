@@ -5,7 +5,7 @@ import (
 	"myapp/internal/controller/handler"
 	repoImp "myapp/internal/controller/repository"
 	"myapp/internal/infrastructure/database"
-	sessionstore "myapp/internal/infrastructure/session_store"
+	"myapp/internal/infrastructure/sessionstore"
 	"myapp/internal/usecase"
 	repoIf "myapp/internal/usecase/repository"
 )

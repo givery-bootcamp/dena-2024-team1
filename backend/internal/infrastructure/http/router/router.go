@@ -3,7 +3,7 @@ package router
 import (
 	"myapp/internal/infrastructure/database"
 	"myapp/internal/infrastructure/http/middleware"
-	sessionstore "myapp/internal/infrastructure/session_store"
+	"myapp/internal/infrastructure/sessionstore"
 	"myapp/internal/registry"
 
 	"github.com/gin-gonic/gin"
