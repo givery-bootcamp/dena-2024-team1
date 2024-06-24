@@ -25,8 +25,6 @@ export const AuthProvider = () => {
     if (response.status === 200) {
         const user = response.data;
 
-        console.log(user);
-
         // ユーザー情報をセット
         dispatch(sessionUserSlice.actions.setSessionUser(user));
     }

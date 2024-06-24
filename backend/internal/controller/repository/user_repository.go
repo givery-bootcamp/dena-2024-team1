@@ -129,7 +129,6 @@ func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, u
 
 	// セッションに保存
 	session.Values[config.SessionKey] = string(sessionUserJson)
-	fmt.Printf("save session: %+v\n", session.Values[config.SessionKey])
 
 	err = session.Save(req, w)
 	if err != nil {
