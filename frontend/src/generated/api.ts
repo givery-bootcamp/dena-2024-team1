@@ -94,19 +94,6 @@ export interface CreatePostResponse {
 /**
  * 
  * @export
- * @interface DeletePostResponse
- */
-export interface DeletePostResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof DeletePostResponse
-     */
-    'succeeded'?: boolean;
-}
-/**
- * 
- * @export
  * @interface GetHello200Response
  */
 export interface GetHello200Response {
@@ -178,12 +165,6 @@ export interface Post {
      * @memberof Post
      */
     'updatedAt': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Post
-     */
-    'deletedAt'?: string;
 }
 /**
  * 
@@ -590,7 +571,7 @@ export const PostApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePost(postId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeletePostResponse>> {
+        async deletePost(postId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deletePost(postId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostApi.deletePost']?.[localVarOperationServerIndex]?.url;
@@ -664,7 +645,7 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePost(postId: number, options?: any): AxiosPromise<DeletePostResponse> {
+        deletePost(postId: number, options?: any): AxiosPromise<void> {
             return localVarFp.deletePost(postId, options).then((request) => request(axios, basePath));
         },
         /**
