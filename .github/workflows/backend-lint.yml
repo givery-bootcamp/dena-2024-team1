@@ -1,0 +1,25 @@
+name: GolangCI lint
+
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+
+jobs:
+  golangci-lint:
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: reviewdog/action-golangci-lint@v2
+        with:
+          cache: false
+          workdir: backend/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          go_version: '1.22'
+          reporter: github-pr-review
+          level: warning
+          golangci_lint_flags: "-v --config=.golangci.yaml"

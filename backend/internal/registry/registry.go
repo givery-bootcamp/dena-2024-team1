@@ -5,6 +5,7 @@ import (
 	"myapp/internal/controller/handler"
 	repoImp "myapp/internal/controller/repository"
 	"myapp/internal/infrastructure/database"
+	"myapp/internal/infrastructure/sessionstore"
 	"myapp/internal/usecase"
 	repoIf "myapp/internal/usecase/repository"
 )
@@ -12,6 +13,7 @@ import (
 type APIHandler struct {
 	HelloWorldHandler handler.HelloWorldHandler
 	PostHandler       handler.PostHandler
+	UserHandler       handler.UserHandler
 }
 
 func NewAPIHandler() *APIHandler {
@@ -24,25 +26,30 @@ func NewAPIHandler() *APIHandler {
 func newAPIHandler(u apiUsecase) *APIHandler {
 	hh := handler.NewHelloWorldHandler(u.hu)
 	ph := handler.NewPostHandler(u.ph)
+	uh := handler.NewUserHandler(u.uh)
 
 	return &APIHandler{
 		HelloWorldHandler: hh,
 		PostHandler:       ph,
+		UserHandler:       uh,
 	}
 }
 
 type apiUsecase struct {
 	hu usecase.HelloWorldUsecase
 	ph usecase.PostUsecase
+	uh usecase.UserUsecase
 }
 
 func newAPIUsecase(r apiRepository) *apiUsecase {
 	hu := usecase.NewHelloWorldUsecase(r.hr)
 	ph := usecase.NewPostUsecase(r.pr)
+	uh := usecase.NewUserUsecase(r.ur)
 
 	return &apiUsecase{
 		hu: hu,
 		ph: ph,
+		uh: uh,
 	}
 }
 
@@ -54,10 +61,11 @@ type apiRepository struct {
 
 func newAPIRepository() *apiRepository {
 	db := database.SetupDB()
+	sessionStore := sessionstore.GetStore()
 
 	hr := repoImp.NewHelloWorldRepository(db)
 	pr := repoImp.NewPostRepository(db)
-	ur := repoImp.NewUserRepository(db)
+	ur := repoImp.NewUserRepository(db, sessionStore)
 
 	return &apiRepository{
 		hr: hr,

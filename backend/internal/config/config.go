@@ -15,6 +15,12 @@ var DBName = "training"
 var DBUsername = "root"
 var DBPassword = ""
 
+// セッションストアのシークレットキー
+// 本番環境では、crypto/rand or securecookie.GenerateRandomKey(32)を実行して、その結果を環境変数に設定する
+var SessionSecret = "session"
+var SessionName = "session-name"
+var SessionKey = "user"
+
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
 		HostName = v
@@ -39,5 +45,14 @@ func init() {
 	}
 	if v := os.Getenv("DB_PASSWORD"); v != "" {
 		DBPassword = v
+	}
+	if v := os.Getenv("SESSION_SECRET"); v != "" {
+		SessionSecret = v
+	}
+	if v := os.Getenv("SESSION_NAME"); v != "" {
+		SessionName = v
+	}
+	if v := os.Getenv("SESSION_KEY"); v != "" {
+		SessionKey = v
 	}
 }
