@@ -2,10 +2,8 @@ name: GolangCI lint
 
 on:
   pull_request:
-
-defaults:
-  run:
-    working-directory: backend
+    paths:
+      - "backend/**"
 
 jobs:
   golangci-lint:
