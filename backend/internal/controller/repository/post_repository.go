@@ -48,7 +48,7 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 }
 
 func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.Post, error) {
-	var existngPost Post
+	var existngPost model.Post
 
 	// postIDが存在するかを確認するためのクエリを作っている
 	q := r.Conn.Where("id = ?", id)
