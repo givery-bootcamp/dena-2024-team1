@@ -5,6 +5,8 @@ import (
 	"myapp/internal/config"
 	"os"
 
+	"myapp/internal/controller/repository/model"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,5 +25,8 @@ func SetupDB() *gorm.DB {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	db.Debug()
+
+	db.AutoMigrate(&model.User{}, &model.Post{}, &model.HelloWorld{})
 	return db
 }

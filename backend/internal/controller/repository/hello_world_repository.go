@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 
 	repositoryIF "myapp/internal/usecase/repository"
@@ -14,13 +15,6 @@ type HelloWorldRepository struct {
 	Conn *gorm.DB
 }
 
-// This struct is same as entity model
-// However define again for training
-type HelloWorld struct {
-	Lang    string
-	Message string
-}
-
 func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
 	return &HelloWorldRepository{
 		Conn: conn,
@@ -28,7 +22,7 @@ func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
 }
 
 func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
-	var obj HelloWorld
+	var obj model.HelloWorld
 	result := r.Conn.Where("lang = ?", lang).First(&obj)
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", obj)
@@ -41,7 +35,7 @@ func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
 	return convertHelloWorldRepositoryModelToEntity(&obj), nil
 }
 
-func convertHelloWorldRepositoryModelToEntity(v *HelloWorld) *entity.HelloWorld {
+func convertHelloWorldRepositoryModelToEntity(v *model.HelloWorld) *entity.HelloWorld {
 	return &entity.HelloWorld{
 		Lang:    v.Lang,
 		Message: v.Message,

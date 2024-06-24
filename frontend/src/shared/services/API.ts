@@ -13,12 +13,17 @@ export const getHello = createAsyncThunk<Hello>("getHello", async () => {
 });
 
 export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
-  const response = await postApi.getAllPosts();
+  const postApi = new PostApi();
+  const response = await postApi.getAllPosts({
+    withCredentials: true,
+  });
   return response.data;
 });
 
 export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) => {
-  const response = await postApi.getPostById(postId);
+  const response = await postApi.getPostById(postId, {
+    withCredentials: true,
+  });
   return response.data;
 });
 

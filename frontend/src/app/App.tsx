@@ -1,15 +1,11 @@
-import { AppRoute } from "./AppRoute";
 import "./App.scss";
 
-import { Header } from "~/shared/components/Header";
+import { AuthProvider } from "./AuthProvider";
 
 function App() {
   return (
     <div>
-      <Header />
-      <main>
-        <AppRoute />
-      </main>
+      <AuthProvider />
     </div>
   );
 }
