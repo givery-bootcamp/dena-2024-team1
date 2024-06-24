@@ -23,7 +23,6 @@ export function CreatePostPage() {
     } , {
       withCredentials: true,
     });
-    console.log(response);
     if (response.status === 201) {
       console.log("Created post successfully!");
       navigate("/");
@@ -32,28 +31,18 @@ export function CreatePostPage() {
   }, []);
   
   return (
-    <Container className="mt-20">
-      <div>
-        <form onSubmit={handleSubmit} >
-          <div>
-            <label className="text-2xl font-bold">
-              タイトル
-            </label>
-            <br/>
-            <input type="text" id="title" name="title" className="w-full rounded border border-gray-200 text-2xl" />
-          </div>
-          <br/>
-          <div>
-            <label className="text-2xl font-bold">
-              本文
-            </label>
-            <br/>
-            <textarea id="body" name="body" className="h-64 w-full rounded border border-gray-200 text-2xl" />
-          </div>
-          <br/>
-          <Button className="w-full" type="submit">投稿する</Button>
-        </form>
-      </div>
+    <Container className="pt-10">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <label className="flex flex-col gap-1">
+          <span className="font-bold">タイトル</span>
+          <input className="h-10 rounded border border-gray-200 p-2" type="text" name="title" />
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="font-bold">本文</span>
+          <textarea className="rounded border border-gray-200 p-2" name="body" />
+        </label>
+        <Button className="h-12 w-full" type="submit">投稿する</Button>
+      </form>
     </Container>
   );
 }
