@@ -1,31 +1,32 @@
 import { useCallback , FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Container } from "~/shared/components/Container";
 import { Button } from "~/shared/components/Button";
 import { PostApi } from "~/generated";
 
 export function CreatePostPage() {
+  const navigate = useNavigate();
+
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
     const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-
+    const body = formData.get("body") as string;
+    const user_id = 1;
     const postApi = new PostApi();
-    const responnse = await postApi.postPost({
+    const response = await postApi.postPost({
       title,
-      body: content,
-      user_id: 1,
+      body,
+      user_id,
     } , {
       withCredentials: true,
     });
-
-    if (responnse.status === 200) {
-      console.log("Success");
-
-      // 画面を再読み込みする
-      window.location.href = "/";
+    console.log(response);
+    if (response.status === 201) {
+      console.log("Created post successfully!");
+      navigate("/");
     }
 
   }, []);
@@ -47,7 +48,7 @@ export function CreatePostPage() {
               本文
             </label>
             <br/>
-            <textarea id="content" name="content" className="h-64 w-full rounded border border-gray-200 text-2xl" />
+            <textarea id="body" name="body" className="h-64 w-full rounded border border-gray-200 text-2xl" />
           </div>
           <br/>
           <Button className="w-full" type="submit">投稿する</Button>
