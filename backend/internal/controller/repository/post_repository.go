@@ -152,9 +152,9 @@ func (r *PostRepository) DeletePost(id int) error {
 		return postResult.Error
 	}
 
-	postUpdateResult := r.Conn.Delete(post)
+	postUpdateResult := r.Conn.Delete(&post)
 	if postUpdateResult.Error != nil {
-		return postResult.Error
+		return postUpdateResult.Error
 	}
 
 	return nil
