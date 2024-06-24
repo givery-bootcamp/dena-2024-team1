@@ -195,6 +195,9 @@ paths:
                   type: string
                 password:
                   type: string
+              required:
+                - username
+                - password    
             examples:
               default:
                 value:
@@ -229,6 +232,9 @@ paths:
                   type: string
                 password:
                   type: string
+              required:
+                - username
+                - password    
             examples:
               default:
                 value:

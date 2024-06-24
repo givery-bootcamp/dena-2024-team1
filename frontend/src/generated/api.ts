@@ -177,13 +177,13 @@ export interface SignUpRequest {
      * @type {string}
      * @memberof SignUpRequest
      */
-    'username'?: string;
+    'username': string;
     /**
      * 
      * @type {string}
      * @memberof SignUpRequest
      */
-    'password'?: string;
+    'password': string;
 }
 /**
  * 
