@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Container } from "~/shared/components/Container";
 import { Button } from "~/shared/components/Button";
-import { PostApi } from "~/generated";
+import { postApi } from "~/shared/services/API";
 
 export function CreatePostPage() {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ export function CreatePostPage() {
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
     const user_id = 1;
-    const postApi = new PostApi();
     const response = await postApi.postPost({
       title,
       body,
