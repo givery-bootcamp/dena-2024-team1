@@ -1,0 +1,25 @@
+name: GolangCI lint
+
+on:
+  pull_request:
+
+jobs:
+  golangci-lint:
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          go_version: '1.22'
+          reporter: github-pr-review
+          # Github Status へのレポートレベルの指定
+          level: error
+          golangci_lint_flags: "-v --config=backend/.golangci.yaml"
+          reporter: github-pr-review
+          filter_mode: diff_context
+          fail_on_error: true
