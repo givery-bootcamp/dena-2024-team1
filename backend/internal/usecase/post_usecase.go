@@ -32,5 +32,5 @@ func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Pos
 }
 
 func (u *PostUsecase) DeletePost(id int) error {
-	return u.postRepository.Delete(id)
+	return u.postRepository.DeletePost(id)
 }

@@ -142,7 +142,7 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	return convertPostRepositoryModelToEntity(&post, &user), nil
 }
 
-func (r *PostRepository) Delete(id int) error {
+func (r *PostRepository) DeletePost(id int) error {
 	var post model.Post
 	postResult := r.Conn.Where("id = ?", id).First(&post)
 	if postResult.Error != nil {
