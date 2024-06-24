@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"myapp/internal/openapi"
 	"myapp/internal/usecase"
 
 	"github.com/gin-gonic/gin"
@@ -16,19 +17,14 @@ func NewUserHandler(uu usecase.UserUsecase) UserHandler {
 	}
 }
 
-type SignupRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 func (h UserHandler) Signup(ctx *gin.Context) {
-	var req SignupRequest
+	var req openapi.SignUpJSONBody
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
 
-	err := h.uu.Signup(req.Username, req.Password)
+	err := h.uu.Signup(*req.Username, *req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -37,19 +33,14 @@ func (h UserHandler) Signup(ctx *gin.Context) {
 	}
 }
 
-type SigninRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 func (h UserHandler) Signin(ctx *gin.Context) {
-	var req SigninRequest
+	var req openapi.SignInJSONBody
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
 
-	err := h.uu.Signin(req.Username, req.Password, ctx.Request, ctx.Writer)
+	err := h.uu.Signin(*req.Username, *req.Password, ctx.Request, ctx.Writer)
 
 	if err != nil {
 		handleError(ctx, 500, err)
