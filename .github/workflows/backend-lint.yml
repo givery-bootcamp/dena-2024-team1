@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: reviewdog/action-golangci-lint@v2
         with:
+          cache: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
           go_version: '1.22'
           reporter: github-pr-review
