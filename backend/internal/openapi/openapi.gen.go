@@ -24,6 +24,11 @@ type CreatePostResponse struct {
 	UserId    *int       `json:"user_id,omitempty"`
 }
 
+// DeletePostResponse defines model for DeletePostResponse.
+type DeletePostResponse struct {
+	Succeeded *bool `json:"succeeded,omitempty"`
+}
+
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 

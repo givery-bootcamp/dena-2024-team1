@@ -181,6 +181,40 @@ paths:
       tags:
         - post
       summary: ''
+    delete:
+      description: Delete a post.
+      operationId: deletePost
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: Post deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePostResponse'
+              examples:
+                default:
+                  value:
+                    succeeded: true
+        "400":
+          description: Failed to delete a post.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - post
 tags:
   - name: post
     description: Tag for post
@@ -307,6 +341,12 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Post'
+    DeletePostResponse:
+      title: DeletePostResponse
+      type: object
+      properties:
+        succeeded:
+          type: boolean
   responses: {}
 servers:
   - url: 'http://localhost:9000'
