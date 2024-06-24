@@ -6,6 +6,7 @@ export function Header() {
       <p className="text-white">サンプルアプリケーション</p>
       <div className="flex space-x-4">
         <Link to="/" className="text-white">Top</Link>
+        <Link to="/create_post" className="text-white">新規投稿</Link>
         <Link to="/signout" className="text-white">Signout</Link>
       </div>
     </header>
