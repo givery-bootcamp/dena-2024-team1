@@ -21,12 +21,25 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 
 func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	var request openapi.CreateScketchesRequest
+	const MaxUploadSize = 10 * 1024 * 1024 // 10MB
 
 	file, err := ctx.FormFile("file")
 	if err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
+	// Check file size
+	if file.Size > MaxUploadSize {
+		handleError(ctx, 400, errors.New("file size too large"))
+		return
+	}
+	// Check file type
+	if file.Header.Get("Content-Type") != "image/png" && file.Header.Get("Content-Type") != "image/jpeg" {
+		handleError(ctx, 400, errors.New("file type not allowed"))
+		return
+	}
+
+	// Save file
 	destination := "./uploads/" + file.Filename
 
 	if err := ctx.SaveUploadedFile(file, destination); err != nil {
