@@ -31,6 +31,6 @@ func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Pos
 	return u.postRepository.UpdatePost(id, title, body)
 }
 
-func (u *PostUsecase) CreateSketch(filename string, file string) (entity.Post, error) {
+func (u *PostUsecase) CreateSketch(filename string, file string) (entity.Sketch, error) {
 	return u.postRepository.CreateSketch(filename, file)
 }
