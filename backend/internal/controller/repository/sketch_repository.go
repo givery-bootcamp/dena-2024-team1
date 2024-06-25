@@ -26,9 +26,9 @@ func (r *SketchRepository) CreateSketch(filename string, file *types.File) (enti
 	sketch := model.Sketch{
 		ImageName: filename,
 	}
-	result := r.Conn.Create(&sketch)
-	if result.Error != nil {
-		return entity.Sketch{}, result.Error
+	sketchResult := r.Conn.Create(&sketch)
+	if sketchResult.Error != nil {
+		return entity.Sketch{}, sketchResult.Error
 	}
 	return entity.Sketch{
 		ID:        int(sketch.ID),
