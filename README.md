@@ -26,7 +26,13 @@
 
 ## How to develop
 
+$ cp ./backend/.env.sample ./backend/.env
 ```
+ローカルにおけるAWSアクセスを有効にするために、./backend/.envを作成してください
+
+値については管理者に問い合わせてください
+```
+
 $ docker-compose up
 ```
 
