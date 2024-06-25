@@ -11,7 +11,7 @@ type Args = {
 }
 
 export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
-  const [drawing, setDrawing] = useState<boolean>(false);
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   useEffect(() => {
     if (canvasRef.current === null) return;
@@ -30,7 +30,7 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
 
   const handleMouseDown: React.MouseEventHandler = (e) =>  {
     const { offsetX: x, offsetY: y } = e.nativeEvent;
-    setDrawing(true);
+    setIsDrawing(true);
     const ctx = getContext();
     if (!ctx) return;
 
@@ -39,7 +39,7 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
   };
 
   const handleMouseMove: React.MouseEventHandler = (e) => {
-    if (!drawing) return;
+    if (!isDrawing) return;
 
     const { offsetX: x ,offsetY: y } = e.nativeEvent;
     const ctx = getContext();
@@ -49,7 +49,7 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
   }; 
 
   const handleDrawingFinish = () => {
-    setDrawing(false);
+    setIsDrawing(false);
     if (canvasRef.current === null) return;
     onCanvasUpdate(canvasRef.current);
   };
