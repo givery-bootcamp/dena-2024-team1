@@ -2,16 +2,16 @@ import { useCallback, FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 type SignFormProps = {
-    onSubmit: (username: string, password: string) => void;
-    title: string;
-    submitText: string;
-    linkText: string;
-    linkTo: string;
+  onSubmit: (username: string, password: string) => void;
+  title: string;
+  submitText: string;
+  linkText: string;
+  linkTo: string;
 }
 
 
 export const SignForm = (props: SignFormProps) => {
-   const { onSubmit } = props; 
+  const { onSubmit } = props; 
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
