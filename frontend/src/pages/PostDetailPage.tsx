@@ -34,11 +34,11 @@ export function PostDetailPage() {
 
   const handleModalOpen = () => {
     setIsOpen(true);
-  }
+  };
 
   const handleModalClose = () => {
     setIsOpen(false);
-  }
+  };
 
   if (!post) return <p>Loading...</p>;
   return (
