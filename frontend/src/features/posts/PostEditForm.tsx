@@ -13,8 +13,6 @@ export const PostEditForm = () => {
   const { postId } = useParams<{postId: string}>();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  console.log(title);
-  console.log(body);
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
@@ -31,14 +29,7 @@ export const PostEditForm = () => {
   }, [dispatch]);
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
-    //console.log(title);
-    //console.log(body);
-    //console.log(postId);
     event.preventDefault();
-    //const form = event.currentTarget;
-    //const formData = new FormData(form);
-    //const title = formData.get("title") as string;
-    //const body = formData.get("body") as string;
     const response = await postApi.putPost(
       parseInt(postId ?? ""),
       {
@@ -49,11 +40,9 @@ export const PostEditForm = () => {
         withCredentials: true,
       },
     );
-    //console.log(title);
-    //console.log(body);
-    //console.log(response.status);
-    if (response.status === 201) {
-      navigate("/");
+    console.log(response.status);
+    if (response.status === 200) {
+      navigate(`/posts/${postId}`);
     }
 
   }, [title, body]);
