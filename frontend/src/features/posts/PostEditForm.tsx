@@ -31,7 +31,7 @@ export const PostEditForm = () => {
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await postApi.putPost(
-      parseInt(postId ?? ""),
+      Number(postId),
       {
         title,
         body,
