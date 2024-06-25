@@ -7,21 +7,16 @@ import { PostItem } from "~/features/posts/PostItem";
 import { BorderLine } from "~/shared/components/BorderLine";
 
 export function ImageListPage() {
-  const { posts } = useAppSelector((state) => state.posts);
+  const { sketches } = useAppSelector((state) => state.sketches);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(APIService.getPosts());
+    dispatch(APIService.getSketches());
   }, [dispatch]);
-
+  console.log(sketches);
   return (
     <Container className='mt-10'>
-      {posts?.map((post,index)=>(
-        <Fragment key={index}>
-          <PostItem post={post}/>
-          {index === posts.length - 1 ? null : <BorderLine/>}
-        </Fragment>
-    ))}
+      <h1 className='text-2xl font-bold'>画像一覧</h1>
     </Container>
   );
 }

@@ -28,7 +28,8 @@ export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) 
 });
 
 export const getSketches = createAsyncThunk<Sketch[]>("getSketches", async () => {
-  const response = await SketchApi.getAllSketches({
+  const sketchApi = new SketchApi();
+  const response = await sketchApi.getAllSketches({
     withCredentials: true,
   });
   return response.data;
