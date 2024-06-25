@@ -59,10 +59,6 @@ func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.
 		return nil, err
 	}
 
-	// 既存の投稿に対して、引数のtitleとbodyを代入
-	// existngPost.Title = title
-	// existngPost.Body = body
-
 	// 存在していたら書き込み
 	if err := r.Conn.Model(&existngPost).Updates(model.Post{Title: title, Body: body}).Error; err != nil {
 		return nil, err
