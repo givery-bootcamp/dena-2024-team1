@@ -3,7 +3,7 @@ import { useEffect,Fragment } from "react";
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
 import { Container } from "~/shared/components/Container";
-import { PostItem } from "~/features/posts/PostItem";
+import { SketchItem } from "~/features/sketches/SketchItem";
 import { BorderLine } from "~/shared/components/BorderLine";
 
 export function ImageListPage() {
@@ -17,6 +17,12 @@ export function ImageListPage() {
   return (
     <Container className='mt-10'>
       <h1 className='text-2xl font-bold'>画像一覧</h1>
+      {sketches?.map((sketch,index)=>(
+        <Fragment key={index}>
+          <SketchItem sketch={sketch}/>
+          {index === sketches.length - 1 ? null : <BorderLine/>}
+        </Fragment>
+      ))}
     </Container>
   );
 }
