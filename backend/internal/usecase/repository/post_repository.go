@@ -9,4 +9,5 @@ type PostRepository interface {
 	Get(int) (*entity.Post, error)
 	CreatePost(*entity.Post) (entity.Post, error)
 	UpdatePost(id int, title string, body string) (*entity.Post, error)
+	CreateSketch(filenanme string, file string) (entity.Post, error)
 }
