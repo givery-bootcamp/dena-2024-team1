@@ -7,7 +7,7 @@ import (
 
 type Sketch struct {
 	ID        int       `json:"id"`
-	Image     os.File   `json:"image"`
+	ImageFile os.File   `json:"image_file"`
 	ImageName string    `json:"image_name"`
 	UserID    int       `json:"user_id"`
 	UserName  string    `json:"user_name"`

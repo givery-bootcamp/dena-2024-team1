@@ -5,8 +5,8 @@ import (
 )
 
 type Sketch struct {
-	Name   string `json:"image"`
-	UserID int    `json:"user_id"`
+	ImageName string `json:"image_name"`
+	UserID    int    `json:"user_id"`
 
 	gorm.Model
 }
