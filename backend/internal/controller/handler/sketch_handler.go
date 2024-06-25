@@ -24,6 +24,7 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
 	}
+
 	createdSketch, err := h.su.CreateSketch(*request.Filename, request.File)
 	if err != nil {
 		handleError(ctx, 500, err)
