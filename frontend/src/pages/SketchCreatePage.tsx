@@ -17,6 +17,7 @@ export const SketchCreatePage = () => {
     if (canvas === null) return;
     const image = canvas.toDataURL("image/png");
 
+    // TODO: 画像保存APIに画像を送信する
     await axios.post("http://localhost:9000/images", { image });
   };
 
