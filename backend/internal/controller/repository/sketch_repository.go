@@ -5,6 +5,7 @@ import (
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -19,13 +20,13 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(filename string, file string) (entity.Sketch, error) {
+func (r *SketchRepository) CreateSketch(filename string, file *os.File) (entity.Sketch, error) {
 	sketch := model.Sketch{
 		ImageName: filename,
 	}
-	sketchResult := r.Conn.Create(&sketch)
-	if sketchResult.Error != nil {
-		return entity.Sketch{}, sketchResult.Error
+	result := r.Conn.Create(&sketch)
+	if result.Error != nil {
+		return entity.Sketch{}, result.Error
 	}
 	return entity.Sketch{
 		ID:        int(sketch.ID),
