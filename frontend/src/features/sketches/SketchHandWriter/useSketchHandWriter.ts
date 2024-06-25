@@ -14,13 +14,13 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   useEffect(() => {
-    if (canvasRef.current === null) return;
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvasSetting.width, canvasSetting.height);
+    clearCanvas();
   }, []);
+
+  const clearCanvas = () => {
+    const ctx = getContext();
+    ctx.clearRect(0, 0, canvasSetting.width, canvasSetting.height);
+  };
 
   const getContext = (): CanvasRenderingContext2D => {
     if (!canvasRef.current) {
