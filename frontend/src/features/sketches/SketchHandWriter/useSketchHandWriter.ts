@@ -22,9 +22,16 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
     ctx.clearRect(0, 0, canvasSetting.width, canvasSetting.height);
   }, []);
 
-  const getContext = () => {
-    if (!canvasRef.current) return;
-    const ctx = (canvasRef.current as HTMLCanvasElement).getContext("2d");
+  const getContext = (): CanvasRenderingContext2D => {
+    if (!canvasRef.current) {
+      throw new Error("canvasRef is not assigned");
+    }
+
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) {
+      throw new Error("Failed to get 2d context");
+    }
+
     return ctx;
   };
 
@@ -32,7 +39,6 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
     const { offsetX: x, offsetY: y } = e.nativeEvent;
     setIsDrawing(true);
     const ctx = getContext();
-    if (!ctx) return;
 
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -43,7 +49,7 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
 
     const { offsetX: x ,offsetY: y } = e.nativeEvent;
     const ctx = getContext();
-    if (!ctx) return;
+
     ctx.lineTo(x, y);
     ctx.stroke();
   }; 
