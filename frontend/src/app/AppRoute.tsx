@@ -7,6 +7,7 @@ import { PostEditPage } from "~/pages/PostEditPage";
 import { SignInPage } from "~/pages/SignInPage";
 import { SignUpPage } from "~/pages/SignUpPage";
 import { SignOutPage } from "~/pages/SignOutPage";
+import { ImageListPage } from "~/pages/ImageListPage";
 
 export const AppRoute = () => {
   return (
@@ -17,6 +18,7 @@ export const AppRoute = () => {
       <Route path="/posts/:postId/edit" element={<PostEditPage />} />
       <Route path="/signout" element={<SignOutPage />} />
       <Route path="*" element={<Navigate to={"/"} />} />
+      <Route path="/images/list" element={<ImageListPage/>} />
     </Routes>
   );
 };
