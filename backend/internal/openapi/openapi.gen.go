@@ -26,6 +26,12 @@ type CreatePostResponse struct {
 	UserId    *int       `json:"user_id,omitempty"`
 }
 
+// CreateScketchesRequest defines model for CreateScketchesRequest.
+type CreateScketchesRequest struct {
+	File     *openapi_types.File `json:"file,omitempty"`
+	Filename *string             `json:"filename,omitempty"`
+}
+
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 
@@ -45,10 +51,14 @@ type Post struct {
 	UserName  string    `json:"userName"`
 }
 
-// PostSketchesResponse defines model for PostSketchesResponse.
-type PostSketchesResponse struct {
-	File     *openapi_types.File `json:"file,omitempty"`
-	Filename *string             `json:"filename,omitempty"`
+// Sketch defines model for Sketch.
+type Sketch struct {
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int       `json:"id"`
+	ImageName string    `json:"imageName"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"userId"`
+	UserName  string    `json:"userName"`
 }
 
 // UpdatePostRequest defines model for UpdatePostRequest.
@@ -100,4 +110,4 @@ type SignInJSONRequestBody SignInJSONBody
 type SignUpJSONRequestBody SignUpJSONBody
 
 // PostSketchMultipartRequestBody defines body for PostSketch for multipart/form-data ContentType.
-type PostSketchMultipartRequestBody = PostSketchesResponse
+type PostSketchMultipartRequestBody = CreateScketchesRequest
