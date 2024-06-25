@@ -202,7 +202,7 @@ export interface Sketch {
      * @type {string}
      * @memberof Sketch
      */
-    'imageName': string;
+    'imageUrl': string;
     /**
      * 
      * @type {number}

@@ -47,7 +47,7 @@ type Post struct {
 type Sketch struct {
 	CreatedAt time.Time `json:"createdAt"`
 	Id        int       `json:"id"`
-	ImageName string    `json:"imageName"`
+	ImageUrl  string    `json:"imageUrl"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	UserId    int       `json:"userId"`
 	UserName  string    `json:"userName"`
