@@ -19,7 +19,7 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 }
 
 func (h *PostHandler) CreateSketch(ctx *gin.Context) {
-	var request openapi.CreateSketchRequest
+	var request openapi.CreateScketchesRequest
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
