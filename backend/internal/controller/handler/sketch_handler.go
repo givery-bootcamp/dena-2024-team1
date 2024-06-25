@@ -18,11 +18,24 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 	}
 }
 
-func (h *PostHandler) CreateSketch(ctx *gin.Context) {
+func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	var request openapi.CreateScketchesRequest
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
+	}
+	createdSketch, err := h.su.CreateSketch(*request.Filename, request.File)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(201, openapi.Sketch{
+			Id:        createdSketch.ID,
+			ImageName: createdSketch.ImageName,
+			UserId:    createdSketch.UserID,
+			UserName:  createdSketch.UserName,
+			CreatedAt: createdSketch.CreatedAt,
+			UpdatedAt: createdSketch.UpdatedAt,
+		})
 	}
 }
 
