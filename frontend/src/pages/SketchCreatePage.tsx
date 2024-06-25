@@ -22,7 +22,7 @@ export const SketchCreatePage = () => {
 
   return (
     <div>
-      <SketchHandWriter canvas={canvasRef} onCanvasUpdate={handleCanvasUpdate} />
+      <SketchHandWriter canvasRef={canvasRef} onCanvasUpdate={handleCanvasUpdate} />
       <Button type="submit" onClick={postImageToApi}>APIに送る</Button>
 
       <div>

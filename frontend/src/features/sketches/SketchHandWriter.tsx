@@ -6,25 +6,25 @@ const canvasSetting = {
 };
 
 type Props = {
-  canvas: RefObject<HTMLCanvasElement>
+  canvasRef: RefObject<HTMLCanvasElement>
   onCanvasUpdate: (canvas: HTMLCanvasElement) => void;
 }
 
-export const SketchHandWriter: React.FC<Props> = ({ canvas, onCanvasUpdate }) => {
+export const SketchHandWriter: React.FC<Props> = ({ canvasRef, onCanvasUpdate }) => {
   const [drawing, setDrawing] = useState<boolean>(false);
 
   useEffect(() => {
-    if (canvas.current === null) return;
+    if (canvasRef.current === null) return;
 
-    const ctx = canvas.current.getContext("2d");
+    const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvasSetting.width, canvasSetting.height);
   }, []);
 
   const getContext = () => {
-    if (!canvas.current) return;
-    const ctx = (canvas.current as HTMLCanvasElement).getContext("2d");
+    if (!canvasRef.current) return;
+    const ctx = (canvasRef.current as HTMLCanvasElement).getContext("2d");
     return ctx;
   };
 
@@ -50,14 +50,14 @@ export const SketchHandWriter: React.FC<Props> = ({ canvas, onCanvasUpdate }) =>
 
   const endDrawing = () => {
     setDrawing(false);
-    if (canvas.current === null) return;
-    onCanvasUpdate(canvas.current);
+    if (canvasRef.current === null) return;
+    onCanvasUpdate(canvasRef.current);
   };
 
   return (
     <canvas
       className="border"
-      ref={canvas}
+      ref={canvasRef}
       width={canvasSetting.width}
       height={canvasSetting.height}
       onMouseDown={mouseDown}
