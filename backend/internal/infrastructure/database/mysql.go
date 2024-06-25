@@ -27,6 +27,11 @@ func SetupDB() *gorm.DB {
 	}
 	db.Debug()
 
-	db.AutoMigrate(&model.User{}, &model.Post{}, &model.HelloWorld{})
+	err = db.AutoMigrate(&model.User{}, &model.Post{}, &model.HelloWorld{}, &model.Sketch{})
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	return db
 }

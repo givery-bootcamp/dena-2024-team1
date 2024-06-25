@@ -7,6 +7,7 @@ export function Header() {
       <div className="flex space-x-4">
         <Link to="/" className="text-white">Top</Link>
         <Link to="/posts/create" className="text-white">新規投稿</Link>
+        <Link to="/sketches/create" className="text-white">Sketch</Link>
         <Link to="/signout" className="text-white">Signout</Link>
       </div>
     </header>
