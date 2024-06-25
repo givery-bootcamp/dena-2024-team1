@@ -3,6 +3,7 @@ package filestorage
 import (
 	"errors"
 	"log"
+	"myapp/internal/config"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -16,7 +17,7 @@ type FileStorage interface {
 
 func setUpFileStorage() (*s3.S3, error) {
 	newSession, err := session.NewSession(&aws.Config{
-		Region: aws.String("ap-northeast-1"),
+		Region: aws.String(config.AwsDefaultRegion),
 	})
 
 	if err != nil {
@@ -54,7 +55,7 @@ func (S3FileStorage S3FileStorage) UploadFile(file *os.File, fileName string) er
 	}
 
 	params := &s3.PutObjectInput{
-		Bucket:      aws.String("dena-training-2024-team1"),
+		Bucket:      aws.String(config.S3Bucket),
 		Body:        file,
 		Key:         aws.String(key),
 		ContentType: aws.String("image/" + ext),
