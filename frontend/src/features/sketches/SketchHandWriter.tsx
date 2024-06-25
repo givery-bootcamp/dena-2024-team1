@@ -1,12 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect, RefObject } from "react";
 
 const canvasSetting = {
   width: 500,
   height: 300,
 };
 
-export const PostHandWriting: React.FC = () => {
-  const canvas = useRef<HTMLCanvasElement>(null);
+type Props = {
+  canvas: RefObject<HTMLCanvasElement>
+  onCanvasUpdate: (canvas: HTMLCanvasElement) => void;
+}
+
+export const SketchHandWriter: React.FC<Props> = ({ canvas, onCanvasUpdate }) => {
   const [drawing, setDrawing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,6 +50,8 @@ export const PostHandWriting: React.FC = () => {
 
   const endDrawing = () => {
     setDrawing(false);
+    if (canvas.current === null) return;
+    onCanvasUpdate(canvas.current);
   };
 
   return (
