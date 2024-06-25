@@ -13,6 +13,7 @@ export const PostEditForm = () => {
   const { postId } = useParams<{postId: string}>();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
