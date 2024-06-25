@@ -1,4 +1,9 @@
-import { useState, useEffect, type RefObject } from "react";
+import {
+  useState,
+  useEffect,
+  type RefObject,
+  type MouseEventHandler,
+} from "react";
 
 const canvasSetting = {
   width: 500,
@@ -35,21 +40,22 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
     return ctx;
   };
 
-  const handleMouseDown: React.MouseEventHandler = (e) =>  {
-    const { offsetX: x, offsetY: y } = e.nativeEvent;
+  const handleMouseDown: MouseEventHandler = (event) =>  {
     setIsDrawing(true);
-    const ctx = getContext();
 
+    const { offsetX: x, offsetY: y } = event.nativeEvent;
+
+    const ctx = getContext();
     ctx.beginPath();
     ctx.moveTo(x, y);
   };
 
-  const handleMouseMove: React.MouseEventHandler = (e) => {
+  const handleMouseMove: MouseEventHandler = (event) => {
     if (!isDrawing) return;
 
-    const { offsetX: x ,offsetY: y } = e.nativeEvent;
-    const ctx = getContext();
+    const { offsetX: x ,offsetY: y } = event.nativeEvent;
 
+    const ctx = getContext();
     ctx.lineTo(x, y);
     ctx.stroke();
   }; 
