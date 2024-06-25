@@ -24,7 +24,7 @@ export const SignInPage = () => {
         window.location.href = "/";
       }
     } catch (error) {
-      alert("サインインに失敗しました。ユーザーネームかパスワードが間違っています");
+      alert("サインインに失敗しました。ユーザー名かパスワードが間違っています");
     }
 
   }, []);
