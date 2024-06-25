@@ -32,7 +32,7 @@ export const SignForm = (props: SignFormProps) => {
       </div>
       <hr className="border-border" />
       <div className="flex flex-col gap-3 text-lg">
-        <label className="text-lg" htmlFor="username">ユーザーネーム</label>
+        <label className="text-lg" htmlFor="username">ユーザー名</label>
         <input className="border border-border p-2" type="text" id="username" name="username" />
         <label className="text-lg" htmlFor="password">パスワード</label>
         <input className="border border-border p-2" type="password" id="password" name="password" />
