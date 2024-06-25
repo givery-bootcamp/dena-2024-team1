@@ -26,9 +26,9 @@ export const PostEditForm = () => {
   if (!post) return <p>Loading...</p>;
   useEffect(() => {
     dispatch(APIService.getPost(Number(postId)));
-    //setTitle(post.title);
-    //setBody(post.body); 
-  }, []);
+    setTitle(post.title);
+    setBody(post.body); 
+  }, [dispatch]);
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     //console.log(title);
@@ -42,8 +42,8 @@ export const PostEditForm = () => {
     const response = await postApi.putPost(
       parseInt(postId ?? ""),
       {
-        title: "固定タイトル",
-        body: "固定本文",
+        title,
+        body,
       },
       { 
         withCredentials: true,
@@ -56,7 +56,7 @@ export const PostEditForm = () => {
       navigate("/");
     }
 
-  }, []);
+  }, [title, body]);
 
 
   return (
