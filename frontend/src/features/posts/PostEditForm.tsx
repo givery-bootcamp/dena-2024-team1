@@ -1,5 +1,5 @@
-import { useCallback , FormEvent , useEffect , useState } from "react";
-import { useNavigate , useParams } from "react-router-dom";
+import { useCallback, FormEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "~/shared/hooks";
 import { Button } from "~/shared/components/Button";
