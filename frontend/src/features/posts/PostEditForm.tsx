@@ -13,7 +13,7 @@ export const PostEditForm = () => {
   const { postId } = useParams<{postId: string}>();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
@@ -22,11 +22,11 @@ export const PostEditForm = () => {
     setBody(event.target.value);
   };
 
-  if (!post) return <p>Loading...</p>;
+
   useEffect(() => {
     dispatch(APIService.getPost(Number(postId)));
-    setTitle(post.title);
-    setBody(post.body); 
+    setTitle(post?.title ?? "");
+    setBody(post?.body ?? ""); 
   }, [dispatch]);
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
@@ -46,7 +46,6 @@ export const PostEditForm = () => {
     }
 
   }, [title, body]);
-
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
