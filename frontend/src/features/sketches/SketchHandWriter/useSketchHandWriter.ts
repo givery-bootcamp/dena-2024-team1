@@ -12,10 +12,9 @@ const canvasSetting = {
 
 type Args = {
   canvasRef: RefObject<HTMLCanvasElement>
-  onCanvasUpdate: (canvas: HTMLCanvasElement) => void;
 }
 
-export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
+export const useSketchHandWriter = ({ canvasRef }: Args) => {
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -62,8 +61,6 @@ export const useSketchHandWriter = ({ canvasRef, onCanvasUpdate }: Args) => {
 
   const handleDrawingFinish = () => {
     setIsDrawing(false);
-    if (canvasRef.current === null) return;
-    onCanvasUpdate(canvasRef.current);
   };
 
   return {

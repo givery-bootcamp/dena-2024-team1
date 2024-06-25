@@ -4,19 +4,15 @@ import { useSketchHandWriter } from "./useSketchHandWriter";
 
 type Props = {
   canvasRef: RefObject<HTMLCanvasElement>
-  onCanvasUpdate: (canvas: HTMLCanvasElement) => void;
 }
 
-export const SketchHandWriter: FC<Props> = ({ canvasRef, onCanvasUpdate }) => {
+export const SketchHandWriter: FC<Props> = ({ canvasRef }) => {
   const {
     canvasSetting,
     handleMouseDown,
     handleMouseMove,
     handleDrawingFinish,
-  } = useSketchHandWriter({
-    canvasRef,
-    onCanvasUpdate,
-  });
+  } = useSketchHandWriter({ canvasRef });
 
   return (
     <canvas
