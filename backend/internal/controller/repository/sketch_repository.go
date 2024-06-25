@@ -2,11 +2,12 @@ package repository
 
 import (
 	"errors"
-	"go/types"
+	// "go/types"
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
+	"github.com/oapi-codegen/runtime/types"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +22,7 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 }
 
 func (r *SketchRepository) CreateSketch(filename string, file *types.File) (entity.Sketch, error) {
+
 	sketch := model.Sketch{
 		ImageName: filename,
 	}

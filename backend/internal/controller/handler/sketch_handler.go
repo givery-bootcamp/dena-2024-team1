@@ -4,6 +4,7 @@ import (
 	"errors"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,18 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 
 func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	var request openapi.CreateScketchesRequest
+
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+	destination := "./uploads/" + file.Filename
+
+	if err := ctx.SaveUploadedFile(file, destination); err != nil {
+		ctx.String(http.StatusInternalServerError, "Failed to save file: %s", err.Error())
+		return
+	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
