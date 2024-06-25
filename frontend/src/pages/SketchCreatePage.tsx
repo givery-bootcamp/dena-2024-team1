@@ -4,11 +4,13 @@ import { useRef } from "react";
 import { SketchHandWriter } from "~/features/sketches/SketchHandWriter";
 import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
+import { useCanvas } from "~/shared/hooks/useCanvas";
 
 export const SketchCreatePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { clearCanvas } = useCanvas({ canvasRef });
 
-  const postImageToApi = async () => {
+  const postSketchToApi = async () => {
     const canvas = canvasRef.current;
     if (canvas === null) return;
     const image = canvas.toDataURL("image/png");
@@ -22,8 +24,8 @@ export const SketchCreatePage = () => {
       <SketchHandWriter canvasRef={canvasRef} />
 
       <div className="flex flex-col gap-2">
-        <Button variant="secondary">リセット</Button>
-        <Button onClick={postImageToApi}>投稿する</Button>
+        <Button variant="secondary" onClick={clearCanvas}>リセット</Button>
+        <Button onClick={postSketchToApi}>投稿する</Button>
       </div>
     </Container>
   );

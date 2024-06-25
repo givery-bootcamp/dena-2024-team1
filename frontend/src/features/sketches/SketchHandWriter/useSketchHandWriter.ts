@@ -5,6 +5,8 @@ import {
   type MouseEventHandler,
 } from "react";
 
+import { useCanvas } from "~/shared/hooks/useCanvas";
+
 const canvasSetting = {
   width: 1020,
   height: 400,
@@ -16,28 +18,11 @@ type Args = {
 
 export const useSketchHandWriter = ({ canvasRef }: Args) => {
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const { getContext, clearCanvas } = useCanvas({ canvasRef });
 
   useEffect(() => {
     clearCanvas();
   }, []);
-
-  const clearCanvas = () => {
-    const ctx = getContext();
-    ctx.clearRect(0, 0, canvasSetting.width, canvasSetting.height);
-  };
-
-  const getContext = (): CanvasRenderingContext2D => {
-    if (!canvasRef.current) {
-      throw new Error("canvasRef is not assigned");
-    }
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) {
-      throw new Error("Failed to get 2d context");
-    }
-
-    return ctx;
-  };
 
   const handleMouseDown: MouseEventHandler = (event) =>  {
     setIsDrawing(true);
