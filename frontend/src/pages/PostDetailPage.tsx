@@ -27,7 +27,7 @@ export function PostDetailPage() {
       console.log("Deleted post successfully!");
       window.location.href = "/";
     }
-  }
+  };
 
   if (!post) return <p>Loading...</p>;
   return (
