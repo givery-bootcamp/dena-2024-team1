@@ -129,11 +129,6 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 	ctx.JSON(200, response)
 }
 
-func (h *PostHandler) CreateSketch(ctx *gin.Context) {
-	var request openapi.CreateSketchRequest
-	if err := ctx.ShouldBindJSON(&request); err != nil {
-		handleError(ctx, 400, err)
-	}
 func (h *PostHandler) DeletePost(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

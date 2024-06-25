@@ -15,6 +15,10 @@ func NewSketchUsecase(pr repository.SketchRepository) SketchUsecase {
 	}
 }
 
+func (u *SketchUsecase) CreateSketch(filename string, file string) (entity.Sketch, error) {
+	return u.sketchRepository.CreateSketch(filename, file)
+}
+
 func (u *SketchUsecase) GetSketches() ([]entity.Sketch, error) {
 	return u.sketchRepository.GetAll()
 }

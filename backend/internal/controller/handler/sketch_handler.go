@@ -18,6 +18,14 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 	}
 }
 
+func (h *PostHandler) CreateSketch(ctx *gin.Context) {
+	var request openapi.CreateSketchRequest
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		handleError(ctx, 400, err)
+	}
+}
+
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
 	ps, err := h.su.GetSketches()
 	var response openapi.GetAllSketchesResponse
