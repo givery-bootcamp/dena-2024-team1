@@ -34,3 +34,7 @@ func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Pos
 func (u *PostUsecase) CreateSketch(filename string, file string) (entity.Sketch, error) {
 	return u.postRepository.CreateSketch(filename, file)
 }
+
+func (u *PostUsecase) DeletePost(id int) error {
+	return u.postRepository.DeletePost(id)
+}

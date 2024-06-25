@@ -89,30 +89,34 @@ paths:
         - post
       summary: ''
   /sketches:
-    post:
-      description: Upload a sketch image
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PostSketchesResponse'
+    get:
+      description: Retrieve all sketches.
       responses:
-        '201':
-          description: Sketch image uploaded successfully.
+        '200':
+          description: Sketches retrieved successfully.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/GetAllSketchesResponse'
               examples:
                 default:
                   value:
-                    message: success
-      operationId: postSketch
-
+                    - id: 1
+                      imageName: 'sketch1.jpg'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-01T00:00:00Z'
+                      updatedAt: '2021-01-01T00:00:00Z'
+                    - id: 2
+                      imageName: 'sketch2.jpg'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-02T00:00:00Z'
+                      updatedAt: '2021-01-02T00:00:00Z'
+      operationId: getAllSketches
+      summary: ''
+      tags:
+        - sketch
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
@@ -205,6 +209,25 @@ paths:
       tags:
         - post
       summary: ''
+    delete:
+      description: Delete a post.
+      operationId: deletePost
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: no content.
+        "400":
+          description: Failed to delete a post.
+      tags:
+        - post
   /signup:
     post:
       description: Create a new user.
@@ -469,15 +492,35 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Post'
-    PostSketchesResponse:
-    # まずは最小で
+    GetAllSketchesResponse:
+      title: GetAllSketchesResponse
+      type: array
+      items:
+        $ref: '#/components/schemas/Sketch'
+    Sketch:
       type: object
       properties:
-        filename: 
+        id:
+          type: integer
+        imageName:
           type: string
-        file:
+        userId:
+          type: integer
+        userName:
           type: string
-          format: binary
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - imageName
+        - userId
+        - userName
+        - createdAt
+        - updatedAt
   responses: {}
 servers:
   - url: 'http://localhost:9000'

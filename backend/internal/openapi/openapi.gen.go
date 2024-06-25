@@ -29,6 +29,9 @@ type CreatePostResponse struct {
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 
+// GetAllSketchesResponse defines model for GetAllSketchesResponse.
+type GetAllSketchesResponse = []Sketch
+
 // GetPostResponse defines model for GetPostResponse.
 type GetPostResponse = Post
 

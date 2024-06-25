@@ -188,6 +188,49 @@ export interface SignUpRequest {
 /**
  * 
  * @export
+ * @interface Sketch
+ */
+export interface Sketch {
+    /**
+     * 
+     * @type {number}
+     * @memberof Sketch
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Sketch
+     */
+    'imageName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Sketch
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Sketch
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Sketch
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Sketch
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface UpdatePostRequest
  */
 export interface UpdatePostRequest {
@@ -461,6 +504,39 @@ export class DefaultApi extends BaseAPI {
 export const PostApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Delete a post.
+         * @param {number} postId The unique identifier of the post.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePost: async (postId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postId' is not null or undefined
+            assertParamExists('deletePost', 'postId', postId)
+            const localVarPath = `/posts/{postId}`
+                .replace(`{${"postId"}}`, encodeURIComponent(String(postId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieve all posts.
          * @summary 
          * @param {*} [options] Override http request option.
@@ -611,6 +687,18 @@ export const PostApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PostApiAxiosParamCreator(configuration)
     return {
         /**
+         * Delete a post.
+         * @param {number} postId The unique identifier of the post.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePost(postId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePost(postId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostApi.deletePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieve all posts.
          * @summary 
          * @param {*} [options] Override http request option.
@@ -673,6 +761,15 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = PostApiFp(configuration)
     return {
         /**
+         * Delete a post.
+         * @param {number} postId The unique identifier of the post.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePost(postId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePost(postId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieve all posts.
          * @summary 
          * @param {*} [options] Override http request option.
@@ -723,6 +820,17 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
  */
 export class PostApi extends BaseAPI {
     /**
+     * Delete a post.
+     * @param {number} postId The unique identifier of the post.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostApi
+     */
+    public deletePost(postId: number, options?: RawAxiosRequestConfig) {
+        return PostApiFp(this.configuration).deletePost(postId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieve all posts.
      * @summary 
      * @param {*} [options] Override http request option.
@@ -768,6 +876,107 @@ export class PostApi extends BaseAPI {
      */
     public putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: RawAxiosRequestConfig) {
         return PostApiFp(this.configuration).putPost(postId, updatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SketchApi - axios parameter creator
+ * @export
+ */
+export const SketchApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Retrieve all sketches.
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllSketches: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/sketches`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SketchApi - functional programming interface
+ * @export
+ */
+export const SketchApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SketchApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Retrieve all sketches.
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllSketches(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Sketch>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllSketches(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SketchApi.getAllSketches']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SketchApi - factory interface
+ * @export
+ */
+export const SketchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SketchApiFp(configuration)
+    return {
+        /**
+         * Retrieve all sketches.
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllSketches(options?: any): AxiosPromise<Array<Sketch>> {
+            return localVarFp.getAllSketches(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SketchApi - object-oriented interface
+ * @export
+ * @class SketchApi
+ * @extends {BaseAPI}
+ */
+export class SketchApi extends BaseAPI {
+    /**
+     * Retrieve all sketches.
+     * @summary 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SketchApi
+     */
+    public getAllSketches(options?: RawAxiosRequestConfig) {
+        return SketchApiFp(this.configuration).getAllSketches(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
