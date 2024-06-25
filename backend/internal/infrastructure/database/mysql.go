@@ -27,6 +27,6 @@ func SetupDB() *gorm.DB {
 	}
 	db.Debug()
 
-	db.AutoMigrate(&model.User{}, &model.Post{}, &model.HelloWorld{})
+	db.AutoMigrate(&model.User{}, &model.Post{}, &model.HelloWorld{}, &model.Sketch{})
 	return db
 }
