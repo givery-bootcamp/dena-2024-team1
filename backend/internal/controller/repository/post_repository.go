@@ -60,11 +60,11 @@ func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.
 	}
 
 	// 既存の投稿に対して、引数のtitleとbodyを代入
-	existngPost.Title = title
-	existngPost.Body = body
+	// existngPost.Title = title
+	// existngPost.Body = body
 
 	// 存在していたら書き込み
-	if err := r.Conn.Model(&existngPost).Update("title", "body").Error; err != nil {
+	if err := r.Conn.Model(&existngPost).Updates(model.Post{Title: title, Body: body}).Error; err != nil {
 		return nil, err
 	}
 
@@ -140,24 +140,6 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	}
 
 	return convertPostRepositoryModelToEntity(&post, &user), nil
-}
-
-func (r *PostRepository) DeletePost(id int) error {
-	var post model.Post
-	postResult := r.Conn.Where("id = ?", id).First(&post)
-	if postResult.Error != nil {
-		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
-			return nil
-		}
-		return postResult.Error
-	}
-
-	postDeleteResult := r.Conn.Delete(&post)
-	if postDeleteResult.Error != nil {
-		return postDeleteResult.Error
-	}
-
-	return nil
 }
 
 func convertPostRepositoryModelToEntity(p *model.Post, u *model.User) *entity.Post {
