@@ -26,13 +26,3 @@ export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) 
   });
   return response.data;
 });
-
-export const deletePost = createAsyncThunk<void, number>("deletePost", async (postId) => {
-  const response = await postApi.deletePost(postId, {
-    withCredentials: true,
-  });
-  if (response.status === 204) {
-    return;
-  }
-  throw new Error("Failed to delete post");
-});
