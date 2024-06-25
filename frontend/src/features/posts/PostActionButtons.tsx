@@ -5,7 +5,7 @@ import { Button } from "~/shared/components/Button";
 
 type Props = {
   postId: number;
-  onDelete: () => Promise<void>;
+  onDelete: () => void;
 }
 
 export const PostActionButtons: FC<Props> = ({ postId, onDelete }) => {
