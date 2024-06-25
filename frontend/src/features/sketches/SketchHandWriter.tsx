@@ -28,7 +28,7 @@ export const SketchHandWriter: React.FC<Props> = ({ canvasRef, onCanvasUpdate })
     return ctx;
   };
 
-  const mouseDown: React.MouseEventHandler = (e) =>  {
+  const handleMouseDown: React.MouseEventHandler = (e) =>  {
     const { offsetX: x, offsetY: y } = e.nativeEvent;
     setDrawing(true);
     const ctx = getContext();
@@ -38,7 +38,7 @@ export const SketchHandWriter: React.FC<Props> = ({ canvasRef, onCanvasUpdate })
     ctx.moveTo(x, y);
   };
 
-  const mouseMove: React.MouseEventHandler = (e) => {
+  const handleMouseMove: React.MouseEventHandler = (e) => {
     if (!drawing) return;
 
     const { offsetX: x ,offsetY: y } = e.nativeEvent;
@@ -48,7 +48,7 @@ export const SketchHandWriter: React.FC<Props> = ({ canvasRef, onCanvasUpdate })
     ctx.stroke();
   }; 
 
-  const endDrawing = () => {
+  const handleDrawingFinish = () => {
     setDrawing(false);
     if (canvasRef.current === null) return;
     onCanvasUpdate(canvasRef.current);
@@ -60,10 +60,10 @@ export const SketchHandWriter: React.FC<Props> = ({ canvasRef, onCanvasUpdate })
       ref={canvasRef}
       width={canvasSetting.width}
       height={canvasSetting.height}
-      onMouseDown={mouseDown}
-      onMouseMove={mouseMove}
-      onMouseUp={endDrawing}
-      onMouseLeave={endDrawing}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleDrawingFinish}
+      onMouseLeave={handleDrawingFinish}
     />
   );
 };
