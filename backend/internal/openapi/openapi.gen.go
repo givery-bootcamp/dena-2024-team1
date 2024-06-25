@@ -27,6 +27,9 @@ type CreatePostResponse struct {
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 
+// GetAllSketchesResponse defines model for GetAllSketchesResponse.
+type GetAllSketchesResponse = []Sketch
+
 // GetPostResponse defines model for GetPostResponse.
 type GetPostResponse = Post
 
@@ -37,6 +40,16 @@ type Post struct {
 	Id        int       `json:"id"`
 	Title     string    `json:"title"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	UserName  string    `json:"userName"`
+}
+
+// Sketch defines model for Sketch.
+type Sketch struct {
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int       `json:"id"`
+	ImageName string    `json:"imageName"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"userId"`
 	UserName  string    `json:"userName"`
 }
 
