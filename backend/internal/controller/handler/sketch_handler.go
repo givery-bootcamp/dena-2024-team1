@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"myapp/internal/config"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
 
@@ -19,16 +20,17 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 }
 
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
-	ps, err := h.su.GetSketches()
+	ss, err := h.su.GetSketches()
 	var response openapi.GetAllSketchesResponse
-	for _, p := range ps {
+	for _, s := range ss {
+		imageURL := config.S3BucketURL + s.ImageName
 		response = append(response, openapi.Sketch{
-			Id:        p.ID,
-			ImageName: p.ImageName,
-			UserId:    p.UserID,
-			UserName:  p.UserName,
-			CreatedAt: p.CreatedAt,
-			UpdatedAt: p.UpdatedAt,
+			Id:        s.ID,
+			ImageUrl:  imageURL,
+			UserId:    s.UserID,
+			UserName:  s.UserName,
+			CreatedAt: s.CreatedAt,
+			UpdatedAt: s.UpdatedAt,
 		})
 	}
 
