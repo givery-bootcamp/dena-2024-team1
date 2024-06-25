@@ -88,7 +88,35 @@ paths:
       tags:
         - post
       summary: ''
-    
+  /sketches:
+    get:
+      description: Retrieve all sketches.
+      responses:
+        '200':
+          description: Sketches retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllSketchesResponse'
+              examples:
+                default:
+                  value:
+                    - id: 1
+                      imageName: 'sketch1.jpg'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-01T00:00:00Z'
+                      updatedAt: '2021-01-01T00:00:00Z'
+                    - id: 2
+                      imageName: 'sketch2.jpg'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-02T00:00:00Z'
+                      updatedAt: '2021-01-02T00:00:00Z'
+      operationId: getAllSketches
+      summary: ''
+      tags:
+        - sketch
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
@@ -464,6 +492,35 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Post'
+    GetAllSketchesResponse:
+      title: GetAllSketchesResponse
+      type: array
+      items:
+        $ref: '#/components/schemas/Sketch'
+    Sketch:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageName:
+          type: string
+        userId:
+          type: integer
+        userName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - imageName
+        - userId
+        - userName
+        - createdAt
+        - updatedAt
   responses: {}
 servers:
   - url: 'http://localhost:9000'
