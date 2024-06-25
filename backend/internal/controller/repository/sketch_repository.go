@@ -19,6 +19,22 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
+func (r *SketchRepository) CreateSketch(filename string, file string) (entity.Sketch, error) {
+	sketch := model.Sketch{
+		ImageName: filename,
+	}
+	sketchResult := r.Conn.Create(&sketch)
+	if sketchResult.Error != nil {
+		return entity.Sketch{}, sketchResult.Error
+	}
+	return entity.Sketch{
+		ID:        int(sketch.ID),
+		ImageName: sketch.ImageName,
+		CreatedAt: sketch.CreatedAt,
+		UpdatedAt: sketch.UpdatedAt,
+	}, nil
+}
+
 func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {
 	var sketches []model.Sketch
 	sketchResult := r.Conn.Find(&sketches)
