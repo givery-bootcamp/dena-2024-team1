@@ -88,7 +88,31 @@ paths:
       tags:
         - post
       summary: ''
-    
+  /sketches:
+    post:
+      description: Upload a sketch image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostSketchesResponse'
+      responses:
+        '201':
+          description: Sketch image uploaded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                default:
+                  value:
+                    message: success
+      operationId: postSketch
+
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
@@ -445,6 +469,15 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Post'
+    PostSketchesResponse:
+    # まずは最小で
+      type: object
+      properties:
+        filename: 
+          type: string
+        file:
+          type: string
+          format: binary
   responses: {}
 servers:
   - url: 'http://localhost:9000'
