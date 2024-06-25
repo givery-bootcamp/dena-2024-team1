@@ -3,6 +3,7 @@ import { useRef } from "react";
 
 import { SketchHandWriter } from "~/features/sketches/SketchHandWriter";
 import { Button } from "~/shared/components/Button";
+import { Container } from "~/shared/components/Container";
 
 export const SketchCreatePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -17,9 +18,13 @@ export const SketchCreatePage = () => {
   };
 
   return (
-    <div>
+    <Container className="flex flex-col gap-8 pt-10">
       <SketchHandWriter canvasRef={canvasRef} />
-      <Button type="submit" onClick={postImageToApi}>APIに送る</Button>
-    </div>
+
+      <div className="flex flex-col gap-2">
+        <Button variant="secondary">リセット</Button>
+        <Button onClick={postImageToApi}>投稿する</Button>
+      </div>
+    </Container>
   );
 };

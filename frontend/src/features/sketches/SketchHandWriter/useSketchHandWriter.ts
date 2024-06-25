@@ -6,8 +6,8 @@ import {
 } from "react";
 
 const canvasSetting = {
-  width: 500,
-  height: 300,
+  width: 1020,
+  height: 400,
 };
 
 type Args = {
