@@ -128,3 +128,17 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 	}
 	ctx.JSON(200, response)
 }
+
+func (h *PostHandler) DeletePost(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		handleError(ctx, 400, err)
+	}
+
+	err = h.pu.DeletePost(id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(204, nil)
+	}
+}

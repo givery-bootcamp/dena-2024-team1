@@ -30,3 +30,7 @@ func (u *PostUsecase) CreatePost(post entity.Post) (entity.Post, error) {
 func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Post, error) {
 	return u.postRepository.UpdatePost(id, title, body)
 }
+
+func (u *PostUsecase) DeletePost(id int) error {
+	return u.postRepository.DeletePost(id)
+}

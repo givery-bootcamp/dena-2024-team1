@@ -40,7 +40,7 @@ func setupEndpoints(router *gin.Engine) {
 	router.GET("/posts/:id", authMiddleware, apiHandler.PostHandler.GetPost)
 	router.POST("/posts", authMiddleware, apiHandler.PostHandler.CreatePost)
 	router.PUT("/posts/:id", authMiddleware, apiHandler.PostHandler.UpdatePost)
+	router.DELETE("/posts/:id", authMiddleware, apiHandler.PostHandler.DeletePost)
 	router.POST("/signout", authMiddleware, apiHandler.UserHandler.Signout)
 	router.GET("/session_user", authMiddleware, apiHandler.UserHandler.GetSessionUser)
-
 }

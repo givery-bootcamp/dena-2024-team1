@@ -181,6 +181,25 @@ paths:
       tags:
         - post
       summary: ''
+    delete:
+      description: Delete a post.
+      operationId: deletePost
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: no content.
+        "400":
+          description: Failed to delete a post.
+      tags:
+        - post
   /signup:
     post:
       description: Create a new user.
