@@ -102,13 +102,13 @@ paths:
                 default:
                   value:
                     - id: 1
-                      imageName: 'sketch1.jpg'
+                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/happy.png'
                       userId: 1
                       userName: John Doe
                       createdAt: '2021-01-01T00:00:00Z'
                       updatedAt: '2021-01-01T00:00:00Z'
                     - id: 2
-                      imageName: 'sketch2.jpg'
+                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/quickMTG.png'
                       userId: 1
                       userName: John Doe
                       createdAt: '2021-01-02T00:00:00Z'
@@ -526,7 +526,7 @@ components:
       properties:
         id:
           type: integer
-        imageName:
+        imageUrl:
           type: string
         userId:
           type: integer
@@ -540,7 +540,7 @@ components:
           format: date-time
       required:
         - id
-        - imageName
+        - imageUrl
         - userId
         - userName
         - createdAt

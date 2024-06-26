@@ -21,6 +21,11 @@ var SessionSecret = "session"
 var SessionName = "session-name"
 var SessionKey = "user"
 
+var AwsDefaultRegion = "ap-northeast-1"
+var S3Bucket = "dena-training-2024-team1"
+
+var S3BucketURL = "https://team-1.member0005.track-bootcamp.run/images/"
+
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
 		HostName = v
@@ -54,5 +59,14 @@ func init() {
 	}
 	if v := os.Getenv("SESSION_KEY"); v != "" {
 		SessionKey = v
+	}
+	if v := os.Getenv("AWS_DEFAULT_REGION"); v != "" {
+		AwsDefaultRegion = v
+	}
+	if v := os.Getenv("S3_BUCKET"); v != "" {
+		S3Bucket = v
+	}
+	if v := os.Getenv("S3_BUCKET_URL"); v != "" {
+		S3BucketURL = v
 	}
 }
