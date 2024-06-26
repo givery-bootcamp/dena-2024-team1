@@ -1,9 +1,9 @@
-import { useEffect,Fragment } from "react";
+import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
 import { Container } from "~/shared/components/Container";
-import { SketchItem } from "~/features/sketches/SketchItem";
+import { SketchList } from "~/features/sketches/SketchList";
 
 export function SketchListPage() {
   const { sketches } = useAppSelector((state) => state.sketches);
@@ -16,13 +16,7 @@ export function SketchListPage() {
   if (!sketches) return <p>Loading...</p>;
   return (
     <Container className='mt-10'>
-      <div className='grid grid-cols-3 gap-10'>
-        {sketches.map((sketch,index) => (
-          <Fragment key={index}>
-            <SketchItem sketch={sketch}/>
-          </Fragment>
-      ))}
-      </div>
+      <SketchList sketches={sketches} />
     </Container>
   );
 }
