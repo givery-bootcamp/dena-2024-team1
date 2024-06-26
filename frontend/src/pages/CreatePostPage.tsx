@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "~/shared/components/Container";
 import { Button } from "~/shared/components/Button";
 import { postApi } from "~/shared/services/API";
+import { useAppSelector } from "~/shared/hooks";
 
 export function CreatePostPage() {
   const navigate = useNavigate();
+  const { sessionUser } = useAppSelector((state) => state.sessionUser);
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,7 +16,12 @@ export function CreatePostPage() {
     const formData = new FormData(form);
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
-    const user_id = 1;
+
+    if (!sessionUser || !sessionUser.id) {
+      return;
+    }
+
+    const user_id = sessionUser.id;
     const response = await postApi.postPost({
       title,
       body,
