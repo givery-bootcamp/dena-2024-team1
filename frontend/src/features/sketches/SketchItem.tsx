@@ -5,7 +5,7 @@ type SketchItemProps = {sketch: Sketch};
 
 export function SketchItem({ sketch }: SketchItemProps) {
   return(
-    <div className="flex flex-col items-center border border-solid border-gray-200 py-4">
+    <div className="flex flex-col items-center border border-solid border-gray-200 py-4 hover:scale-110">
       <img src={sketch.imageUrl} alt={sketch.imageUrl} className="w-1/2"/>
       <div>
         <div className='text-sm font-semibold text-gray-100'>
