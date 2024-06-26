@@ -26,21 +26,22 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 }
 
 func (r *SketchRepository) CreateSketch(destination string) error {
-
 	fn := uuid.New().String() + ".png"
 	file, err := os.Open(destination)
 	if err != nil {
 		return err
 	}
 	s3FileStorage := filestorage.SetUpS3()
-	// fileName = "ファイル名を定義"
 
-	s3FileStorage.UploadFile(file, fn)
+	err = s3FileStorage.UploadFile(file, fn)
+	if err != nil {
+		return err
+	}
 
 	sketch := model.Sketch{
 		ImageName: fn,
 		// TODO：ここでUserIDをどうやって取得するか
-		UserID:    1,
+		UserID: 1,
 	}
 	sketchResult := r.Conn.Create(&sketch)
 	if sketchResult.Error != nil {
