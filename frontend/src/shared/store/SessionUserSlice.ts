@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "~/generated";
 
 export type SessionUserState = {
-  sessionUser?: User
+  sessionUser?: User;
 };
 
 export const initialState: SessionUserState = {};
