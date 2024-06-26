@@ -12,7 +12,7 @@ export function ImageListPage() {
   useEffect(() => {
     dispatch(APIService.getSketches());
   }, [dispatch]);
-  console.log(sketches);
+
   
   return (
     <Container className='mt-10'>
