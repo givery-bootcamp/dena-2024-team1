@@ -13,11 +13,11 @@ export function SketchListPage() {
     dispatch(APIService.getSketches());
   }, [dispatch]);
 
-  
+  if (!sketches) return <p>Loading...</p>;
   return (
     <Container className='mt-10'>
       <div className='grid grid-cols-3 gap-10'>
-        {sketches?.map((sketch,index) => (
+        {sketches.map((sketch,index) => (
           <Fragment key={index}>
             <SketchItem sketch={sketch}/>
           </Fragment>
