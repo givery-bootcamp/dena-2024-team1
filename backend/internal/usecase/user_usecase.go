@@ -19,7 +19,7 @@ func NewUserUsecase(ur repository.UserRepository) UserUsecase {
 	}
 }
 
-func (u UserUsecase) Signup(username, password string) error {
+func (u UserUsecase) Signup(session sessions.Session, username, password string) error {
 	if username == "" {
 		return errors.New("username is empty")
 	}
@@ -45,7 +45,20 @@ func (u UserUsecase) Signup(username, password string) error {
 		return err
 	}
 
-	return u.userRepository.CreateUser(username, password)
+	user, err = u.userRepository.CreateUser(username, password)
+
+	if err != nil {
+		return err
+	}
+
+	// セッションにユーザーを保存
+	err = u.userRepository.SaveSession(session, user)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u UserUsecase) Signin(session sessions.Session, username, password string) error {
