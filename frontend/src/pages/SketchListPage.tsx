@@ -17,7 +17,9 @@ export function SketchListPage() {
   return (
     <div className="h-screen w-screen">
       <InfiniteCanvas>
-        <SketchList sketches={sketches} />
+        <div className="p-10">
+          <SketchList sketches={sketches} />
+        </div>
       </InfiniteCanvas>
     </div>
   );

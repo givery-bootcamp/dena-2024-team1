@@ -6,7 +6,7 @@ import {
 } from "react-infinite-canvas";
 
 const config = {
-  scale: 0.5,
+  scale: 1,
   backgroundColor: "white",
 };
 
