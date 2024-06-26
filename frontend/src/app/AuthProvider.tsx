@@ -24,7 +24,7 @@ export const AuthProvider = () => {
   
       // 取得に成功した場合
       if (response.status === 200) {
-          const user = response.data;
+          const user = response.data.user;
   
           // ユーザー情報をセット
           dispatch(sessionUserSlice.actions.setSessionUser(user));
