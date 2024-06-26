@@ -31,8 +31,8 @@ export const SignUpPage = () => {
     <Container>
       <SignForm
         onSubmit={handleSubmit}
-        title="サインアップ"
-        submitText="サインアップ"
+        title="新規登録"
+        submitText="アカウントを作成"
         linkText="アカウントをお持ちの方はこちら"
         linkTo="/signin"
       />

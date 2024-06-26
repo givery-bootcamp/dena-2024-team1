@@ -33,8 +33,8 @@ export const SignInPage = () => {
     <Container>
       <SignForm
         onSubmit={handleSubmit}
-        title="サインイン"
-        submitText="サインイン"
+        title="ログイン"
+        submitText="ログイン"
         linkText="アカウントをお持ちでない方はこちら"
         linkTo="/signup"
       />
