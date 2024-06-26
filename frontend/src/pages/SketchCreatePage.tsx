@@ -1,27 +1,42 @@
-import axios from "axios";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { SketchHandWriter } from "~/features/sketches/SketchHandWriter";
+import { SketchApi } from "~/generated";
 import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
 import { useCanvas } from "~/shared/hooks/useCanvas";
 
 export const SketchCreatePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const navigate = useNavigate();
   const { clearCanvas } = useCanvas({ canvasRef });
+
+  const api = new SketchApi();
 
   const postSketchToApi = async () => {
     const canvas = canvasRef.current;
     if (canvas === null) return;
     const image = canvas.toDataURL("image/png");
 
-    // TODO: 画像保存APIに画像を送信する
-    await axios.post("http://localhost:9000/images", { image });
+    const blob = await fetch(image).then((res) => res.blob());
+    const file = new File([blob], "sketch.png", { type: "image/png" });
+    const result = await api.postSketch(file, {
+      withCredentials: true,
+    });
+
+    if (result.status !== 201) {
+      throw new Error("画像のアップロードに失敗しました");
+    }
+
+    navigate("/sketches");
   };
 
   return (
-    <Container className="flex flex-col gap-8 pt-10">
-      <SketchHandWriter canvasRef={canvasRef} />
+    <Container className="flex max-w-[900px] flex-col gap-8 pt-10">
+      <div>
+        <SketchHandWriter canvasRef={canvasRef} />
+      </div>
 
       <div className="flex flex-col gap-2">
         <Button variant="secondary" onClick={clearCanvas}>リセット</Button>
