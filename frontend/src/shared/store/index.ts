@@ -4,6 +4,7 @@ import helloReducer, { helloSlice } from "./HelloSlice";
 import postsReducer, { postsSlice } from "./PostsSlice";
 import sessionUserReducer, { sessionUserSlice } from "./SessionUserSlice";
 import postReducer, { postSlice } from "./PostSlice";
+import sketchesReducer, { sketchesSlice } from "./SketchesSlice";
 
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     posts: postsReducer,
     sessionUser: sessionUserReducer,
     post: postReducer,
+    sketches: sketchesReducer,
   },
 });
 
@@ -20,6 +22,7 @@ export const actions = {
   ...postsSlice.actions,
   ...sessionUserSlice.actions,
   ...postSlice.actions,
+  ...sketchesSlice.actions,
 };
 
 export type RootState = ReturnType<typeof store.getState>;
