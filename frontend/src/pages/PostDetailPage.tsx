@@ -1,34 +1,80 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { PostActionButtons } from "~/features/posts/PostActionButtons";
+import { PostContent } from "~/features/posts/PostContent";
+import { PostHeading } from "~/features/posts/PostHeading";
+import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "~/shared/components/Modal";
+import { useAppSelector, useAppDispatch } from "~/shared/hooks";
+import { APIService } from "~/shared/services";
+import { postApi } from "~/shared/services/API";
+import { formatDateTime } from "~/shared/utils";
 
 export function PostDetailPage() {
+  const { post } = useAppSelector((state) => state.post);
+  const dispatch = useAppDispatch();
+  const { postId } = useParams<{postId: string}>();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(APIService.getPost(Number(postId)));
+  }, [dispatch]);
+
+  const handleDelete = async () => {
+    const response = await postApi.deletePost(Number(postId) , {
+      withCredentials: true,
+    });
+    if (response.status === 204) {
+      console.log("Deleted post successfully!");
+      window.location.href = "/";
+    }
+  };
+
+  const handleModalOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
+
+  if (!post) return <p>Loading...</p>;
   return (
     <Container>
-      <div className="mt-10 flex flex-col gap-7">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-bold">{mockPost.title}</h1>
-          <div className="flex flex-col gap-0.5 text-sm text-gray-200">
-            <p>作成日時: {mockPost.createdAt}</p>
-            <p>更新日時: {mockPost.updatedAt}</p>
-          </div>
+      <div className="flex flex-col gap-6">
+        <div className="mt-10 flex flex-col gap-7">
+          <PostHeading
+            title={post.title}
+            createdAt={formatDateTime(post.createdAt)}
+            updatedAt={formatDateTime(post.updatedAt)}
+          />
+          <hr className="border-border" />
+          <PostContent body={post.body} username={post.userName} />
         </div>
-        <hr className="border-border" />
-        <div className="flex flex-col gap-3 text-lg">
-          <p className="whitespace-pre-line leading-8">{mockPost.body}</p>
-          <p className="text-right">{mockPost.user.username}</p>
-        </div>
+        <PostActionButtons postId={post.id} onDelete={handleModalOpen} />
       </div>
+      <Modal isOpen={isOpen} onClose={handleModalClose}>
+        <ModalHeader>本当に削除しますか？</ModalHeader>
+        <ModalBody>
+          削除した投稿は復元できません
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            variant="alert"
+            onClick={handleDelete}
+          >
+            削除する
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleModalClose}
+          >
+            キャンセル
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Container>
   );
 }
-
-// APIから以下のレスポンスが返ってくる想定
-const mockPost = {
-  id: "1",
-  title: "バナナはおやつに含まれますか？",
-  body: "来週の遠足の件で質問です。\n\nおやつは一人500円までと言われているのですが、バナナはおやつに含まれますか？\nそれとも弁当に含まれますか？",
-  createdAt: "2024/05/27 09:00",
-  updatedAt: "2024/05/27 15:30",
-  user: {
-    username: "watapon",
-  },
-};

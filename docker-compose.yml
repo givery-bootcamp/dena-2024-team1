@@ -9,9 +9,12 @@ services:
       - ./backend:/go/src/myapp
     command: "air"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       TZ: Asia/Tokyo
+    env_file:
+      - ./backend/.env  
   frontend:
     image: node:20.12.2
     working_dir: /home/node/myapp
@@ -36,6 +39,10 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=training
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
   prism:
     build:
       context: ./docker

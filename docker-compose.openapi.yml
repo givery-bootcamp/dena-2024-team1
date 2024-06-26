@@ -1,0 +1,15 @@
+services:
+  openapi-generator-fe:
+    image: openapitools/openapi-generator-cli
+    volumes:
+      - ./:/local
+    command: generate -g typescript-axios -i local/openapi/openapi.yml -o local/frontend/src/generated
+  openapi-generator-be:
+    build:
+      context: ./docker
+      dockerfile: backend-oas-gen.Dockerfile
+    volumes:
+      - ./backend/internal/openapi:/go/src/openapi_gen
+      - ./openapi:/go/src/openapi
+    working_dir: /go/src/openapi_gen
+    command: "oapi-codegen --config=config.yaml ../openapi/openapi.yml"

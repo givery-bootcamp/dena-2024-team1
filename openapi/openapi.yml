@@ -3,13 +3,12 @@ info:
   title: Simple User API
   description: A simple API to retrieve user information.
   version: 1.0.0
-
 paths:
   /hello:
     get:
       description: Returns a simple hello message.
       responses:
-        "200":
+        '200':
           description: Hello message returned successfully.
           content:
             application/json:
@@ -25,51 +24,115 @@ paths:
                   value:
                     lang: ja
                     message: こんにちは 世界
-                
+      operationId: getHello
   /posts:
     get:
       description: Retrieve all posts.
       responses:
-        "200":
+        '200':
           description: Posts retrieved successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      format: int64
-                    title:
-                      type: string
-                    body:
-                      type: string
-                    userName:
-                      type: string
-                    createdAt:
-                      type: string
-                      format: date-time
-                    updatedAt:
-                      type: string
-                      format: date-time
+                $ref: '#/components/schemas/GetAllPostsResponse'
               examples:
                 default:
                   value:
                     - id: 1
-                      title: "Hello, World!"
-                      body: "This is my first post."
-                      userName: "John Doe"
-                      createdAt: "2021-01-01T00:00:00Z"
-                      updatedAt: "2021-01-01T00:00:00Z"
+                      title: 'Hello, World!'
+                      body: This is my first post.
+                      userName: John Doe
+                      createdAt: '2021-01-01T00:00:00Z'
+                      updatedAt: '2021-01-01T00:00:00Z'
                     - id: 2
-                      title: "Hello, World! (2)"
-                      body: "This is my second post."
-                      userName: "John Doe"
-                      createdAt: "2021-01-02T00:00:00Z"
-                      updatedAt: "2021-01-02T00:00:00Z"
-  /posts/{postId}:
+                      title: 'Hello, World! (2)'
+                      body: This is my second post.
+                      userName: John Doe
+                      createdAt: '2021-01-02T00:00:00Z'
+                      updatedAt: '2021-01-02T00:00:00Z'
+      operationId: getAllPosts
+      tags:
+        - post
+      summary: ''
+    post:
+      description: Create a new post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+            examples:
+              default:
+                value:
+                  title: "Hello, World!"
+                  body: "This is my first post."
+                  user_id: 0
+      responses:
+        "201":
+          description: Post created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePostResponse'
+              examples:
+                default:
+                  value:
+                    id: 1
+                    title: "Hello, World!"
+                    body: "This is my first post."
+                    user_id: 0
+                    createdAt: "2021-01-01T00:00:00Z"
+                    updatedAt: "2021-01-01T00:00:00Z"
+      operationId: postPost
+      tags:
+        - post
+      summary: ''
+  /sketches:
+    get:
+      description: Retrieve all sketches.
+      responses:
+        '200':
+          description: Sketches retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllSketchesResponse'
+              examples:
+                default:
+                  value:
+                    - id: 1
+                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/happy.png'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-01T00:00:00Z'
+                      updatedAt: '2021-01-01T00:00:00Z'
+                    - id: 2
+                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/quickMTG.png'
+                      userId: 1
+                      userName: John Doe
+                      createdAt: '2021-01-02T00:00:00Z'
+                      updatedAt: '2021-01-02T00:00:00Z'
+      operationId: getAllSketches
+      summary: ''
+      tags:
+        - sketch
+    post:
+      description: Upload a sketch image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateScketchesRequest'
+      responses:
+        '201':
+          description: Sketch image uploaded successfully.
+      operationId: postSketch
+      summary: ''
+      tags:
+        - sketch
+  '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
       parameters:
@@ -82,35 +145,70 @@ paths:
             format: int64
             example: 1
       responses:
-        "200":
+        '200':
           description: Post information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              examples:
+                default:
+                  value:
+                    id: 1
+                    title: 'Hello, World! updated'
+                    body: This is my updated post.
+                    userName: John Doe
+                    createdAt: '2021-01-01T00:00:00Z'
+                    updatedAt: '2021-01-01T00:00:00Z'
+        '404':
+          description: Post not found.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    format: int64
-                  title:
+                  message:
                     type: string
-                  body:
-                    type: string
-                  userName:
-                    type: string
-                  createdAt:
-                    type: string
-                    format: date-time
-                  updatedAt:
-                    type: string
-                    format: date-time
+      operationId: getPostById
+      summary: ''
+      tags:
+        - post
+    put:
+      description: Update a post by ID.
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequest'
+            examples:
+              default:
+                value:
+                  title: "Hello, World!"
+                  body: "This is my first post."
+      responses:
+        "200":
+          description: Post updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePostResponse'
               examples:
                 default:
                   value:
                     id: 1
                     title: "Hello, World!"
                     body: "This is my first post."
-                    userName: "John Doe"
+                    user_id: 0
                     createdAt: "2021-01-01T00:00:00Z"
                     updatedAt: "2021-01-01T00:00:00Z"
         "404":
@@ -122,3 +220,332 @@ paths:
                 properties:
                   message:
                     type: string
+      operationId: putPost
+      tags:
+        - post
+      summary: ''
+    delete:
+      description: Delete a post.
+      operationId: deletePost
+      parameters:
+        - name: postId
+          in: path
+          description: The unique identifier of the post.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: no content.
+        "400":
+          description: Failed to delete a post.
+      tags:
+        - post
+  /signup:
+    post:
+      description: Create a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password    
+            examples:
+              default:
+                value:
+                  username: John Doe
+                  password: password
+      responses:
+        '201':
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                default:
+                  value:
+                    message: success
+      operationId: signUp
+      summary: ''
+      tags:
+        - user
+  /signin:
+    post:
+      description: Sign in to the application.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password    
+            examples:
+              default:
+                value:
+                  username: John Doe
+                  password: password
+      responses:
+        '200':
+          description: User signed in successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                default:
+                  value:
+                    message: success
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: signIn
+      summary: ''
+      tags:
+        - user   
+  /session_user:
+    get:
+      description: Retrieve the current session user.
+      responses:
+        '200':
+          description: Session user retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                default:
+                  value:
+                    id: 1
+                    name: John Doe
+                    createdAt: '2021-01-01T00:00:00Z'
+                    updatedAt: '2021-01-01T00:00:00Z'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: getSessionUser
+      summary: ''
+      tags:
+        - user       
+  /signout:
+    post:
+      description: Sign out of the application.
+      responses:
+        '200':
+          description: User signed out successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                default:
+                  value:
+                    message: success
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: signOut
+      summary: ''
+      tags:
+        - user      
+tags:
+  - name: post
+    description: Tag for post
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Post:
+      title: Post
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        userName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - body
+        - userName
+        - createdAt
+        - updatedAt
+    CreatePostRequest:
+      title: CreatePostRequest
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        user_id:
+          type: integer
+      required:
+        - title
+        - body
+        - user_id
+    CreatePostResponse:
+      title: CreatePostResponse
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        body:
+          type: string
+        user_id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UpdatePostRequest:
+      title: UpdatePostRequest
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+      required:
+        - title
+        - body
+    UpdatePostResponse:
+      title: UpdatePostResponse
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        body:
+          type: string
+        user_id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - body
+        - user_id
+        - createdAt
+        - updatedAt
+    CreateScketchesRequest:
+    # まずは最小で
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+    GetPostResponse:
+      $ref: '#/components/schemas/Post'
+    GetAllPostsResponse:
+      title: GetAllPostsResponse
+      type: array
+      items:
+        $ref: '#/components/schemas/Post'
+    GetAllSketchesResponse:
+      title: GetAllSketchesResponse
+      type: array
+      items:
+        $ref: '#/components/schemas/Sketch'
+    Sketch:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+        userId:
+          type: integer
+        userName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - imageUrl
+        - userId
+        - userName
+        - createdAt
+        - updatedAt
+  responses: {}
+servers:
+  - url: 'http://localhost:9000'
+    description: local server
