@@ -504,11 +504,11 @@ components:
     # まずは最小で
       type: object
       properties:
-        filename: 
-          type: string
         file:
           type: string
           format: binary
+      required:
+        - file
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:

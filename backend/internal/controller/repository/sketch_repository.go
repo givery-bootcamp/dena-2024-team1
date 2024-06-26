@@ -26,8 +26,6 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 }
 
 func (r *SketchRepository) CreateSketch(destination string) error {
-	// types.Fileを使ってるけど、関数内で使っていないので、削除しても問題ないのかな？
-	// そもそもRepositoryの責務ってなんだ？ってなっている
 
 	fn := uuid.New().String() + ".png"
 	file, err := os.Open(destination)

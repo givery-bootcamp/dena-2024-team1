@@ -842,12 +842,13 @@ export const SketchApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * Upload a sketch image
          * @summary 
-         * @param {string} [filename] 
-         * @param {File} [file] 
+         * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postSketch: async (filename?: string, file?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postSketch: async (file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('postSketch', 'file', file)
             const localVarPath = `/sketches`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -862,10 +863,6 @@ export const SketchApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
 
-            if (filename !== undefined) { 
-                localVarFormParams.append('filename', filename as any);
-            }
-    
             if (file !== undefined) { 
                 localVarFormParams.append('file', file as any);
             }
@@ -908,13 +905,12 @@ export const SketchApiFp = function(configuration?: Configuration) {
         /**
          * Upload a sketch image
          * @summary 
-         * @param {string} [filename] 
-         * @param {File} [file] 
+         * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postSketch(filename?: string, file?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postSketch(filename, file, options);
+        async postSketch(file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postSketch(file, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SketchApi.postSketch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -941,13 +937,12 @@ export const SketchApiFactory = function (configuration?: Configuration, basePat
         /**
          * Upload a sketch image
          * @summary 
-         * @param {string} [filename] 
-         * @param {File} [file] 
+         * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postSketch(filename?: string, file?: File, options?: any): AxiosPromise<void> {
-            return localVarFp.postSketch(filename, file, options).then((request) => request(axios, basePath));
+        postSketch(file: File, options?: any): AxiosPromise<void> {
+            return localVarFp.postSketch(file, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -973,14 +968,13 @@ export class SketchApi extends BaseAPI {
     /**
      * Upload a sketch image
      * @summary 
-     * @param {string} [filename] 
-     * @param {File} [file] 
+     * @param {File} file 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SketchApi
      */
-    public postSketch(filename?: string, file?: File, options?: RawAxiosRequestConfig) {
-        return SketchApiFp(this.configuration).postSketch(filename, file, options).then((request) => request(this.axios, this.basePath));
+    public postSketch(file: File, options?: RawAxiosRequestConfig) {
+        return SketchApiFp(this.configuration).postSketch(file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
