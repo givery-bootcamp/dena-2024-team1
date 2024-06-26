@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bytes"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
 )
@@ -15,8 +16,8 @@ func NewSketchUsecase(pr repository.SketchRepository) SketchUsecase {
 	}
 }
 
-func (u *SketchUsecase) CreateSketch(destination string) error {
-	return u.sketchRepository.CreateSketch(destination)
+func (u *SketchUsecase) CreateSketch(reader *bytes.Reader) error {
+	return u.sketchRepository.CreateSketch(reader)
 }
 
 func (u *SketchUsecase) GetSketches() ([]entity.Sketch, error) {

@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"bytes"
 	"myapp/internal/entity"
 )
 
 type SketchRepository interface {
-	CreateSketch(destination string) error
+	CreateSketch(reader *bytes.Reader) error
 	GetAll() ([]entity.Sketch, error)
 }

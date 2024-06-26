@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"bytes"
 	"errors"
-	"os"
 
 	// "go/types"
 	"myapp/internal/controller/repository/model"
@@ -25,15 +25,15 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(destination string) error {
+func (r *SketchRepository) CreateSketch(reader *bytes.Reader) error {
 	fn := uuid.New().String() + ".png"
-	file, err := os.Open(destination)
-	if err != nil {
-		return err
-	}
+	// file, err := os.Open(destination)
+	// if err != nil {
+	// 	return err
+	// }
 	s3FileStorage := filestorage.SetUpS3()
 
-	err = s3FileStorage.UploadFile(file, fn)
+	err := s3FileStorage.UploadFile(reader, fn)
 	if err != nil {
 		return err
 	}
