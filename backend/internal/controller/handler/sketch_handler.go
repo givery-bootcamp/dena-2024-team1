@@ -22,12 +22,7 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 }
 
 func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
-	// var request openapi.CreateScketchesRequest
 	const MaxUploadSize = 10 * 1024 * 1024 // 10MB
-
-	// if err := ctx.ShouldBindJSON(&request); err != nil {
-	// 	handleError(ctx, 400, err)
-	// }
 
 	file, err := ctx.FormFile("file")
 	if err != nil {
