@@ -59,16 +59,21 @@ func convertUserRepositoryModelToEntity(ps []model.User) []entity.User {
 	return users
 }
 
-func (r *UserRepository) CreateUser(username, password string) error {
+func (r *UserRepository) CreateUser(username, password string) (entity.User, error) {
 	user := User{
 		Name:     username,
 		Password: password,
 	}
 	result := r.Conn.Create(&user)
 	if result.Error != nil {
-		return result.Error
+		return entity.User{}, result.Error
 	}
-	return nil
+	return entity.User{
+		ID:        int(user.ID),
+		Name:      user.Name,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
 }
 
 func (r *UserRepository) GetUserByUsername(username string) (entity.User, error) {
