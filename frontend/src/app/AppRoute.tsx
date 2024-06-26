@@ -17,9 +17,9 @@ export const AppRoute = () => {
       <Route path="/posts/:postId" element={<PostDetailPage />} />
       <Route path="/posts/create" element={<CreatePostPage />} />
       <Route path="/posts/:postId/edit" element={<PostEditPage />} />
+      <Route path="/sketches" element={<ImageListPage/>} />
       <Route path="/sketches/create" element={<SketchCreatePage />} />
       <Route path="/signout" element={<SignOutPage />} />
-      <Route path="/images/list" element={<ImageListPage/>} />
       <Route path="*" element={<Navigate to={"/"} />} />
     </Routes>
   );
