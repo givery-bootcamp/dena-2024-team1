@@ -128,18 +128,10 @@ paths:
       responses:
         '201':
           description: Sketch image uploaded successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              examples:
-                default:
-                  value:
-                    message: success
       operationId: postSketch
+      summary: ''
+      tags:
+        - sketch
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
