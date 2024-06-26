@@ -5,5 +5,6 @@ import (
 )
 
 type SketchRepository interface {
+	CreateSketch(destination string) error
 	GetAll() ([]entity.Sketch, error)
 }

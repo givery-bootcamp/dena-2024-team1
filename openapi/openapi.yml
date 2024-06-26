@@ -117,6 +117,21 @@ paths:
       summary: ''
       tags:
         - sketch
+    post:
+      description: Upload a sketch image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateScketchesRequest'
+      responses:
+        '201':
+          description: Sketch image uploaded successfully.
+      operationId: postSketch
+      summary: ''
+      tags:
+        - sketch
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
@@ -485,6 +500,15 @@ components:
         - user_id
         - createdAt
         - updatedAt
+    CreateScketchesRequest:
+    # まずは最小で
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:
