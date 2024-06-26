@@ -4,7 +4,6 @@ import (
 	"errors"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,47 +22,40 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	var request openapi.CreateScketchesRequest
 	const MaxUploadSize = 10 * 1024 * 1024 // 10MB
 
-	file, err := ctx.FormFile("file")
-	if err != nil {
-		handleError(ctx, 400, err)
-		return
-	}
-	// Check file size
-	if file.Size > MaxUploadSize {
-		handleError(ctx, 400, errors.New("file size too large"))
-		return
-	}
-	// Check file type
-	if file.Header.Get("Content-Type") != "image/png" && file.Header.Get("Content-Type") != "image/jpeg" {
-		handleError(ctx, 400, errors.New("file type not allowed"))
-		return
-	}
-
-	// Save file
-	// 保存先が分かってないかもしれない
-	destination := "./uploads/" + file.Filename
-
-	if err := ctx.SaveUploadedFile(file, destination); err != nil {
-		ctx.String(http.StatusInternalServerError, "Failed to save file: %s", err.Error())
-		return
-	}
-
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		handleError(ctx, 400, err)
 	}
 
-	createdSketch, err := h.su.CreateSketch(*request.Filename, request.File)
+	// file, err := ctx.FormFile("file")
+	// if err != nil {
+	// 	handleError(ctx, 400, err)
+	// 	return
+	// }
+	// // Check file size
+	// if file.Size > MaxUploadSize {
+	// 	handleError(ctx, 400, errors.New("file size too large"))
+	// 	return
+	// }
+	// // Check file type
+	// if file.Header.Get("Content-Type") != "image/png" && file.Header.Get("Content-Type") != "image/jpeg" {
+	// 	handleError(ctx, 400, errors.New("file type not allowed"))
+	// 	return
+	// }
+
+	// // Save file
+	// // 保存先が分かってないかもしれない
+	// // destination := "./uploads/" + file.Filename
+
+	// if err := ctx.SaveUploadedFile(file, destination); err != nil {
+	// 	ctx.String(http.StatusInternalServerError, "Failed to save file: %s", err.Error())
+	// 	return
+	// }
+
+	err := h.su.CreateSketch(*request.Filename, request.File)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
-		ctx.JSON(201, openapi.Sketch{
-			Id:        createdSketch.ID,
-			ImageName: createdSketch.ImageName,
-			UserId:    createdSketch.UserID,
-			UserName:  createdSketch.UserName,
-			CreatedAt: createdSketch.CreatedAt,
-			UpdatedAt: createdSketch.UpdatedAt,
-		})
+		ctx.JSON(201, nil)
 	}
 }
 
