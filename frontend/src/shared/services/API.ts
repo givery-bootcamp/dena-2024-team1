@@ -5,7 +5,9 @@ import { Hello } from "~/shared/models";
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
+
 export const postApi = new PostApi();
+export const sketchApi = new SketchApi();
 
 export const getHello = createAsyncThunk<Hello>("getHello", async () => {
   const response = await fetch(`${API_ENDPOINT_PATH}/hello`);
@@ -13,7 +15,6 @@ export const getHello = createAsyncThunk<Hello>("getHello", async () => {
 });
 
 export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
-  const postApi = new PostApi();
   const response = await postApi.getAllPosts({
     withCredentials: true,
   });
@@ -28,7 +29,6 @@ export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) 
 });
 
 export const getSketches = createAsyncThunk<Sketch[]>("getSketches", async () => {
-  const sketchApi = new SketchApi();
   const response = await sketchApi.getAllSketches({
     withCredentials: true,
   });

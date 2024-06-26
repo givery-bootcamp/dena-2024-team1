@@ -2,17 +2,15 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { SketchHandWriter } from "~/features/sketches/SketchHandWriter";
-import { SketchApi } from "~/generated";
 import { Button } from "~/shared/components/Button";
 import { Container } from "~/shared/components/Container";
 import { useCanvas } from "~/shared/hooks/useCanvas";
+import { sketchApi } from "~/shared/services/API";
 
 export const SketchCreatePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
   const { clearCanvas } = useCanvas({ canvasRef });
-
-  const api = new SketchApi();
 
   const postSketchToApi = async () => {
     const canvas = canvasRef.current;
@@ -21,7 +19,7 @@ export const SketchCreatePage = () => {
 
     const blob = await fetch(image).then((res) => res.blob());
     const file = new File([blob], "sketch.png", { type: "image/png" });
-    const result = await api.postSketch(file, {
+    const result = await sketchApi.postSketch(file, {
       withCredentials: true,
     });
 
