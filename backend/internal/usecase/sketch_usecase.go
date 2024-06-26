@@ -3,8 +3,6 @@ package usecase
 import (
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
-
-	"github.com/oapi-codegen/runtime/types"
 )
 
 type SketchUsecase struct {
@@ -17,8 +15,8 @@ func NewSketchUsecase(pr repository.SketchRepository) SketchUsecase {
 	}
 }
 
-func (u *SketchUsecase) CreateSketch(filename string, file *types.File) error {
-	return u.sketchRepository.CreateSketch(filename, file)
+func (u *SketchUsecase) CreateSketch(destination string) error {
+	return u.sketchRepository.CreateSketch(destination)
 }
 
 func (u *SketchUsecase) GetSketches() ([]entity.Sketch, error) {

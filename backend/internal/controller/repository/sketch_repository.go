@@ -2,12 +2,16 @@ package repository
 
 import (
 	"errors"
+	"os"
+
 	// "go/types"
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
-	"github.com/oapi-codegen/runtime/types"
+	"myapp/internal/infrastructure/filestorage"
+
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -21,11 +25,24 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(filename string, file *types.File) error {
+func (r *SketchRepository) CreateSketch(destination string) error {
 	// types.Fileを使ってるけど、関数内で使っていないので、削除しても問題ないのかな？
 	// そもそもRepositoryの責務ってなんだ？ってなっている
+
+	fn := uuid.New().String() + ".png"
+	file, err := os.Open(destination)
+	if err != nil {
+		return err
+	}
+	s3FileStorage := filestorage.SetUpS3()
+	// fileName = "ファイル名を定義"
+
+	s3FileStorage.UploadFile(file, fn)
+
 	sketch := model.Sketch{
-		ImageName: filename,
+		ImageName: fn,
+		// TODO：ここでUserIDをどうやって取得するか
+		UserID:    1,
 	}
 	sketchResult := r.Conn.Create(&sketch)
 	if sketchResult.Error != nil {
