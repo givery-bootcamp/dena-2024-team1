@@ -16,7 +16,7 @@ export function ImageListPage() {
   
   return (
     <Container className='mt-10'>
-      <div className='grid grid-cols-3'>
+      <div className='grid grid-cols-3 gap-10'>
         {sketches?.map((sketch,index) => (
           <Fragment key={index}>
             <SketchItem sketch={sketch}/>
