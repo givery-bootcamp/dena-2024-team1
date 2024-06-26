@@ -40,6 +40,7 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	}
 
 	// Save file
+	// 保存先が分かってないかもしれない
 	destination := "./uploads/" + file.Filename
 
 	if err := ctx.SaveUploadedFile(file, destination); err != nil {

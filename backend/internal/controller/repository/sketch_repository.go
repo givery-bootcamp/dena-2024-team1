@@ -22,7 +22,8 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 }
 
 func (r *SketchRepository) CreateSketch(filename string, file *types.File) (entity.Sketch, error) {
-
+	// types.Fileを使ってるけど、関数内で使っていないので、削除しても問題ないのかな？
+	// そもそもRepositoryの責務ってなんだ？ってなっている
 	sketch := model.Sketch{
 		ImageName: filename,
 	}
