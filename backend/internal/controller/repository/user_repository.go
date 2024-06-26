@@ -8,15 +8,13 @@ import (
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
-	"net/http"
 
-	"github.com/gorilla/sessions"
+	"github.com/gin-contrib/sessions"
 	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	Conn         *gorm.DB
-	SessionStore *sessions.CookieStore
+	Conn *gorm.DB
 }
 
 // This struct is same as entity model
@@ -27,10 +25,9 @@ type User struct {
 	gorm.Model
 }
 
-func NewUserRepository(conn *gorm.DB, sessionStore *sessions.CookieStore) repositoryIF.UserRepository {
+func NewUserRepository(conn *gorm.DB) repositoryIF.UserRepository {
 	return &UserRepository{
-		Conn:         conn,
-		SessionStore: sessionStore,
+		Conn: conn,
 	}
 }
 
@@ -109,12 +106,7 @@ type SesssionUser struct {
 	Name string
 }
 
-func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, user entity.User) error {
-	session, err := r.SessionStore.Get(req, config.SessionName)
-	if err != nil {
-		return err
-	}
-
+func (r *UserRepository) SaveSession(session sessions.Session, user entity.User) error {
 	// セッションに保存するユーザー情報
 	sessionUser := SesssionUser{
 		ID:   user.ID,
@@ -129,30 +121,26 @@ func (r *UserRepository) SaveSession(req *http.Request, w http.ResponseWriter, u
 	}
 
 	// セッションに保存
-	session.Values[config.SessionKey] = string(sessionUserJson)
+	session.Set(config.SessionKey, string(sessionUserJson))
 
-	err = session.Save(req, w)
+	err = session.Save()
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
-func (r *UserRepository) GetSessionUser(req *http.Request) (entity.User, error) {
-	session, err := r.SessionStore.Get(req, config.SessionName)
-	if err != nil {
-		return entity.User{}, err
-	}
-
+func (r *UserRepository) GetSessionUser(session sessions.Session) (entity.User, error) {
 	// セッションからユーザー情報を取得
-	sessionUserJson, ok := session.Values[config.SessionKey].(string)
+	sessionUserJson, ok := session.Get(config.SessionKey).(string)
 	if !ok {
 		return entity.User{}, errors.New("session is empty")
 	}
 
 	// セッションから取得したユーザー情報を構造体に変換
 	var sessionUser SesssionUser
-	err = json.Unmarshal([]byte(sessionUserJson), &sessionUser)
+	err := json.Unmarshal([]byte(sessionUserJson), &sessionUser)
 	if err != nil {
 		return entity.User{}, err
 	}
@@ -168,15 +156,10 @@ func (r *UserRepository) GetSessionUser(req *http.Request) (entity.User, error) 
 	return user, nil
 }
 
-func (r *UserRepository) DeleteSessionUser(req *http.Request, w http.ResponseWriter) error {
-	session, err := r.SessionStore.Get(req, config.SessionName)
-	if err != nil {
-		return err
-	}
-
+func (r *UserRepository) DeleteSessionUser(session sessions.Session) error {
 	// セッションを削除
-	session.Options.MaxAge = -1
-	err = session.Save(req, w)
+	session.Clear()
+	err := session.Save()
 	if err != nil {
 		return err
 	}

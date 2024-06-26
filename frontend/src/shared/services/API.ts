@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { Post, PostApi } from "~/generated";
+import { Post, PostApi, Sketch, SketchApi } from "~/generated";
 import { Hello } from "~/shared/models";
 
 const API_ENDPOINT_PATH =
@@ -22,6 +22,14 @@ export const getPosts = createAsyncThunk<Post[]>("getPosts", async () => {
 
 export const getPost = createAsyncThunk<Post, number>("getPost", async (postId) => {
   const response = await postApi.getPostById(postId, {
+    withCredentials: true,
+  });
+  return response.data;
+});
+
+export const getSketches = createAsyncThunk<Sketch[]>("getSketches", async () => {
+  const sketchApi = new SketchApi();
+  const response = await sketchApi.getAllSketches({
     withCredentials: true,
   });
   return response.data;

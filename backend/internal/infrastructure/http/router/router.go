@@ -3,7 +3,6 @@ package router
 import (
 	"myapp/internal/infrastructure/database"
 	"myapp/internal/infrastructure/http/middleware"
-	"myapp/internal/infrastructure/sessionstore"
 	"myapp/internal/registry"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +14,7 @@ func NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(middleware.Transaction(db))
 	router.Use(middleware.Cors())
+	router.Use(middleware.Session())
 
 	setupEndpoints(router)
 
@@ -23,8 +23,6 @@ func NewRouter() *gin.Engine {
 
 func setupEndpoints(router *gin.Engine) {
 	apiHandler := registry.NewAPIHandler()
-	sessionStore := sessionstore.GetStore()
-	authMiddleware := middleware.Auth(sessionStore)
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "It works")
@@ -33,6 +31,8 @@ func setupEndpoints(router *gin.Engine) {
 	// 認証が不要なエンドポイント
 	router.POST("/signup", apiHandler.UserHandler.Signup)
 	router.POST("/signin", apiHandler.UserHandler.Signin)
+
+	authMiddleware := middleware.Auth()
 
 	// 認証が必要なエンドポイント
 	router.GET("/hello", authMiddleware, apiHandler.HelloWorldHandler.HelloWorld)

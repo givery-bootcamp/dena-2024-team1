@@ -5,7 +5,8 @@ import (
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
 	"myapp/internal/utils/crypt"
-	"net/http"
+
+	"github.com/gin-contrib/sessions"
 )
 
 type UserUsecase struct {
@@ -47,7 +48,7 @@ func (u UserUsecase) Signup(username, password string) error {
 	return u.userRepository.CreateUser(username, password)
 }
 
-func (u UserUsecase) Signin(username, password string, r *http.Request, w http.ResponseWriter) error {
+func (u UserUsecase) Signin(session sessions.Session, username, password string) error {
 	if username == "" {
 		return errors.New("username is empty")
 	}
@@ -76,7 +77,7 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 	}
 
 	// セッションにユーザーを保存
-	err = u.userRepository.SaveSession(r, w, user)
+	err = u.userRepository.SaveSession(session, user)
 
 	if err != nil {
 		return err
@@ -85,8 +86,8 @@ func (u UserUsecase) Signin(username, password string, r *http.Request, w http.R
 	return nil
 }
 
-func (u UserUsecase) GetSessionUser(r *http.Request) (*entity.User, error) {
-	user, err := u.userRepository.GetSessionUser(r)
+func (u UserUsecase) GetSessionUser(session sessions.Session) (*entity.User, error) {
+	user, err := u.userRepository.GetSessionUser(session)
 
 	if err != nil {
 		return nil, err
@@ -99,6 +100,6 @@ func (u UserUsecase) GetSessionUser(r *http.Request) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u UserUsecase) Signout(r *http.Request, w http.ResponseWriter) error {
-	return u.userRepository.DeleteSessionUser(r, w)
+func (u UserUsecase) Signout(session sessions.Session) error {
+	return u.userRepository.DeleteSessionUser(session)
 }

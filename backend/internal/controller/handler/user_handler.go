@@ -4,6 +4,7 @@ import (
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,7 +41,8 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 		return
 	}
 
-	err := h.uu.Signin(req.Username, req.Password, ctx.Request, ctx.Writer)
+	session := sessions.Default(ctx)
+	err := h.uu.Signin(session, req.Username, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -50,7 +52,8 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 }
 
 func (h UserHandler) GetSessionUser(ctx *gin.Context) {
-	user, err := h.uu.GetSessionUser(ctx.Request)
+	session := sessions.Default(ctx)
+	user, err := h.uu.GetSessionUser(session)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -60,7 +63,8 @@ func (h UserHandler) GetSessionUser(ctx *gin.Context) {
 }
 
 func (h UserHandler) Signout(ctx *gin.Context) {
-	err := h.uu.Signout(ctx.Request, ctx.Writer)
+	session := sessions.Default(ctx)
+	err := h.uu.Signout(session)
 
 	if err != nil {
 		handleError(ctx, 500, err)
