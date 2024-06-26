@@ -5,7 +5,7 @@ import { APIService } from "~/shared/services";
 import { Container } from "~/shared/components/Container";
 import { SketchItem } from "~/features/sketches/SketchItem";
 
-export function ImageListPage() {
+export function SketchListPage() {
   const { sketches } = useAppSelector((state) => state.sketches);
   const dispatch = useAppDispatch();
 
