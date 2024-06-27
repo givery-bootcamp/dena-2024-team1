@@ -8,7 +8,6 @@ export const schema = v.object({
   password: v.pipe(
     v.string(),
     v.nonEmpty("パスワードを入力してください"),
-    v.minLength(8, "パスワードは8文字以上で入力してください"),
   ),
 });
 
