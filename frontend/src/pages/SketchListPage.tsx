@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 
-import { Modal } from "~/shared/components/Modal";
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
 import { SketchList } from "~/features/sketches/SketchList";
 import { InfiniteCanvas } from "~/shared/components/InfiniteCanvas";
 import { selectedSketchUrlAtom } from "~/shared/store/Sketch";
+import { SketchModal } from "~/features/sketches/SketchModal";
 
 export function SketchListPage() {
   const { sketches } = useAppSelector((state) => state.sketches);
   const dispatch = useAppDispatch();
   const [selectedSketchUrl, setSelectedSketchUrl] = useAtom(selectedSketchUrlAtom);
-  
+
   useEffect(() => {
     dispatch(APIService.getSketches());
   }, [dispatch]);
@@ -26,9 +26,7 @@ export function SketchListPage() {
         </div>
       </InfiniteCanvas>
       {selectedSketchUrl && (
-        <Modal isOpen={true} onClose={() => setSelectedSketchUrl(null)}>
-          <img src={selectedSketchUrl} alt={selectedSketchUrl} />
-        </Modal>
+        <SketchModal selectedSketchUrl={selectedSketchUrl} setSelectedSketchUrl={setSelectedSketchUrl} />
       )}
     </div>
   );
