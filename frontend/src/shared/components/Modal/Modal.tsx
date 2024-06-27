@@ -17,7 +17,7 @@ export const Modal: FC<Props> = ({
 
   if (!isOpen) return null;
   return (
-    <div className="absolute left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-[black]/40">
+    <div className="absolute left-0 top-0 z-modal flex h-screen w-screen items-center justify-center bg-[black]/40">
       <div className="relative flex flex-col items-center justify-center gap-12 rounded-lg bg-white p-16 text-center">
         <button className="absolute right-2 top-2" onClick={onClose}>
           <X size={28} />

@@ -17,6 +17,9 @@ export default {
       border: "#CACACA",
       alert: "#DD5757",
     },
+    zIndex: {
+      modal: 10,
+    },
   },
   plugins: [],
 };
