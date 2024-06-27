@@ -45,7 +45,7 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		return
 	}
 
-	err = h.su.CreateSketch(&file)
+	err = h.su.CreateSketch(ctx, &file)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
@@ -54,7 +54,7 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 }
 
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
-	ss, err := h.su.GetSketches()
+	ss, err := h.su.GetSketches(ctx)
 	var response openapi.GetAllSketchesResponse
 	for _, s := range ss {
 		imageURL := config.S3BucketURL + s.ImageName

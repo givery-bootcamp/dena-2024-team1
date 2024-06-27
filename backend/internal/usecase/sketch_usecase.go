@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"mime/multipart"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
@@ -16,10 +17,10 @@ func NewSketchUsecase(pr repository.SketchRepository) SketchUsecase {
 	}
 }
 
-func (u *SketchUsecase) CreateSketch(file *multipart.File) error {
-	return u.sketchRepository.CreateSketch(file)
+func (u *SketchUsecase) CreateSketch(ctx context.Context, file *multipart.File) error {
+	return u.sketchRepository.CreateSketch(ctx, file)
 }
 
-func (u *SketchUsecase) GetSketches() ([]entity.Sketch, error) {
-	return u.sketchRepository.GetAll()
+func (u *SketchUsecase) GetSketches(ctx context.Context) ([]entity.Sketch, error) {
+	return u.sketchRepository.GetAll(ctx)
 }
