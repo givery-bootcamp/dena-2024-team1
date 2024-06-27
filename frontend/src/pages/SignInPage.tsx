@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 
 import { Container } from "~/shared/components/Container";
-import { SignForm } from "~/shared/components/SignForm";
+import { UserAuthForm } from "~/features/users/UserAuthForm";
 import { userApi } from "~/shared/services/API";
-
 
 export const SignInPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
@@ -27,13 +26,7 @@ export const SignInPage = () => {
 
   return (
     <Container>
-      <SignForm
-        onSubmit={handleSubmit}
-        title="ログイン"
-        submitText="ログイン"
-        linkText="アカウントをお持ちでない方はこちら"
-        linkTo="/signup"
-      />
+      <UserAuthForm type="sign-in" onSubmit={handleSubmit} />
     </Container>
   );
 };
