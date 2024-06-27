@@ -513,11 +513,8 @@ components:
         file:
           type: string
           format: binary
-        userId:
-          type: integer
       required:
         - file
-        - userId
     CreateScketchesResponse:
       type: object
       properties:

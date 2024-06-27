@@ -48,7 +48,7 @@ func newAPIUsecase(r apiRepository) *apiUsecase {
 	hu := usecase.NewHelloWorldUsecase(r.hr)
 	ph := usecase.NewPostUsecase(r.pr)
 	uh := usecase.NewUserUsecase(r.ur)
-	sh := usecase.NewSketchUsecase(r.sh)
+	sh := usecase.NewSketchUsecase(r.sh, r.ur)
 
 	return &apiUsecase{
 		hu: hu,
