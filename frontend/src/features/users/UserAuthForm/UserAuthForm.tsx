@@ -26,11 +26,8 @@ export const UserAuthForm = ({ title, submitText, linkText, linkTo, onSubmit }: 
   }, [onSubmit]);
 
   return (
-    <form className="mt-10 flex flex-col gap-7" onSubmit={handleFormSubmit(handleSubmit)}>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-bold">{ title }</h1>
-      </div>
-      <hr className="border-border" />
+    <form className="mt-10 flex flex-col gap-10" onSubmit={handleFormSubmit(handleSubmit)}>
+      <h1 className="text-center text-2xl font-bold">{title}</h1>
       <div className="flex flex-col gap-6 text-lg">
         <label className="flex flex-col gap-2 text-lg">
           <span className="font-bold">ユーザー名</span>
