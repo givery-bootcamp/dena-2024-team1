@@ -27,7 +27,7 @@ func (h UserHandler) Signup(ctx *gin.Context) {
 
 	session := sessions.Default(ctx)
 
-	err := h.uu.Signup(session, req.Username, req.Password)
+	err := h.uu.Signup(session, req.UserName, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -44,7 +44,7 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 	}
 
 	session := sessions.Default(ctx)
-	err := h.uu.Signin(session, req.Username, req.Password)
+	err := h.uu.Signin(session, req.UserName, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
