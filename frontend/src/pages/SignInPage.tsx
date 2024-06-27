@@ -29,13 +29,7 @@ export const SignInPage = () => {
 
   return (
     <Container>
-      <UserAuthForm
-        onSubmit={handleSubmit}
-        title="ログイン"
-        submitText="ログイン"
-        linkText="アカウントをお持ちでない方はこちら"
-        linkTo="/signup"
-      />
+      <UserAuthForm type="sign-in" onSubmit={handleSubmit} />
     </Container>
   );
 };

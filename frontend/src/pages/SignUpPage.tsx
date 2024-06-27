@@ -28,13 +28,7 @@ export const SignUpPage = () => {
 
   return (
     <Container>
-      <UserAuthForm
-        onSubmit={handleSubmit}
-        title="新規登録"
-        submitText="アカウントを作成"
-        linkText="アカウントをお持ちの方はこちら"
-        linkTo="/signin"
-      />
+      <UserAuthForm type="sign-up" onSubmit={handleSubmit} />
     </Container>
   );
 };
