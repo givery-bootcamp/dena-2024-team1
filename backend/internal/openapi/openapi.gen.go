@@ -28,7 +28,8 @@ type CreatePostResponse struct {
 
 // CreateScketchesRequest defines model for CreateScketchesRequest.
 type CreateScketchesRequest struct {
-	File openapi_types.File `json:"file"`
+	File   openapi_types.File `json:"file"`
+	UserId int                `json:"userId"`
 }
 
 // GetAllPostsResponse defines model for GetAllPostsResponse.

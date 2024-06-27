@@ -501,14 +501,16 @@ components:
         - createdAt
         - updatedAt
     CreateScketchesRequest:
-    # まずは最小で
       type: object
       properties:
         file:
           type: string
           format: binary
+        userId:
+          type: integer
       required:
         - file
+        - userId
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:
