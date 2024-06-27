@@ -16,8 +16,8 @@ func NewSketchUsecase(pr repository.SketchRepository) SketchUsecase {
 	}
 }
 
-func (u *SketchUsecase) CreateSketch(file *multipart.File) error {
-	return u.sketchRepository.CreateSketch(file)
+func (u *SketchUsecase) CreateSketch(file *multipart.File, userid int) error {
+	return u.sketchRepository.CreateSketch(file, userid)
 }
 
 func (u *SketchUsecase) GetSketches() ([]entity.Sketch, error) {
