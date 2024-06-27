@@ -14,7 +14,11 @@ import {
 
 import { Button } from "~/shared/components/Button";
 import { Input } from "~/shared/components/Input";
-import { FormErrorMessage, FormLabel } from "~/shared/components/Form";
+import {
+  FormErrorMessage,
+  FormField,
+  FormLabel,
+} from "~/shared/components/Form";
 
 type UserAuthFormProps = {
   type: PageType;
@@ -40,28 +44,24 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
     <form className="mt-10 flex flex-col gap-10" onSubmit={handleFormSubmit(handleSubmit)}>
       <h1 className="text-center text-2xl font-bold">{title}</h1>
       <div className="flex flex-col gap-6 text-lg">
-        <label className="flex flex-col gap-2 text-lg">
+        <FormField>
           <FormLabel>ユーザー名</FormLabel>
-          <div className="flex flex-col gap-1">
-            <Input {...register("username")} />
-            {formState.errors.username && (
-              <FormErrorMessage>
-                {formState.errors.username.message}
-              </FormErrorMessage>
-            )}
-          </div>
-        </label>
-        <label className="flex flex-col gap-2 text-lg">
+          <Input {...register("username")} />
+          {formState.errors.username && (
+            <FormErrorMessage>
+              {formState.errors.username.message}
+            </FormErrorMessage>
+          )}
+        </FormField>
+        <FormField>
           <FormLabel>パスワード</FormLabel>
-          <div className="flex flex-col gap-1">
-            <Input type="password" {...register("password")} />
-            {formState.errors.password && (
-              <FormErrorMessage>
-                {formState.errors.password.message}
-              </FormErrorMessage>
-            )}
-          </div>
-        </label>
+          <Input type="password" {...register("password")} />
+          {formState.errors.password && (
+            <FormErrorMessage>
+              {formState.errors.password.message}
+            </FormErrorMessage>
+          )}
+        </FormField>
         <Button type="submit">{buttonLabel}</Button>
       </div>
       <div>
