@@ -13,6 +13,7 @@ import {
 } from "./mapping";
 
 import { Button } from "~/shared/components/Button";
+import { Input } from "~/shared/components/Input";
 
 type UserAuthFormProps = {
   type: PageType;
@@ -41,7 +42,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
         <label className="flex flex-col gap-2 text-lg">
           <span className="font-bold">ユーザー名</span>
           <div className="flex flex-col gap-1">
-            <input className="border border-border p-2" type="text" {...register("username")} />
+            <Input {...register("username")} />
             {formState.errors.username && (
               <span className="text-sm font-semibold text-alert">
                 {formState.errors.username.message}
@@ -52,7 +53,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
         <label className="flex flex-col gap-2 text-lg">
           <span className="font-bold">パスワード</span>
           <div className="flex flex-col gap-1">
-            <input className="border border-border p-2" type="password" {...register("password")} />
+            <Input type="password" {...register("password")} />
             {formState.errors.password && (
               <span className="text-sm font-semibold text-alert">
                 {formState.errors.password.message}
