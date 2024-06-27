@@ -126,6 +126,19 @@ export interface GetPostById404Response {
 /**
  * 
  * @export
+ * @interface GetSessionUser200Response
+ */
+export interface GetSessionUser200Response {
+    /**
+     * 
+     * @type {User}
+     * @memberof GetSessionUser200Response
+     */
+    'user'?: User;
+}
+/**
+ * 
+ * @export
  * @interface Post
  */
 export interface Post {
@@ -1134,7 +1147,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSessionUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async getSessionUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSessionUser200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSessionUser(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.getSessionUser']?.[localVarOperationServerIndex]?.url;
@@ -1194,7 +1207,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSessionUser(options?: any): AxiosPromise<User> {
+        getSessionUser(options?: any): AxiosPromise<GetSessionUser200Response> {
             return localVarFp.getSessionUser(options).then((request) => request(axios, basePath));
         },
         /**
