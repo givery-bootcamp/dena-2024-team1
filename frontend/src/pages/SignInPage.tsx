@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Container } from "~/shared/components/Container";
 import { UserApi } from "~/generated";
 import { SignForm } from "~/shared/components/SignForm";
+import { config } from "~/config/api";
 
 
 export const SignInPage = () => {
@@ -13,9 +14,7 @@ export const SignInPage = () => {
       const responnse = await userApi.signIn({
         username,
         password,
-      }, {
-        withCredentials: true,
-      });
+      }, config);
   
       if (responnse.status === 200) {
         console.log("Success");
