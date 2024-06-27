@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"mime/multipart"
 	"myapp/internal/entity"
 )
 
 type SketchRepository interface {
-	CreateSketch(destination string) error
+	CreateSketch(file *multipart.File) error
 	GetAll() ([]entity.Sketch, error)
 }

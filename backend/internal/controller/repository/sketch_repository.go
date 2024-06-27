@@ -2,9 +2,8 @@ package repository
 
 import (
 	"errors"
-	"os"
+	"mime/multipart"
 
-	// "go/types"
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
@@ -25,15 +24,11 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(destination string) error {
+func (r *SketchRepository) CreateSketch(file *multipart.File) error {
 	fn := uuid.New().String() + ".png"
-	file, err := os.Open(destination)
-	if err != nil {
-		return err
-	}
-	s3FileStorage := filestorage.SetUpS3()
 
-	err = s3FileStorage.UploadFile(file, fn)
+	s3FileStorage := filestorage.SetUpS3()
+	err := s3FileStorage.UploadFile(file, fn)
 	if err != nil {
 		return err
 	}
