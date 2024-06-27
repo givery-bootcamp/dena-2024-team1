@@ -5,7 +5,6 @@ import { SketchCreatePage } from "~/pages/SketchCreatePage";
 import { SignInPage } from "~/pages/SignInPage";
 import { SignUpPage } from "~/pages/SignUpPage";
 import { SignOutPage } from "~/pages/SignOutPage";
-import { SketchCreateNoAuthPage } from "~/pages/SketchCreateNoAuthPage";
 
 export const AppRoute = () => {
   return (
@@ -22,7 +21,6 @@ export const AppRouteNoAuth = () => {
   return (
     <Routes>
       <Route path="/" element={<SketchListPage/>} />
-      <Route path="/sketches/create" element={<SketchCreateNoAuthPage />} />
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<Navigate to={"/"} />} />
