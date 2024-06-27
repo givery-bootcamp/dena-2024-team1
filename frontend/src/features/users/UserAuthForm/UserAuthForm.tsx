@@ -7,9 +7,9 @@ import { type Schema, schema } from "./schema";
 import {
   type PageType,
   typeToButtonLabel,
-  typeToLabel,
   typeToLink,
   typeToNavigationText,
+  typeToTitle,
 } from "./mapping";
 
 import { Button } from "~/shared/components/Button";
@@ -24,7 +24,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
     resolver: valibotResolver(schema),
   });
 
-  const label = typeToLabel[type];
+  const title = typeToTitle[type];
   const buttonLabel = typeToButtonLabel[type];
   const link = typeToLink[type];
   const navigationText = typeToNavigationText[type];
@@ -36,7 +36,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
 
   return (
     <form className="mt-10 flex flex-col gap-10" onSubmit={handleFormSubmit(handleSubmit)}>
-      <h1 className="text-center text-2xl font-bold">{label}</h1>
+      <h1 className="text-center text-2xl font-bold">{title}</h1>
       <div className="flex flex-col gap-6 text-lg">
         <label className="flex flex-col gap-2 text-lg">
           <span className="font-bold">ユーザー名</span>

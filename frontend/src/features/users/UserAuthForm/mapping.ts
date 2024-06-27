@@ -1,10 +1,10 @@
 export type PageType = "sign-in" | "sign-up";
 
-type Label = "ログイン" | "新規登録";
+type Title = "ログイン" | "新規登録";
 type PageLink = "/signin" | "/signup";
 type ButtonLabel = "ログインする" | "アカウントを作成する";
 
-export const typeToLabel: Record<PageType, Label> = {
+export const typeToTitle: Record<PageType, Title> = {
   "sign-in": "ログイン",
   "sign-up": "新規登録",
 };
