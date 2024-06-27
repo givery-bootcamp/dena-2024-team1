@@ -21,6 +21,8 @@ var SessionSecret = "session"
 var SessionName = "session-name"
 var SessionKey = "user"
 
+var AwsAccessKeyID = ""
+var AwsSecretAccessKey = ""
 var AwsDefaultRegion = "ap-northeast-1"
 var S3Bucket = "dena-training-2024-team1"
 
@@ -59,6 +61,12 @@ func init() {
 	}
 	if v := os.Getenv("SESSION_KEY"); v != "" {
 		SessionKey = v
+	}
+	if v := os.Getenv("AWS_ACCESS_KEY_ID"); v != "" {
+		AwsAccessKeyID = v
+	}
+	if v := os.Getenv("AWS_SECRET_ACCESS_KEY"); v != "" {
+		AwsSecretAccessKey = v
 	}
 	if v := os.Getenv("AWS_DEFAULT_REGION"); v != "" {
 		AwsDefaultRegion = v
