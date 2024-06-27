@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"myapp/internal/config"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
@@ -35,7 +34,6 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		return
 	}
 	// Check file type
-	fmt.Println(requestFile.Header)
 	if requestFile.Header.Get("Content-Type") != "image/png" && requestFile.Header.Get("Content-Type") != "image/jpeg" {
 		handleError(ctx, 400, errors.New("file type not allowed"))
 		return
