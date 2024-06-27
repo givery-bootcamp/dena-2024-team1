@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"bytes"
 	"errors"
+	"fmt"
 	"myapp/internal/config"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
@@ -21,48 +21,33 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 }
 
 func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
-	// const MaxUploadSize = 10 * 1024 * 1024 // 10MB
+	const MaxUploadSize = 10 * 1024 * 1024 // 10MB
 
-	// file, err := ctx.FormFile("file")
-	// if err != nil {
-	// 	handleError(ctx, 400, err)
-	// 	return
-	// }
-	// // Check file size
-	// if file.Size > MaxUploadSize {
-	// 	handleError(ctx, 400, errors.New("file size too large"))
-	// 	return
-	// }
-	// // Check file type
-	// if file.Header.Get("Content-Type") != "image/png" && file.Header.Get("Content-Type") != "image/jpeg" {
-	// 	handleError(ctx, 400, errors.New("file type not allowed"))
-	// 	return
-	// }
-
-	// // Save file
-	// // 保存先が分かってないかもしれない
-	// destination := "uploads/" + time.Now().Format("20060102150405") + ".png"
-
-	// if err := ctx.SaveUploadedFile(file, destination); err != nil {
-	// 	ctx.String(http.StatusInternalServerError, "Failed to save file: %s", err.Error())
-	// 	return
-	// }
-
-	var request openapi.CreateScketchesRequest
-	if err := ctx.ShouldBindJSON(&request); err != nil {
-		handleError(ctx, 400, err)
-		return
-	}
-
-	file, err := request.File.Bytes()
+	requestFile, err := ctx.FormFile("file")
 	if err != nil {
 		handleError(ctx, 400, err)
 		return
 	}
 
-	reader := bytes.NewReader(file)
+	// Check file size
+	if requestFile.Size > MaxUploadSize {
+		handleError(ctx, 400, errors.New("file size too large"))
+		return
+	}
+	// Check file type
+	fmt.Println(requestFile.Header)
+	if requestFile.Header.Get("Content-Type") != "image/png" && requestFile.Header.Get("Content-Type") != "image/jpeg" {
+		handleError(ctx, 400, errors.New("file type not allowed"))
+		return
+	}
 
-	err = h.su.CreateSketch(reader)
+	file, err := requestFile.Open()
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	}
+
+	err = h.su.CreateSketch(&file)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
