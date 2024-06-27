@@ -6,6 +6,7 @@ import (
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,10 +45,14 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		handleError(ctx, 500, err)
 		return
 	}
+	session := sessions.Default(ctx)
 
-	// userid
-	userID := ctx.GetInt("userID")
-	err = h.su.CreateSketch(&file, userID)
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	}
+
+	err = h.su.CreateSketch(&file, session)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {

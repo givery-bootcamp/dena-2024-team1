@@ -10,6 +10,7 @@ import (
 
 	"myapp/internal/infrastructure/filestorage"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -24,7 +25,7 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(file *multipart.File, userid int) error {
+func (r *SketchRepository) CreateSketch(file *multipart.File, session sessions.Session) error {
 	fn := uuid.New().String() + ".png"
 
 	s3FileStorage := filestorage.SetUpS3()
@@ -32,11 +33,12 @@ func (r *SketchRepository) CreateSketch(file *multipart.File, userid int) error 
 	if err != nil {
 		return err
 	}
+	// Get user id from session
+	userid := session.Get("user_id").(int)
 
 	sketch := model.Sketch{
 		ImageName: fn,
-		// TODO：ここでUserIDをどうやって取得するか
-		UserID: userid,
+		UserID:    userid,
 	}
 	sketchResult := r.Conn.Create(&sketch)
 	if sketchResult.Error != nil {
