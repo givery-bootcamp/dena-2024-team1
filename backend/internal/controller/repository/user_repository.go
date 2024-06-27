@@ -3,7 +3,6 @@ package repository
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"myapp/internal/config"
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
@@ -34,8 +33,6 @@ func NewUserRepository(conn *gorm.DB) repositoryIF.UserRepository {
 func (r *UserRepository) GetAll() ([]entity.User, error) {
 	var users []model.User
 	result := r.Conn.Find(&users)
-	fmt.Printf("%+v\n", result)
-	fmt.Printf("%+v\n", users)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -152,7 +149,6 @@ func (r *UserRepository) GetSessionUser(session sessions.Session) (entity.User, 
 
 	// ユーザー情報を取得
 	user, err := r.GetUserByUsername(sessionUser.Name)
-	fmt.Printf("get session user: %+v\n", user)
 
 	if err != nil {
 		return entity.User{}, err

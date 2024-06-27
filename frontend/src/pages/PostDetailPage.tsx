@@ -42,8 +42,6 @@ export function PostDetailPage() {
   if (!post) return <p>Loading...</p>;
 
   const authActionButtons = () => {
-    console.log(sessionUser)
-    console.log(post)
     if (sessionUser && sessionUser.id === post.user_id) {
       return (
         <>
@@ -69,7 +67,7 @@ export function PostDetailPage() {
             </ModalFooter>
           </Modal>
         </>
-      )
+      );
     }
     return null;
   };
@@ -89,5 +87,5 @@ export function PostDetailPage() {
         {authActionButtons()}
       </div>
     </Container>
-  )
+  );
 }
