@@ -7,6 +7,8 @@ import (
 	"myapp/internal/config"
 	"myapp/internal/infrastructure/database/ent"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Database Setup
