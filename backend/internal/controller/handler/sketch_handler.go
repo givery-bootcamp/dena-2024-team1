@@ -56,11 +56,18 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		return
 	}
 
-	err = h.su.CreateSketch(&file, user.ID)
+	sketch, err := h.su.CreateSketch(&file, user.ID)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
-		ctx.JSON(201, nil)
+		ctx.JSON(201, openapi.CreateScketchesResponse{
+			Id:        sketch.ID,
+			ImageUrl:  config.S3BucketURL + sketch.ImageName,
+			UserId:    sketch.UserID,
+			UserName:  user.Name,
+			CreatedAt: sketch.CreatedAt,
+			UpdatedAt: sketch.UpdatedAt,
+		})
 	}
 }
 
