@@ -41,12 +41,6 @@ export interface CreatePostRequest {
      * @memberof CreatePostRequest
      */
     'body': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePostRequest
-     */
-    'user_id': number;
 }
 /**
  * 

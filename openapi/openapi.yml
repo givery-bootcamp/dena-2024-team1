@@ -449,12 +449,9 @@ components:
           type: string
         body:
           type: string
-        user_id:
-          type: integer
       required:
         - title
         - body
-        - user_id
     CreatePostResponse:
       title: CreatePostResponse
       $ref: '#/components/schemas/Post'
