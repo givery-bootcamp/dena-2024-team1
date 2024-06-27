@@ -161,6 +161,7 @@ func convertPostRepositoryModelToEntity(p *model.Post, u *model.User) *entity.Po
 		ID:        int(p.ID),
 		Title:     p.Title,
 		Body:      p.Body,
+		UserID:    p.UserID,
 		UserName:  u.Name,
 		CreatedAt: p.CreatedAt,
 		UpdatedAt: p.UpdatedAt,
