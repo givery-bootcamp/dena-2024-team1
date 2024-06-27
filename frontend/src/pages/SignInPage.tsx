@@ -8,7 +8,7 @@ export const SignInPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
     try {
       const responnse = await userApi.signIn({
-        username,
+        user_name: username,
         password,
       });
   
