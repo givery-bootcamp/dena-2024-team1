@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
 
@@ -39,10 +40,42 @@ func (u *PostUsecase) CreatePost(post entity.Post, session sessions.Session) (*e
 	return u.postRepository.CreatePost(&post)
 }
 
-func (u *PostUsecase) UpdatePost(id int, title string, body string) (*entity.Post, error) {
+func (u *PostUsecase) UpdatePost(id int, title string, body string, session sessions.Session) (*entity.Post, error) {
+	canModify, err := u.canModifyPostBySessionUser(id, session)
+	if err != nil {
+		return nil, err
+	}
+	if !canModify {
+		return nil, errors.New("cannot modify post")
+	}
+
 	return u.postRepository.UpdatePost(id, title, body)
 }
 
-func (u *PostUsecase) DeletePost(id int) error {
+func (u *PostUsecase) DeletePost(id int, session sessions.Session) error {
+	canModify, err := u.canModifyPostBySessionUser(id, session)
+	if err != nil {
+		return err
+	}
+	if !canModify {
+		return errors.New("cannot modify post")
+	}
+
 	return u.postRepository.DeletePost(id)
+}
+
+func (u *PostUsecase) canModifyPostBySessionUser(postID int, session sessions.Session) (bool, error) {
+	post, err := u.postRepository.Get(postID)
+	if err != nil {
+		return false, err
+	}
+
+	user, err := u.userRepository.GetSessionUser(session)
+	if err != nil {
+		return false, err
+	}
+
+	result := post.UserID == user.ID
+
+	return result, nil
 }
