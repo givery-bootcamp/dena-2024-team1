@@ -45,7 +45,9 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		return
 	}
 
-	err = h.su.CreateSketch(&file)
+	// userid
+	userID := ctx.GetInt("userID")
+	err = h.su.CreateSketch(&file, userID)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
