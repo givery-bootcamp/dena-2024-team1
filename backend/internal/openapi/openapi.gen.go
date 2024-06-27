@@ -32,6 +32,16 @@ type CreateScketchesRequest struct {
 	UserId int                `json:"userId"`
 }
 
+// CreateScketchesResponse defines model for CreateScketchesResponse.
+type CreateScketchesResponse struct {
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int       `json:"id"`
+	ImageUrl  string    `json:"imageUrl"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"userId"`
+	UserName  string    `json:"userName"`
+}
+
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 

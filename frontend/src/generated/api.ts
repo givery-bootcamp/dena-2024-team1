@@ -94,6 +94,49 @@ export interface CreatePostResponse {
 /**
  * 
  * @export
+ * @interface CreateScketchesResponse
+ */
+export interface CreateScketchesResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateScketchesResponse
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateScketchesResponse
+     */
+    'imageUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateScketchesResponse
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateScketchesResponse
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateScketchesResponse
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateScketchesResponse
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface GetHello200Response
  */
 export interface GetHello200Response {
@@ -917,7 +960,7 @@ export const SketchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postSketch(file: File, userId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postSketch(file: File, userId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateScketchesResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postSketch(file, userId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SketchApi.postSketch']?.[localVarOperationServerIndex]?.url;
@@ -950,7 +993,7 @@ export const SketchApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postSketch(file: File, userId: number, options?: any): AxiosPromise<void> {
+        postSketch(file: File, userId: number, options?: any): AxiosPromise<CreateScketchesResponse> {
             return localVarFp.postSketch(file, userId, options).then((request) => request(axios, basePath));
         },
     };

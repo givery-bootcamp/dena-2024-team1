@@ -128,6 +128,10 @@ paths:
       responses:
         '201':
           description: Sketch image uploaded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScketchesResponse'
       operationId: postSketch
       summary: ''
       tags:
@@ -511,6 +515,31 @@ components:
       required:
         - file
         - userId
+    CreateScketchesResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+        userId:
+          type: integer
+        userName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - imageUrl
+        - userId
+        - userName
+        - createdAt
+        - updatedAt
+
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:
