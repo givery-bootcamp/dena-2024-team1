@@ -19,6 +19,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -468,6 +469,22 @@ func (c *PostClient) GetX(ctx context.Context, id int) *Post {
 	return obj
 }
 
+// QueryUser queries the user edge of a Post.
+func (c *PostClient) QueryUser(po *Post) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := po.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(post.Table, post.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, post.UserTable, post.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(po.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *PostClient) Hooks() []Hook {
 	return c.hooks.Post
@@ -601,6 +618,22 @@ func (c *SketchClient) GetX(ctx context.Context, id int) *Sketch {
 	return obj
 }
 
+// QueryUser queries the user edge of a Sketch.
+func (c *SketchClient) QueryUser(s *Sketch) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sketch.Table, sketch.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sketch.UserTable, sketch.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SketchClient) Hooks() []Hook {
 	return c.hooks.Sketch
@@ -732,6 +765,38 @@ func (c *UserClient) GetX(ctx context.Context, id int) *User {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryPosts queries the posts edge of a User.
+func (c *UserClient) QueryPosts(u *User) *PostQuery {
+	query := (&PostClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(post.Table, post.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.PostsTable, user.PostsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySketches queries the sketches edge of a User.
+func (c *UserClient) QuerySketches(u *User) *SketchQuery {
+	query := (&SketchClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(sketch.Table, sketch.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.SketchesTable, user.SketchesColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

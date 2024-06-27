@@ -529,11 +529,11 @@ type PostMutation struct {
 	id            *int
 	created_at    *time.Time
 	updated_at    *time.Time
-	user_id       *int
-	adduser_id    *int
 	title         *string
 	body          *string
 	clearedFields map[string]struct{}
+	user          *int
+	cleareduser   bool
 	done          bool
 	oldValue      func(context.Context) (*Post, error)
 	predicates    []predicate.Post
@@ -711,13 +711,12 @@ func (m *PostMutation) ResetUpdatedAt() {
 
 // SetUserID sets the "user_id" field.
 func (m *PostMutation) SetUserID(i int) {
-	m.user_id = &i
-	m.adduser_id = nil
+	m.user = &i
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
 func (m *PostMutation) UserID() (r int, exists bool) {
-	v := m.user_id
+	v := m.user
 	if v == nil {
 		return
 	}
@@ -741,28 +740,9 @@ func (m *PostMutation) OldUserID(ctx context.Context) (v int, err error) {
 	return oldValue.UserID, nil
 }
 
-// AddUserID adds i to the "user_id" field.
-func (m *PostMutation) AddUserID(i int) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *PostMutation) AddedUserID() (r int, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetUserID resets all changes to the "user_id" field.
 func (m *PostMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
+	m.user = nil
 }
 
 // SetTitle sets the "title" field.
@@ -837,6 +817,33 @@ func (m *PostMutation) ResetBody() {
 	m.body = nil
 }
 
+// ClearUser clears the "user" edge to the User entity.
+func (m *PostMutation) ClearUser() {
+	m.cleareduser = true
+	m.clearedFields[post.FieldUserID] = struct{}{}
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *PostMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *PostMutation) UserIDs() (ids []int) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *PostMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+}
+
 // Where appends a list predicates to the PostMutation builder.
 func (m *PostMutation) Where(ps ...predicate.Post) {
 	m.predicates = append(m.predicates, ps...)
@@ -878,7 +885,7 @@ func (m *PostMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, post.FieldUpdatedAt)
 	}
-	if m.user_id != nil {
+	if m.user != nil {
 		fields = append(fields, post.FieldUserID)
 	}
 	if m.title != nil {
@@ -976,9 +983,6 @@ func (m *PostMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *PostMutation) AddedFields() []string {
 	var fields []string
-	if m.adduser_id != nil {
-		fields = append(fields, post.FieldUserID)
-	}
 	return fields
 }
 
@@ -987,8 +991,6 @@ func (m *PostMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *PostMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case post.FieldUserID:
-		return m.AddedUserID()
 	}
 	return nil, false
 }
@@ -998,13 +1000,6 @@ func (m *PostMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *PostMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case post.FieldUserID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Post numeric field %s", name)
 }
@@ -1053,19 +1048,28 @@ func (m *PostMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PostMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.user != nil {
+		edges = append(edges, post.EdgeUser)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *PostMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case post.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PostMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -1077,25 +1081,42 @@ func (m *PostMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PostMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.cleareduser {
+		edges = append(edges, post.EdgeUser)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *PostMutation) EdgeCleared(name string) bool {
+	switch name {
+	case post.EdgeUser:
+		return m.cleareduser
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *PostMutation) ClearEdge(name string) error {
+	switch name {
+	case post.EdgeUser:
+		m.ClearUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Post unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *PostMutation) ResetEdge(name string) error {
+	switch name {
+	case post.EdgeUser:
+		m.ResetUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Post edge %s", name)
 }
 
@@ -1107,10 +1128,10 @@ type SketchMutation struct {
 	id            *int
 	created_at    *time.Time
 	updated_at    *time.Time
-	user_id       *int
-	adduser_id    *int
 	image_name    *string
 	clearedFields map[string]struct{}
+	user          *int
+	cleareduser   bool
 	done          bool
 	oldValue      func(context.Context) (*Sketch, error)
 	predicates    []predicate.Sketch
@@ -1288,13 +1309,12 @@ func (m *SketchMutation) ResetUpdatedAt() {
 
 // SetUserID sets the "user_id" field.
 func (m *SketchMutation) SetUserID(i int) {
-	m.user_id = &i
-	m.adduser_id = nil
+	m.user = &i
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
 func (m *SketchMutation) UserID() (r int, exists bool) {
-	v := m.user_id
+	v := m.user
 	if v == nil {
 		return
 	}
@@ -1318,28 +1338,9 @@ func (m *SketchMutation) OldUserID(ctx context.Context) (v int, err error) {
 	return oldValue.UserID, nil
 }
 
-// AddUserID adds i to the "user_id" field.
-func (m *SketchMutation) AddUserID(i int) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *SketchMutation) AddedUserID() (r int, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetUserID resets all changes to the "user_id" field.
 func (m *SketchMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
+	m.user = nil
 }
 
 // SetImageName sets the "image_name" field.
@@ -1376,6 +1377,33 @@ func (m *SketchMutation) OldImageName(ctx context.Context) (v string, err error)
 // ResetImageName resets all changes to the "image_name" field.
 func (m *SketchMutation) ResetImageName() {
 	m.image_name = nil
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (m *SketchMutation) ClearUser() {
+	m.cleareduser = true
+	m.clearedFields[sketch.FieldUserID] = struct{}{}
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *SketchMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *SketchMutation) UserIDs() (ids []int) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *SketchMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
 }
 
 // Where appends a list predicates to the SketchMutation builder.
@@ -1419,7 +1447,7 @@ func (m *SketchMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, sketch.FieldUpdatedAt)
 	}
-	if m.user_id != nil {
+	if m.user != nil {
 		fields = append(fields, sketch.FieldUserID)
 	}
 	if m.image_name != nil {
@@ -1503,9 +1531,6 @@ func (m *SketchMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *SketchMutation) AddedFields() []string {
 	var fields []string
-	if m.adduser_id != nil {
-		fields = append(fields, sketch.FieldUserID)
-	}
 	return fields
 }
 
@@ -1514,8 +1539,6 @@ func (m *SketchMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *SketchMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case sketch.FieldUserID:
-		return m.AddedUserID()
 	}
 	return nil, false
 }
@@ -1525,13 +1548,6 @@ func (m *SketchMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *SketchMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case sketch.FieldUserID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Sketch numeric field %s", name)
 }
@@ -1577,19 +1593,28 @@ func (m *SketchMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SketchMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.user != nil {
+		edges = append(edges, sketch.EdgeUser)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *SketchMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case sketch.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SketchMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -1601,42 +1626,65 @@ func (m *SketchMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SketchMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.cleareduser {
+		edges = append(edges, sketch.EdgeUser)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *SketchMutation) EdgeCleared(name string) bool {
+	switch name {
+	case sketch.EdgeUser:
+		return m.cleareduser
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *SketchMutation) ClearEdge(name string) error {
+	switch name {
+	case sketch.EdgeUser:
+		m.ClearUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Sketch unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *SketchMutation) ResetEdge(name string) error {
+	switch name {
+	case sketch.EdgeUser:
+		m.ResetUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Sketch edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	created_at    *time.Time
-	updated_at    *time.Time
-	name          *string
-	password      *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*User, error)
-	predicates    []predicate.User
+	op              Op
+	typ             string
+	id              *int
+	created_at      *time.Time
+	updated_at      *time.Time
+	name            *string
+	password        *string
+	clearedFields   map[string]struct{}
+	posts           map[int]struct{}
+	removedposts    map[int]struct{}
+	clearedposts    bool
+	sketches        map[int]struct{}
+	removedsketches map[int]struct{}
+	clearedsketches bool
+	done            bool
+	oldValue        func(context.Context) (*User, error)
+	predicates      []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -1881,6 +1929,114 @@ func (m *UserMutation) ResetPassword() {
 	m.password = nil
 }
 
+// AddPostIDs adds the "posts" edge to the Post entity by ids.
+func (m *UserMutation) AddPostIDs(ids ...int) {
+	if m.posts == nil {
+		m.posts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.posts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPosts clears the "posts" edge to the Post entity.
+func (m *UserMutation) ClearPosts() {
+	m.clearedposts = true
+}
+
+// PostsCleared reports if the "posts" edge to the Post entity was cleared.
+func (m *UserMutation) PostsCleared() bool {
+	return m.clearedposts
+}
+
+// RemovePostIDs removes the "posts" edge to the Post entity by IDs.
+func (m *UserMutation) RemovePostIDs(ids ...int) {
+	if m.removedposts == nil {
+		m.removedposts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.posts, ids[i])
+		m.removedposts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPosts returns the removed IDs of the "posts" edge to the Post entity.
+func (m *UserMutation) RemovedPostsIDs() (ids []int) {
+	for id := range m.removedposts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PostsIDs returns the "posts" edge IDs in the mutation.
+func (m *UserMutation) PostsIDs() (ids []int) {
+	for id := range m.posts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPosts resets all changes to the "posts" edge.
+func (m *UserMutation) ResetPosts() {
+	m.posts = nil
+	m.clearedposts = false
+	m.removedposts = nil
+}
+
+// AddSketchIDs adds the "sketches" edge to the Sketch entity by ids.
+func (m *UserMutation) AddSketchIDs(ids ...int) {
+	if m.sketches == nil {
+		m.sketches = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.sketches[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSketches clears the "sketches" edge to the Sketch entity.
+func (m *UserMutation) ClearSketches() {
+	m.clearedsketches = true
+}
+
+// SketchesCleared reports if the "sketches" edge to the Sketch entity was cleared.
+func (m *UserMutation) SketchesCleared() bool {
+	return m.clearedsketches
+}
+
+// RemoveSketchIDs removes the "sketches" edge to the Sketch entity by IDs.
+func (m *UserMutation) RemoveSketchIDs(ids ...int) {
+	if m.removedsketches == nil {
+		m.removedsketches = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.sketches, ids[i])
+		m.removedsketches[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSketches returns the removed IDs of the "sketches" edge to the Sketch entity.
+func (m *UserMutation) RemovedSketchesIDs() (ids []int) {
+	for id := range m.removedsketches {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SketchesIDs returns the "sketches" edge IDs in the mutation.
+func (m *UserMutation) SketchesIDs() (ids []int) {
+	for id := range m.sketches {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSketches resets all changes to the "sketches" edge.
+func (m *UserMutation) ResetSketches() {
+	m.sketches = nil
+	m.clearedsketches = false
+	m.removedsketches = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -2065,48 +2221,110 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.posts != nil {
+		edges = append(edges, user.EdgePosts)
+	}
+	if m.sketches != nil {
+		edges = append(edges, user.EdgeSketches)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *UserMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case user.EdgePosts:
+		ids := make([]ent.Value, 0, len(m.posts))
+		for id := range m.posts {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeSketches:
+		ids := make([]ent.Value, 0, len(m.sketches))
+		for id := range m.sketches {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.removedposts != nil {
+		edges = append(edges, user.EdgePosts)
+	}
+	if m.removedsketches != nil {
+		edges = append(edges, user.EdgeSketches)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case user.EdgePosts:
+		ids := make([]ent.Value, 0, len(m.removedposts))
+		for id := range m.removedposts {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeSketches:
+		ids := make([]ent.Value, 0, len(m.removedsketches))
+		for id := range m.removedsketches {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.clearedposts {
+		edges = append(edges, user.EdgePosts)
+	}
+	if m.clearedsketches {
+		edges = append(edges, user.EdgeSketches)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *UserMutation) EdgeCleared(name string) bool {
+	switch name {
+	case user.EdgePosts:
+		return m.clearedposts
+	case user.EdgeSketches:
+		return m.clearedsketches
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown User unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
+	switch name {
+	case user.EdgePosts:
+		m.ResetPosts()
+		return nil
+	case user.EdgeSketches:
+		m.ResetSketches()
+		return nil
+	}
 	return fmt.Errorf("unknown User edge %s", name)
 }

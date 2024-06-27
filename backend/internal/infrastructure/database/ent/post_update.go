@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/post"
 	"myapp/internal/infrastructure/database/ent/predicate"
+	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -36,7 +37,6 @@ func (pu *PostUpdate) SetUpdatedAt(t time.Time) *PostUpdate {
 
 // SetUserID sets the "user_id" field.
 func (pu *PostUpdate) SetUserID(i int) *PostUpdate {
-	pu.mutation.ResetUserID()
 	pu.mutation.SetUserID(i)
 	return pu
 }
@@ -46,12 +46,6 @@ func (pu *PostUpdate) SetNillableUserID(i *int) *PostUpdate {
 	if i != nil {
 		pu.SetUserID(*i)
 	}
-	return pu
-}
-
-// AddUserID adds i to the "user_id" field.
-func (pu *PostUpdate) AddUserID(i int) *PostUpdate {
-	pu.mutation.AddUserID(i)
 	return pu
 }
 
@@ -83,9 +77,20 @@ func (pu *PostUpdate) SetNillableBody(s *string) *PostUpdate {
 	return pu
 }
 
+// SetUser sets the "user" edge to the User entity.
+func (pu *PostUpdate) SetUser(u *User) *PostUpdate {
+	return pu.SetUserID(u.ID)
+}
+
 // Mutation returns the PostMutation object of the builder.
 func (pu *PostUpdate) Mutation() *PostMutation {
 	return pu.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (pu *PostUpdate) ClearUser() *PostUpdate {
+	pu.mutation.ClearUser()
+	return pu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -124,7 +129,18 @@ func (pu *PostUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pu *PostUpdate) check() error {
+	if _, ok := pu.mutation.UserID(); pu.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Post.user"`)
+	}
+	return nil
+}
+
 func (pu *PostUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(post.Table, post.Columns, sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -136,17 +152,40 @@ func (pu *PostUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.SetField(post.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := pu.mutation.UserID(); ok {
-		_spec.SetField(post.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := pu.mutation.AddedUserID(); ok {
-		_spec.AddField(post.FieldUserID, field.TypeInt, value)
-	}
 	if value, ok := pu.mutation.Title(); ok {
 		_spec.SetField(post.FieldTitle, field.TypeString, value)
 	}
 	if value, ok := pu.mutation.Body(); ok {
 		_spec.SetField(post.FieldBody, field.TypeString, value)
+	}
+	if pu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   post.UserTable,
+			Columns: []string{post.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   post.UserTable,
+			Columns: []string{post.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -176,7 +215,6 @@ func (puo *PostUpdateOne) SetUpdatedAt(t time.Time) *PostUpdateOne {
 
 // SetUserID sets the "user_id" field.
 func (puo *PostUpdateOne) SetUserID(i int) *PostUpdateOne {
-	puo.mutation.ResetUserID()
 	puo.mutation.SetUserID(i)
 	return puo
 }
@@ -186,12 +224,6 @@ func (puo *PostUpdateOne) SetNillableUserID(i *int) *PostUpdateOne {
 	if i != nil {
 		puo.SetUserID(*i)
 	}
-	return puo
-}
-
-// AddUserID adds i to the "user_id" field.
-func (puo *PostUpdateOne) AddUserID(i int) *PostUpdateOne {
-	puo.mutation.AddUserID(i)
 	return puo
 }
 
@@ -223,9 +255,20 @@ func (puo *PostUpdateOne) SetNillableBody(s *string) *PostUpdateOne {
 	return puo
 }
 
+// SetUser sets the "user" edge to the User entity.
+func (puo *PostUpdateOne) SetUser(u *User) *PostUpdateOne {
+	return puo.SetUserID(u.ID)
+}
+
 // Mutation returns the PostMutation object of the builder.
 func (puo *PostUpdateOne) Mutation() *PostMutation {
 	return puo.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (puo *PostUpdateOne) ClearUser() *PostUpdateOne {
+	puo.mutation.ClearUser()
+	return puo
 }
 
 // Where appends a list predicates to the PostUpdate builder.
@@ -277,7 +320,18 @@ func (puo *PostUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (puo *PostUpdateOne) check() error {
+	if _, ok := puo.mutation.UserID(); puo.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Post.user"`)
+	}
+	return nil
+}
+
 func (puo *PostUpdateOne) sqlSave(ctx context.Context) (_node *Post, err error) {
+	if err := puo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(post.Table, post.Columns, sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt))
 	id, ok := puo.mutation.ID()
 	if !ok {
@@ -306,17 +360,40 @@ func (puo *PostUpdateOne) sqlSave(ctx context.Context) (_node *Post, err error) 
 	if value, ok := puo.mutation.UpdatedAt(); ok {
 		_spec.SetField(post.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := puo.mutation.UserID(); ok {
-		_spec.SetField(post.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := puo.mutation.AddedUserID(); ok {
-		_spec.AddField(post.FieldUserID, field.TypeInt, value)
-	}
 	if value, ok := puo.mutation.Title(); ok {
 		_spec.SetField(post.FieldTitle, field.TypeString, value)
 	}
 	if value, ok := puo.mutation.Body(); ok {
 		_spec.SetField(post.FieldBody, field.TypeString, value)
+	}
+	if puo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   post.UserTable,
+			Columns: []string{post.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   post.UserTable,
+			Columns: []string{post.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Post{config: puo.config}
 	_spec.Assign = _node.assignValues

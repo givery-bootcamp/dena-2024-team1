@@ -27,29 +27,45 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "user_id", Type: field.TypeInt},
 		{Name: "title", Type: field.TypeString},
 		{Name: "body", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeInt},
 	}
 	// PostsTable holds the schema information for the "posts" table.
 	PostsTable = &schema.Table{
 		Name:       "posts",
 		Columns:    PostsColumns,
 		PrimaryKey: []*schema.Column{PostsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "posts_users_posts",
+				Columns:    []*schema.Column{PostsColumns[5]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 	}
 	// SketchesColumns holds the columns for the "sketches" table.
 	SketchesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "user_id", Type: field.TypeInt},
 		{Name: "image_name", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeInt},
 	}
 	// SketchesTable holds the schema information for the "sketches" table.
 	SketchesTable = &schema.Table{
 		Name:       "sketches",
 		Columns:    SketchesColumns,
 		PrimaryKey: []*schema.Column{SketchesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sketches_users_sketches",
+				Columns:    []*schema.Column{SketchesColumns[4]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -75,4 +91,6 @@ var (
 )
 
 func init() {
+	PostsTable.ForeignKeys[0].RefTable = UsersTable
+	SketchesTable.ForeignKeys[0].RefTable = UsersTable
 }

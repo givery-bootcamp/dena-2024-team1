@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/post"
+	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -64,6 +65,11 @@ func (pc *PostCreate) SetTitle(s string) *PostCreate {
 func (pc *PostCreate) SetBody(s string) *PostCreate {
 	pc.mutation.SetBody(s)
 	return pc
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (pc *PostCreate) SetUser(u *User) *PostCreate {
+	return pc.SetUserID(u.ID)
 }
 
 // Mutation returns the PostMutation object of the builder.
@@ -128,6 +134,9 @@ func (pc *PostCreate) check() error {
 	if _, ok := pc.mutation.Body(); !ok {
 		return &ValidationError{Name: "body", err: errors.New(`ent: missing required field "Post.body"`)}
 	}
+	if _, ok := pc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Post.user"`)}
+	}
 	return nil
 }
 
@@ -162,10 +171,6 @@ func (pc *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 		_spec.SetField(post.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.UserID(); ok {
-		_spec.SetField(post.FieldUserID, field.TypeInt, value)
-		_node.UserID = value
-	}
 	if value, ok := pc.mutation.Title(); ok {
 		_spec.SetField(post.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -173,6 +178,23 @@ func (pc *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Body(); ok {
 		_spec.SetField(post.FieldBody, field.TypeString, value)
 		_node.Body = value
+	}
+	if nodes := pc.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   post.UserTable,
+			Columns: []string{post.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

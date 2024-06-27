@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"myapp/internal/infrastructure/database/ent/user"
 	"strings"
 	"time"
 
@@ -24,8 +25,31 @@ type Sketch struct {
 	// UserID holds the value of the "user_id" field.
 	UserID int `json:"user_id,omitempty"`
 	// ImageName holds the value of the "image_name" field.
-	ImageName    string `json:"image_name,omitempty"`
+	ImageName string `json:"image_name,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SketchQuery when eager-loading is set.
+	Edges        SketchEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// SketchEdges holds the relations/edges for other nodes in the graph.
+type SketchEdges struct {
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SketchEdges) UserOrErr() (*User, error) {
+	if e.User != nil {
+		return e.User, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "user"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -95,6 +119,11 @@ func (s *Sketch) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Sketch) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
+}
+
+// QueryUser queries the "user" edge of the Sketch entity.
+func (s *Sketch) QueryUser() *UserQuery {
+	return NewSketchClient(s.config).QueryUser(s)
 }
 
 // Update returns a builder for updating this Sketch.

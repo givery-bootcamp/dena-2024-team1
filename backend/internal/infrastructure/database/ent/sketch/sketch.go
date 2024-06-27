@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -21,8 +22,17 @@ const (
 	FieldUserID = "user_id"
 	// FieldImageName holds the string denoting the image_name field in the database.
 	FieldImageName = "image_name"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
 	// Table holds the table name of the sketch in the database.
 	Table = "sketches"
+	// UserTable is the table that holds the user relation/edge.
+	UserTable = "sketches"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "user_id"
 )
 
 // Columns holds all SQL columns for sketch fields.
@@ -79,4 +89,18 @@ func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByImageName orders the results by the image_name field.
 func ByImageName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImageName, opts...).ToFunc()
+}
+
+// ByUserField orders the results by user field.
+func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
 }

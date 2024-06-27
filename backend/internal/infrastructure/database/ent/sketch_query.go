@@ -8,6 +8,7 @@ import (
 	"math"
 	"myapp/internal/infrastructure/database/ent/predicate"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"myapp/internal/infrastructure/database/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -21,6 +22,7 @@ type SketchQuery struct {
 	order      []sketch.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Sketch
+	withUser   *UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +57,28 @@ func (sq *SketchQuery) Unique(unique bool) *SketchQuery {
 func (sq *SketchQuery) Order(o ...sketch.OrderOption) *SketchQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (sq *SketchQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sketch.Table, sketch.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sketch.UserTable, sketch.UserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Sketch entity from the query.
@@ -249,10 +273,22 @@ func (sq *SketchQuery) Clone() *SketchQuery {
 		order:      append([]sketch.OrderOption{}, sq.order...),
 		inters:     append([]Interceptor{}, sq.inters...),
 		predicates: append([]predicate.Sketch{}, sq.predicates...),
+		withUser:   sq.withUser.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SketchQuery) WithUser(opts ...func(*UserQuery)) *SketchQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUser = query
+	return sq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +367,11 @@ func (sq *SketchQuery) prepareQuery(ctx context.Context) error {
 
 func (sq *SketchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sketch, error) {
 	var (
-		nodes = []*Sketch{}
-		_spec = sq.querySpec()
+		nodes       = []*Sketch{}
+		_spec       = sq.querySpec()
+		loadedTypes = [1]bool{
+			sq.withUser != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Sketch).scanValues(nil, columns)
@@ -340,6 +379,7 @@ func (sq *SketchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sketc
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Sketch{config: sq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +391,43 @@ func (sq *SketchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sketc
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := sq.withUser; query != nil {
+		if err := sq.loadUser(ctx, query, nodes, nil,
+			func(n *Sketch, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (sq *SketchQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Sketch, init func(*Sketch), assign func(*Sketch, *User)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Sketch)
+	for i := range nodes {
+		fk := nodes[i].UserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (sq *SketchQuery) sqlCount(ctx context.Context) (int, error) {
@@ -378,6 +454,9 @@ func (sq *SketchQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != sketch.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if sq.withUser != nil {
+			_spec.Node.AddColumnOnce(sketch.FieldUserID)
 		}
 	}
 	if ps := sq.predicates; len(ps) > 0 {

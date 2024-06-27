@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/predicate"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -36,7 +37,6 @@ func (su *SketchUpdate) SetUpdatedAt(t time.Time) *SketchUpdate {
 
 // SetUserID sets the "user_id" field.
 func (su *SketchUpdate) SetUserID(i int) *SketchUpdate {
-	su.mutation.ResetUserID()
 	su.mutation.SetUserID(i)
 	return su
 }
@@ -46,12 +46,6 @@ func (su *SketchUpdate) SetNillableUserID(i *int) *SketchUpdate {
 	if i != nil {
 		su.SetUserID(*i)
 	}
-	return su
-}
-
-// AddUserID adds i to the "user_id" field.
-func (su *SketchUpdate) AddUserID(i int) *SketchUpdate {
-	su.mutation.AddUserID(i)
 	return su
 }
 
@@ -69,9 +63,20 @@ func (su *SketchUpdate) SetNillableImageName(s *string) *SketchUpdate {
 	return su
 }
 
+// SetUser sets the "user" edge to the User entity.
+func (su *SketchUpdate) SetUser(u *User) *SketchUpdate {
+	return su.SetUserID(u.ID)
+}
+
 // Mutation returns the SketchMutation object of the builder.
 func (su *SketchUpdate) Mutation() *SketchMutation {
 	return su.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (su *SketchUpdate) ClearUser() *SketchUpdate {
+	su.mutation.ClearUser()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -110,7 +115,18 @@ func (su *SketchUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (su *SketchUpdate) check() error {
+	if _, ok := su.mutation.UserID(); su.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Sketch.user"`)
+	}
+	return nil
+}
+
 func (su *SketchUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := su.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(sketch.Table, sketch.Columns, sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -122,14 +138,37 @@ func (su *SketchUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.UpdatedAt(); ok {
 		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := su.mutation.UserID(); ok {
-		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := su.mutation.AddedUserID(); ok {
-		_spec.AddField(sketch.FieldUserID, field.TypeInt, value)
-	}
 	if value, ok := su.mutation.ImageName(); ok {
 		_spec.SetField(sketch.FieldImageName, field.TypeString, value)
+	}
+	if su.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sketch.UserTable,
+			Columns: []string{sketch.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sketch.UserTable,
+			Columns: []string{sketch.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -159,7 +198,6 @@ func (suo *SketchUpdateOne) SetUpdatedAt(t time.Time) *SketchUpdateOne {
 
 // SetUserID sets the "user_id" field.
 func (suo *SketchUpdateOne) SetUserID(i int) *SketchUpdateOne {
-	suo.mutation.ResetUserID()
 	suo.mutation.SetUserID(i)
 	return suo
 }
@@ -169,12 +207,6 @@ func (suo *SketchUpdateOne) SetNillableUserID(i *int) *SketchUpdateOne {
 	if i != nil {
 		suo.SetUserID(*i)
 	}
-	return suo
-}
-
-// AddUserID adds i to the "user_id" field.
-func (suo *SketchUpdateOne) AddUserID(i int) *SketchUpdateOne {
-	suo.mutation.AddUserID(i)
 	return suo
 }
 
@@ -192,9 +224,20 @@ func (suo *SketchUpdateOne) SetNillableImageName(s *string) *SketchUpdateOne {
 	return suo
 }
 
+// SetUser sets the "user" edge to the User entity.
+func (suo *SketchUpdateOne) SetUser(u *User) *SketchUpdateOne {
+	return suo.SetUserID(u.ID)
+}
+
 // Mutation returns the SketchMutation object of the builder.
 func (suo *SketchUpdateOne) Mutation() *SketchMutation {
 	return suo.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (suo *SketchUpdateOne) ClearUser() *SketchUpdateOne {
+	suo.mutation.ClearUser()
+	return suo
 }
 
 // Where appends a list predicates to the SketchUpdate builder.
@@ -246,7 +289,18 @@ func (suo *SketchUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (suo *SketchUpdateOne) check() error {
+	if _, ok := suo.mutation.UserID(); suo.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Sketch.user"`)
+	}
+	return nil
+}
+
 func (suo *SketchUpdateOne) sqlSave(ctx context.Context) (_node *Sketch, err error) {
+	if err := suo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(sketch.Table, sketch.Columns, sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt))
 	id, ok := suo.mutation.ID()
 	if !ok {
@@ -275,14 +329,37 @@ func (suo *SketchUpdateOne) sqlSave(ctx context.Context) (_node *Sketch, err err
 	if value, ok := suo.mutation.UpdatedAt(); ok {
 		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := suo.mutation.UserID(); ok {
-		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := suo.mutation.AddedUserID(); ok {
-		_spec.AddField(sketch.FieldUserID, field.TypeInt, value)
-	}
 	if value, ok := suo.mutation.ImageName(); ok {
 		_spec.SetField(sketch.FieldImageName, field.TypeString, value)
+	}
+	if suo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sketch.UserTable,
+			Columns: []string{sketch.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sketch.UserTable,
+			Columns: []string{sketch.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Sketch{config: suo.config}
 	_spec.Assign = _node.assignValues

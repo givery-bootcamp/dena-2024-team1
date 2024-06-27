@@ -6,6 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"myapp/internal/infrastructure/database/ent/post"
+	"myapp/internal/infrastructure/database/ent/sketch"
 	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
@@ -58,6 +60,36 @@ func (uc *UserCreate) SetName(s string) *UserCreate {
 func (uc *UserCreate) SetPassword(s string) *UserCreate {
 	uc.mutation.SetPassword(s)
 	return uc
+}
+
+// AddPostIDs adds the "posts" edge to the Post entity by IDs.
+func (uc *UserCreate) AddPostIDs(ids ...int) *UserCreate {
+	uc.mutation.AddPostIDs(ids...)
+	return uc
+}
+
+// AddPosts adds the "posts" edges to the Post entity.
+func (uc *UserCreate) AddPosts(p ...*Post) *UserCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uc.AddPostIDs(ids...)
+}
+
+// AddSketchIDs adds the "sketches" edge to the Sketch entity by IDs.
+func (uc *UserCreate) AddSketchIDs(ids ...int) *UserCreate {
+	uc.mutation.AddSketchIDs(ids...)
+	return uc
+}
+
+// AddSketches adds the "sketches" edges to the Sketch entity.
+func (uc *UserCreate) AddSketches(s ...*Sketch) *UserCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uc.AddSketchIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -160,6 +192,38 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 		_node.Password = value
+	}
+	if nodes := uc.mutation.PostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.SketchesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

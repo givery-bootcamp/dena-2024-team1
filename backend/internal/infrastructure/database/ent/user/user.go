@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -21,8 +22,26 @@ const (
 	FieldName = "name"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
+	// EdgePosts holds the string denoting the posts edge name in mutations.
+	EdgePosts = "posts"
+	// EdgeSketches holds the string denoting the sketches edge name in mutations.
+	EdgeSketches = "sketches"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// PostsTable is the table that holds the posts relation/edge.
+	PostsTable = "posts"
+	// PostsInverseTable is the table name for the Post entity.
+	// It exists in this package in order to avoid circular dependency with the "post" package.
+	PostsInverseTable = "posts"
+	// PostsColumn is the table column denoting the posts relation/edge.
+	PostsColumn = "user_id"
+	// SketchesTable is the table that holds the sketches relation/edge.
+	SketchesTable = "sketches"
+	// SketchesInverseTable is the table name for the Sketch entity.
+	// It exists in this package in order to avoid circular dependency with the "sketch" package.
+	SketchesInverseTable = "sketches"
+	// SketchesColumn is the table column denoting the sketches relation/edge.
+	SketchesColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -79,4 +98,46 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
+}
+
+// ByPostsCount orders the results by posts count.
+func ByPostsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPostsStep(), opts...)
+	}
+}
+
+// ByPosts orders the results by posts terms.
+func ByPosts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPostsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySketchesCount orders the results by sketches count.
+func BySketchesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSketchesStep(), opts...)
+	}
+}
+
+// BySketches orders the results by sketches terms.
+func BySketches(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSketchesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newPostsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PostsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
+	)
+}
+func newSketchesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SketchesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SketchesTable, SketchesColumn),
+	)
 }

@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -27,5 +28,11 @@ func (Sketch) Fields() []ent.Field {
 
 // Edges of the Sketch.
 func (Sketch) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("user", User.Type).
+			Ref("sketches").
+			Unique().
+			Required().
+			Field("user_id"),
+	}
 }

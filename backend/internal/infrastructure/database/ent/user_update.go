@@ -6,7 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"myapp/internal/infrastructure/database/ent/post"
 	"myapp/internal/infrastructure/database/ent/predicate"
+	"myapp/internal/infrastructure/database/ent/sketch"
 	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
@@ -62,9 +64,81 @@ func (uu *UserUpdate) SetNillablePassword(s *string) *UserUpdate {
 	return uu
 }
 
+// AddPostIDs adds the "posts" edge to the Post entity by IDs.
+func (uu *UserUpdate) AddPostIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddPostIDs(ids...)
+	return uu
+}
+
+// AddPosts adds the "posts" edges to the Post entity.
+func (uu *UserUpdate) AddPosts(p ...*Post) *UserUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.AddPostIDs(ids...)
+}
+
+// AddSketchIDs adds the "sketches" edge to the Sketch entity by IDs.
+func (uu *UserUpdate) AddSketchIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddSketchIDs(ids...)
+	return uu
+}
+
+// AddSketches adds the "sketches" edges to the Sketch entity.
+func (uu *UserUpdate) AddSketches(s ...*Sketch) *UserUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uu.AddSketchIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearPosts clears all "posts" edges to the Post entity.
+func (uu *UserUpdate) ClearPosts() *UserUpdate {
+	uu.mutation.ClearPosts()
+	return uu
+}
+
+// RemovePostIDs removes the "posts" edge to Post entities by IDs.
+func (uu *UserUpdate) RemovePostIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemovePostIDs(ids...)
+	return uu
+}
+
+// RemovePosts removes "posts" edges to Post entities.
+func (uu *UserUpdate) RemovePosts(p ...*Post) *UserUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.RemovePostIDs(ids...)
+}
+
+// ClearSketches clears all "sketches" edges to the Sketch entity.
+func (uu *UserUpdate) ClearSketches() *UserUpdate {
+	uu.mutation.ClearSketches()
+	return uu
+}
+
+// RemoveSketchIDs removes the "sketches" edge to Sketch entities by IDs.
+func (uu *UserUpdate) RemoveSketchIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveSketchIDs(ids...)
+	return uu
+}
+
+// RemoveSketches removes "sketches" edges to Sketch entities.
+func (uu *UserUpdate) RemoveSketches(s ...*Sketch) *UserUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uu.RemoveSketchIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -121,6 +195,96 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
+	if uu.mutation.PostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedPostsIDs(); len(nodes) > 0 && !uu.mutation.PostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.PostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.SketchesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedSketchesIDs(); len(nodes) > 0 && !uu.mutation.SketchesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.SketchesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -175,9 +339,81 @@ func (uuo *UserUpdateOne) SetNillablePassword(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// AddPostIDs adds the "posts" edge to the Post entity by IDs.
+func (uuo *UserUpdateOne) AddPostIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddPostIDs(ids...)
+	return uuo
+}
+
+// AddPosts adds the "posts" edges to the Post entity.
+func (uuo *UserUpdateOne) AddPosts(p ...*Post) *UserUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.AddPostIDs(ids...)
+}
+
+// AddSketchIDs adds the "sketches" edge to the Sketch entity by IDs.
+func (uuo *UserUpdateOne) AddSketchIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddSketchIDs(ids...)
+	return uuo
+}
+
+// AddSketches adds the "sketches" edges to the Sketch entity.
+func (uuo *UserUpdateOne) AddSketches(s ...*Sketch) *UserUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uuo.AddSketchIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearPosts clears all "posts" edges to the Post entity.
+func (uuo *UserUpdateOne) ClearPosts() *UserUpdateOne {
+	uuo.mutation.ClearPosts()
+	return uuo
+}
+
+// RemovePostIDs removes the "posts" edge to Post entities by IDs.
+func (uuo *UserUpdateOne) RemovePostIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemovePostIDs(ids...)
+	return uuo
+}
+
+// RemovePosts removes "posts" edges to Post entities.
+func (uuo *UserUpdateOne) RemovePosts(p ...*Post) *UserUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.RemovePostIDs(ids...)
+}
+
+// ClearSketches clears all "sketches" edges to the Sketch entity.
+func (uuo *UserUpdateOne) ClearSketches() *UserUpdateOne {
+	uuo.mutation.ClearSketches()
+	return uuo
+}
+
+// RemoveSketchIDs removes the "sketches" edge to Sketch entities by IDs.
+func (uuo *UserUpdateOne) RemoveSketchIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveSketchIDs(ids...)
+	return uuo
+}
+
+// RemoveSketches removes "sketches" edges to Sketch entities.
+func (uuo *UserUpdateOne) RemoveSketches(s ...*Sketch) *UserUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uuo.RemoveSketchIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -263,6 +499,96 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
+	}
+	if uuo.mutation.PostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedPostsIDs(); len(nodes) > 0 && !uuo.mutation.PostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.PostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PostsTable,
+			Columns: []string{user.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(post.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.SketchesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedSketchesIDs(); len(nodes) > 0 && !uuo.mutation.SketchesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.SketchesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SketchesTable,
+			Columns: []string{user.SketchesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

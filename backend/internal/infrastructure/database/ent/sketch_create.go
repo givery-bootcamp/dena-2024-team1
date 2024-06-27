@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"myapp/internal/infrastructure/database/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -58,6 +59,11 @@ func (sc *SketchCreate) SetUserID(i int) *SketchCreate {
 func (sc *SketchCreate) SetImageName(s string) *SketchCreate {
 	sc.mutation.SetImageName(s)
 	return sc
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (sc *SketchCreate) SetUser(u *User) *SketchCreate {
+	return sc.SetUserID(u.ID)
 }
 
 // Mutation returns the SketchMutation object of the builder.
@@ -119,6 +125,9 @@ func (sc *SketchCreate) check() error {
 	if _, ok := sc.mutation.ImageName(); !ok {
 		return &ValidationError{Name: "image_name", err: errors.New(`ent: missing required field "Sketch.image_name"`)}
 	}
+	if _, ok := sc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Sketch.user"`)}
+	}
 	return nil
 }
 
@@ -153,13 +162,26 @@ func (sc *SketchCreate) createSpec() (*Sketch, *sqlgraph.CreateSpec) {
 		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.UserID(); ok {
-		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)
-		_node.UserID = value
-	}
 	if value, ok := sc.mutation.ImageName(); ok {
 		_spec.SetField(sketch.FieldImageName, field.TypeString, value)
 		_node.ImageName = value
+	}
+	if nodes := sc.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sketch.UserTable,
+			Columns: []string{sketch.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
