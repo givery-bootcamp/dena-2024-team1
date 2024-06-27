@@ -1,19 +1,16 @@
 import { useCallback } from "react";
 
 import { Container } from "~/shared/components/Container";
-import { UserApi } from "~/generated";
-import { config } from "~/config/api";
 import { UserAuthForm } from "~/features/users/UserAuthForm";
+import { userApi } from "~/shared/services/API";
 
 export const SignUpPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
-    const userApi = new UserApi();
-    
     try {
       const response = await userApi.signUp({
         username,
         password,
-      }, config);
+      });
   
       if (response.status === 200) {
         window.location.href = "/sign-in";

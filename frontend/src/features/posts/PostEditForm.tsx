@@ -36,11 +36,7 @@ export const PostEditForm = () => {
       {
         title,
         body,
-      },
-      { 
-        withCredentials: true,
-      },
-    );
+      });
     if (response.status === 200) {
       navigate(`/posts/${postId}`);
     }
