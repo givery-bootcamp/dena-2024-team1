@@ -114,7 +114,7 @@ func (r *PostRepository) Get(ctx context.Context, id int) (*entity.Post, error) 
 func (r *PostRepository) DeletePost(ctx context.Context, id int) error {
 	err := r.Conn.Post.DeleteOneID(id).Exec(ctx)
 	if err != nil {
-		fmt.Errorf("failed to delete post: %w", err)
+		return fmt.Errorf("failed to delete post: %w", err)
 	}
 
 	return nil
