@@ -26,7 +26,11 @@ type UserAuthFormProps = {
 }
 
 export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
-  const { register, formState, handleSubmit: handleFormSubmit } = useForm<Schema>({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit: handleFormSubmit,
+  } = useForm<Schema>({
     resolver: valibotResolver(schema),
   });
 
@@ -47,19 +51,15 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
         <FormField>
           <FormLabel>ユーザー名</FormLabel>
           <Input {...register("username")} />
-          {formState.errors.username && (
-            <FormErrorMessage>
-              {formState.errors.username.message}
-            </FormErrorMessage>
+          {errors.username && (
+            <FormErrorMessage>{errors.username.message}</FormErrorMessage>
           )}
         </FormField>
         <FormField>
           <FormLabel>パスワード</FormLabel>
           <Input type="password" {...register("password")} />
-          {formState.errors.password && (
-            <FormErrorMessage>
-              {formState.errors.password.message}
-            </FormErrorMessage>
+          {errors.password && (
+            <FormErrorMessage>{errors.password.message}</FormErrorMessage>
           )}
         </FormField>
         <Button type="submit">{buttonLabel}</Button>
