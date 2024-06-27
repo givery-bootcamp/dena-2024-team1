@@ -21,7 +21,7 @@ export function CreatePostPage() {
     });
     if (response.status === 201) {
       console.log("Created post successfully!");
-      navigate("/");
+      navigate("/posts");
     }
 
   }, []);
