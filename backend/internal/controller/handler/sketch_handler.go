@@ -15,9 +15,10 @@ type SketchHandler struct {
 	uu usecase.UserUsecase
 }
 
-func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
+func NewSketchHandler(su usecase.SketchUsecase, uu usecase.UserUsecase) SketchHandler {
 	return SketchHandler{
 		su: su,
+		uu: uu,
 	}
 }
 
