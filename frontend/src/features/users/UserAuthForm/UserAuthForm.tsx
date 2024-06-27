@@ -14,6 +14,7 @@ import {
 
 import { Button } from "~/shared/components/Button";
 import { Input } from "~/shared/components/Input";
+import { FormErrorMessage } from "~/shared/components/Form";
 
 type UserAuthFormProps = {
   type: PageType;
@@ -44,9 +45,9 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
           <div className="flex flex-col gap-1">
             <Input {...register("username")} />
             {formState.errors.username && (
-              <span className="text-sm font-semibold text-alert">
+              <FormErrorMessage>
                 {formState.errors.username.message}
-              </span>
+              </FormErrorMessage>
             )}
           </div>
         </label>
@@ -55,9 +56,9 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
           <div className="flex flex-col gap-1">
             <Input type="password" {...register("password")} />
             {formState.errors.password && (
-              <span className="text-sm font-semibold text-alert">
+              <FormErrorMessage>
                 {formState.errors.password.message}
-              </span>
+              </FormErrorMessage>
             )}
           </div>
         </label>
