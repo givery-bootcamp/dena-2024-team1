@@ -47,7 +47,7 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		handleError(ctx, 500, err)
 		return
 	}
-	// useを取得
+	// userを取得
 	session := sessions.Default(ctx)
 	user, err := h.uu.GetSessionUser(session)
 
