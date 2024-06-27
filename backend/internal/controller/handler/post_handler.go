@@ -7,6 +7,7 @@ import (
 	"myapp/internal/usecase"
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -77,16 +78,17 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
+	session := sessions.Default(ctx)
 
 	createdPost, err := h.pu.CreatePost(entity.Post{
-		Title:  request.Title,
-		Body:   request.Body,
-		UserID: request.UserId,
-	})
+		Title: request.Title,
+		Body:  request.Body,
+	}, session)
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
 	}
+
 	response := openapi.CreatePostResponse{
 		Body:      createdPost.Body,
 		CreatedAt: createdPost.CreatedAt,

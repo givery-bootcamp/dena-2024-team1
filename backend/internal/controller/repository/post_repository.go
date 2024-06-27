@@ -19,7 +19,7 @@ func NewPostRepository(conn *gorm.DB) repositoryIF.PostRepository {
 	}
 }
 
-func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
+func (r *PostRepository) CreatePost(post *entity.Post) (*entity.Post, error) {
 	// Convert entity.Post to repository.Post
 	doPost := model.Post{
 		UserID: post.UserID,
@@ -33,7 +33,7 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 
 	postResult := r.Conn.Create(&doPost)
 	if postResult.Error != nil {
-		return entity.Post{}, postResult.Error
+		return nil, postResult.Error
 	}
 
 	resultPost := entity.Post{
@@ -44,7 +44,7 @@ func (r *PostRepository) CreatePost(post *entity.Post) (entity.Post, error) {
 		CreatedAt: doPost.CreatedAt,
 		UpdatedAt: doPost.UpdatedAt,
 	}
-	return resultPost, nil
+	return &resultPost, nil
 }
 
 func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.Post, error) {
