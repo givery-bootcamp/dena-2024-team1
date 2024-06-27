@@ -17,14 +17,7 @@ type CreatePostRequest struct {
 }
 
 // CreatePostResponse defines model for CreatePostResponse.
-type CreatePostResponse struct {
-	Body      *string    `json:"body,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	Id        *int64     `json:"id,omitempty"`
-	Title     *string    `json:"title,omitempty"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-	UserId    *int       `json:"user_id,omitempty"`
-}
+type CreatePostResponse = Post
 
 // CreateScketchesRequest defines model for CreateScketchesRequest.
 type CreateScketchesRequest struct {
@@ -47,6 +40,7 @@ type Post struct {
 	Id        int       `json:"id"`
 	Title     string    `json:"title"`
 	UpdatedAt time.Time `json:"updated_at"`
+	UserId    int       `json:"user_id"`
 	UserName  string    `json:"user_name"`
 }
 
@@ -67,14 +61,7 @@ type UpdatePostRequest struct {
 }
 
 // UpdatePostResponse defines model for UpdatePostResponse.
-type UpdatePostResponse struct {
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"created_at"`
-	Id        int64     `json:"id"`
-	Title     string    `json:"title"`
-	UpdatedAt time.Time `json:"updated_at"`
-	UserId    int       `json:"user_id"`
-}
+type UpdatePostResponse = Post
 
 // User defines model for User.
 type User struct {
