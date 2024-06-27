@@ -26,7 +26,7 @@ type SignFormProps = {
 }
 
 export const SignForm = ({ title, submitText, linkText, linkTo, onSubmit }: SignFormProps) => {
-  const { register, handleSubmit: handleFormSubmit } = useForm<Schema>({
+  const { register, formState, handleSubmit: handleFormSubmit } = useForm<Schema>({
     resolver: valibotResolver(schema),
   });
 
@@ -45,10 +45,12 @@ export const SignForm = ({ title, submitText, linkText, linkTo, onSubmit }: Sign
         <label className="flex flex-col gap-2 text-lg">
           <span>ユーザー名</span>
           <input className="border border-border p-2" type="text" {...register("username")} />
+          {formState.errors.username && <span className="text-sm text-alert">{formState.errors.username.message}</span>}
         </label>
         <label className="flex flex-col gap-2 text-lg">
           <span>パスワード</span>
           <input className="border border-border p-2" type="password" {...register("password")} />
+          {formState.errors.password && <span className="text-sm text-alert">{formState.errors.password.message}</span>}
         </label>
         <button className="mt-10 rounded-md bg-primary p-2 text-white" type="submit">{submitText}</button>
       </div>
