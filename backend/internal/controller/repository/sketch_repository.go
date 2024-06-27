@@ -30,7 +30,7 @@ func (r *SketchRepository) CreateSketch(file *multipart.File, userid int) error 
 	s3FileStorage := filestorage.SetUpS3()
 	err := s3FileStorage.UploadFile(file, fn)
 	if err != nil {
-		return entity.Sketch{}, err
+		return err
 	}
 
 	sketch := model.Sketch{
