@@ -42,10 +42,14 @@ export const SignForm = ({ title, submitText, linkText, linkTo, onSubmit }: Sign
       </div>
       <hr className="border-border" />
       <div className="flex flex-col gap-3 text-lg">
-        <label className="text-lg" htmlFor="username">ユーザー名</label>
-        <input className="border border-border p-2" type="text" id="username" {...register("username")} />
-        <label className="text-lg" htmlFor="password">パスワード</label>
-        <input className="border border-border p-2" type="password" id="password" {...register("password")} />
+        <label className="flex flex-col gap-2 text-lg">
+          <span>ユーザー名</span>
+          <input className="border border-border p-2" type="text" {...register("username")} />
+        </label>
+        <label className="flex flex-col gap-2 text-lg">
+          <span>パスワード</span>
+          <input className="border border-border p-2" type="password" {...register("password")} />
+        </label>
         <button className="mt-10 rounded-md bg-primary p-2 text-white" type="submit">{submitText}</button>
       </div>
       <div>
