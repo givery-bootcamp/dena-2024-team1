@@ -24,7 +24,7 @@ func (u *PostUsecase) GetPost(ctx context.Context, id int) (*entity.Post, error)
 	return u.postRepository.Get(ctx, id)
 }
 
-func (u *PostUsecase) CreatePost(ctx context.Context, post entity.Post) (entity.Post, error) {
+func (u *PostUsecase) CreatePost(ctx context.Context, post entity.Post) (*entity.Post, error) {
 	return u.postRepository.CreatePost(ctx, &post)
 }
 

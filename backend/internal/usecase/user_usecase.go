@@ -30,31 +30,26 @@ func (u UserUsecase) Signup(ctx context.Context, session sessions.Session, usern
 
 	// ユーザー名が既に存在するかチェック
 	user, err := u.userRepository.GetUserByUsername(ctx, username)
-
 	if err != nil {
 		return err
 	}
-
-	if user.Name != "" {
+	if user == nil {
 		return errors.New("username is already taken")
 	}
 
 	// パスワードを暗号化
 	password, err = crypt.EncryptPassword(password)
-
 	if err != nil {
 		return err
 	}
 
 	user, err = u.userRepository.CreateUser(ctx, username, password)
-
 	if err != nil {
 		return err
 	}
 
 	// セッションにユーザーを保存
-	err = u.userRepository.SaveSession(ctx, session, user)
-
+	err = u.userRepository.SaveSession(ctx, session, *user)
 	if err != nil {
 		return err
 	}
@@ -71,28 +66,24 @@ func (u UserUsecase) Signin(ctx context.Context, session sessions.Session, usern
 	}
 
 	hashedPassword, err := u.userRepository.GetUserPassword(ctx, username)
-
 	if err != nil {
 		return err
 	}
-
-	if password == "" {
-		return errors.New("user is not found")
+	if hashedPassword == nil {
+		return errors.New("hashed password is not found")
 	}
 
-	if err := crypt.DecryptPassword(hashedPassword, password); err != nil {
+	if err := crypt.DecryptPassword(*hashedPassword, password); err != nil {
 		return errors.New("password is incorrect")
 	}
 
 	user, err := u.userRepository.GetUserByUsername(ctx, username)
-
 	if err != nil {
 		return err
 	}
 
 	// セッションにユーザーを保存
-	err = u.userRepository.SaveSession(ctx, session, user)
-
+	err = u.userRepository.SaveSession(ctx, session, *user)
 	if err != nil {
 		return err
 	}
@@ -102,16 +93,14 @@ func (u UserUsecase) Signin(ctx context.Context, session sessions.Session, usern
 
 func (u UserUsecase) GetSessionUser(ctx context.Context, session sessions.Session) (*entity.User, error) {
 	user, err := u.userRepository.GetSessionUser(ctx, session)
-
 	if err != nil {
 		return nil, err
 	}
-
-	if user.Name == "" {
+	if user == nil {
 		return nil, errors.New("user is not found")
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 func (u UserUsecase) Signout(ctx context.Context, session sessions.Session) error {
