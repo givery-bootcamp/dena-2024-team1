@@ -1,14 +1,11 @@
 import { useCallback, useEffect } from "react";
 
-import { UserApi } from "~/generated";
+import { userApi } from "~/shared/services/API";
 
 export const SignOutPage = () => {
 
   const signOut = useCallback(async () => {
-    const userApi = new UserApi();
-    const response = await userApi.signOut({
-        withCredentials: true,
-    });
+    const response = await userApi.signOut();
 
     if (response.status === 200) {
         console.log("Success");

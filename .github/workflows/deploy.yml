@@ -13,7 +13,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   ECS_CLUSTER: dena-training-2024
   ECS_SERVICE: dena-training-2024-team-1
-  ECS_TASK_DEFINITION: dena-training-2024-team-1:6
+  ECS_TASK_DEFINITION: dena-training-2024-team-1:7
   BUCKET_PREFIX: team-1
   VITE_API_ENDPOINT_PATH: https://team-1_bk.member0005.track-bootcamp.run
 

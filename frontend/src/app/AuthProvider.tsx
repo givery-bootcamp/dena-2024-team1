@@ -3,9 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { AppRoute, AppRouteNoAuth } from "./AppRoute";
 
 import { sessionUserSlice  } from "~/shared/store/SessionUserSlice";
-import { UserApi } from "~/generated";
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { Header, HeaderNoAuth } from "~/shared/components/Header";
+import { userApi } from "~/shared/services/API";
 
 export const AuthProvider = () => {
   const [loading, setLoading] = useState(true);
@@ -16,11 +16,8 @@ export const AuthProvider = () => {
   const getSessionUser = useCallback(async () => {
     setLoading(true);
 
-    const userApi = new UserApi();
     try {
-      const response = await userApi.getSessionUser({
-        withCredentials: true,
-      });
+      const response = await userApi.getSessionUser();
   
       // 取得に成功した場合
       if (response.status === 200) {

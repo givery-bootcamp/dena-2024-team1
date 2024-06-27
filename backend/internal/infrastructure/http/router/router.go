@@ -31,6 +31,7 @@ func setupEndpoints(router *gin.Engine) {
 	// 認証が不要なエンドポイント
 	router.POST("/signup", apiHandler.UserHandler.Signup)
 	router.POST("/signin", apiHandler.UserHandler.Signin)
+	router.GET("/sketches", apiHandler.SketchHandler.GetSketches)
 
 	authMiddleware := middleware.Auth()
 
@@ -44,6 +45,5 @@ func setupEndpoints(router *gin.Engine) {
 	router.DELETE("/posts/:id", authMiddleware, apiHandler.PostHandler.DeletePost)
 	router.POST("/signout", authMiddleware, apiHandler.UserHandler.Signout)
 	router.GET("/session_user", authMiddleware, apiHandler.UserHandler.GetSessionUser)
-	router.GET("/sketches", authMiddleware, apiHandler.SketchHandler.GetSketches)
 	router.POST("/sketches", authMiddleware, apiHandler.SketchHandler.CreateSketch)
 }

@@ -17,14 +17,7 @@ type CreatePostRequest struct {
 }
 
 // CreatePostResponse defines model for CreatePostResponse.
-type CreatePostResponse struct {
-	Body      *string    `json:"body,omitempty"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	Id        *int64     `json:"id,omitempty"`
-	Title     *string    `json:"title,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	UserId    *int       `json:"user_id,omitempty"`
-}
+type CreatePostResponse = Post
 
 // CreateScketchesRequest defines model for CreateScketchesRequest.
 type CreateScketchesRequest struct {
@@ -43,21 +36,22 @@ type GetPostResponse = Post
 // Post defines model for Post.
 type Post struct {
 	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `json:"created_at"`
 	Id        int       `json:"id"`
 	Title     string    `json:"title"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserName  string    `json:"userName"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserId    int       `json:"user_id"`
+	UserName  string    `json:"user_name"`
 }
 
 // Sketch defines model for Sketch.
 type Sketch struct {
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `json:"created_at"`
 	Id        int       `json:"id"`
-	ImageUrl  string    `json:"imageUrl"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserId    int       `json:"userId"`
-	UserName  string    `json:"userName"`
+	ImageUrl  string    `json:"image_url"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserId    int       `json:"user_id"`
+	UserName  string    `json:"user_name"`
 }
 
 // UpdatePostRequest defines model for UpdatePostRequest.
@@ -67,33 +61,26 @@ type UpdatePostRequest struct {
 }
 
 // UpdatePostResponse defines model for UpdatePostResponse.
-type UpdatePostResponse struct {
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"createdAt"`
-	Id        int64     `json:"id"`
-	Title     string    `json:"title"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserId    int       `json:"user_id"`
-}
+type UpdatePostResponse = Post
 
 // User defines model for User.
 type User struct {
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	Id        *int       `json:"id,omitempty"`
 	Name      *string    `json:"name,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 // SignInJSONBody defines parameters for SignIn.
 type SignInJSONBody struct {
 	Password string `json:"password"`
-	Username string `json:"username"`
+	UserName string `json:"user_name"`
 }
 
 // SignUpJSONBody defines parameters for SignUp.
 type SignUpJSONBody struct {
 	Password string `json:"password"`
-	Username string `json:"username"`
+	UserName string `json:"user_name"`
 }
 
 // PostPostJSONRequestBody defines body for PostPost for application/json ContentType.

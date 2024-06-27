@@ -7,6 +7,7 @@ import (
 	"myapp/internal/config"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
@@ -16,8 +17,11 @@ type FileStorage interface {
 }
 
 func setUpFileStorage() (*s3.S3, error) {
+	cred := credentials.NewStaticCredentials(config.AwsAccessKeyID, config.AwsSecretAccessKey, "")
+
 	newSession, err := session.NewSession(&aws.Config{
-		Region: aws.String(config.AwsDefaultRegion),
+		Credentials: cred,
+		Region:      aws.String(config.AwsDefaultRegion),
 	})
 
 	if err != nil {

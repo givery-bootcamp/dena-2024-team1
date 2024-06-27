@@ -28,8 +28,6 @@ export function CreatePostPage() {
       title,
       body,
       user_id,
-    } , {
-      withCredentials: true,
     });
     if (response.status === 201) {
       console.log("Created post successfully!");
