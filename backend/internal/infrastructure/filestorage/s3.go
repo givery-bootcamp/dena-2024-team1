@@ -3,8 +3,8 @@ package filestorage
 import (
 	"errors"
 	"log"
+	"mime/multipart"
 	"myapp/internal/config"
-	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,7 +12,7 @@ import (
 )
 
 type FileStorage interface {
-	UploadFile(file *os.File, fileName string) error
+	UploadFile(file *multipart.File, fileName string) error
 }
 
 func setUpFileStorage() (*s3.S3, error) {
@@ -31,7 +31,7 @@ func setUpFileStorage() (*s3.S3, error) {
 
 type S3FileStorage struct{}
 
-func (S3FileStorage S3FileStorage) UploadFile(file *os.File, fileName string) error {
+func (S3FileStorage S3FileStorage) UploadFile(file *multipart.File, fileName string) error {
 	svc, err := setUpFileStorage()
 
 	if err != nil {
@@ -56,7 +56,7 @@ func (S3FileStorage S3FileStorage) UploadFile(file *os.File, fileName string) er
 
 	params := &s3.PutObjectInput{
 		Bucket:      aws.String(config.S3Bucket),
-		Body:        file,
+		Body:        *file,
 		Key:         aws.String(key),
 		ContentType: aws.String("image/" + ext),
 	}

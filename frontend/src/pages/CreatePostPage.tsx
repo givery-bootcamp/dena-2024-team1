@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "~/shared/components/Container";
 import { Button } from "~/shared/components/Button";
 import { postApi } from "~/shared/services/API";
+import { config } from "~/config/api";
 
 export function CreatePostPage() {
   const navigate = useNavigate();
@@ -19,9 +20,7 @@ export function CreatePostPage() {
       title,
       body,
       user_id,
-    } , {
-      withCredentials: true,
-    });
+    } , config);
     if (response.status === 201) {
       console.log("Created post successfully!");
       navigate("/");

@@ -1,4 +1,4 @@
-name: GolangCI lint
+name: Check ESLint for backend
 
 on:
   pull_request:

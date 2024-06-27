@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Container } from "~/shared/components/Container";
 import { UserApi } from "~/generated";
 import { SignForm } from "~/shared/components/SignForm";
+import { config } from "~/config/api";
 
 export const SignUpPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
@@ -12,9 +13,7 @@ export const SignUpPage = () => {
       const response = await userApi.signUp({
         username,
         password,
-      }, {
-        withCredentials: true,
-      });
+      }, config);
   
       if (response.status === 200) {
         window.location.href = "/sign-in";
@@ -31,8 +30,8 @@ export const SignUpPage = () => {
     <Container>
       <SignForm
         onSubmit={handleSubmit}
-        title="サインアップ"
-        submitText="サインアップ"
+        title="新規登録"
+        submitText="アカウントを作成"
         linkText="アカウントをお持ちの方はこちら"
         linkTo="/signin"
       />
