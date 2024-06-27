@@ -28,22 +28,13 @@ func (u UserUsecase) Signup(ctx context.Context, session sessions.Session, usern
 		return errors.New("password is empty")
 	}
 
-	// ユーザー名が既に存在するかチェック
-	user, err := u.userRepository.GetUserByUsername(ctx, username)
-	if err != nil {
-		return err
-	}
-	if user == nil {
-		return errors.New("username is already taken")
-	}
-
 	// パスワードを暗号化
-	password, err = crypt.EncryptPassword(password)
+	password, err := crypt.EncryptPassword(password)
 	if err != nil {
 		return err
 	}
 
-	user, err = u.userRepository.CreateUser(ctx, username, password)
+	user, err := u.userRepository.CreateUser(ctx, username, password)
 	if err != nil {
 		return err
 	}
