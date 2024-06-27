@@ -11,7 +11,7 @@ export const SignInPage = () => {
     
     try {
       const responnse = await userApi.signIn({
-        username,
+        user_name: username,
         password,
       }, {
         withCredentials: true,

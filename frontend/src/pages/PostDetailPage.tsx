@@ -47,11 +47,11 @@ export function PostDetailPage() {
         <div className="mt-10 flex flex-col gap-7">
           <PostHeading
             title={post.title}
-            createdAt={formatDateTime(post.createdAt)}
-            updatedAt={formatDateTime(post.updatedAt)}
+            createdAt={formatDateTime(post.created_at)}
+            updatedAt={formatDateTime(post.updated_at)}
           />
           <hr className="border-border" />
-          <PostContent body={post.body} username={post.userName} />
+          <PostContent body={post.body} username={post.user_name} />
         </div>
         <PostActionButtons postId={post.id} onDelete={handleModalOpen} />
       </div>

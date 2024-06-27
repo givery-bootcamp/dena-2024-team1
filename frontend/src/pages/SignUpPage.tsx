@@ -10,7 +10,7 @@ export const SignUpPage = () => {
     
     try {
       const response = await userApi.signUp({
-        username,
+        user_name: username,
         password,
       }, {
         withCredentials: true,

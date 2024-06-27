@@ -83,13 +83,13 @@ export interface CreatePostResponse {
      * @type {string}
      * @memberof CreatePostResponse
      */
-    'createdAt'?: string;
+    'created_at'?: string;
     /**
      * 
      * @type {string}
      * @memberof CreatePostResponse
      */
-    'updatedAt'?: string;
+    'updated_at'?: string;
 }
 /**
  * 
@@ -165,19 +165,19 @@ export interface Post {
      * @type {string}
      * @memberof Post
      */
-    'userName': string;
+    'user_name': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'createdAt': string;
+    'created_at': string;
     /**
      * 
      * @type {string}
      * @memberof Post
      */
-    'updatedAt': string;
+    'updated_at': string;
 }
 /**
  * 
@@ -190,7 +190,7 @@ export interface SignUpRequest {
      * @type {string}
      * @memberof SignUpRequest
      */
-    'username': string;
+    'user_name': string;
     /**
      * 
      * @type {string}
@@ -215,31 +215,31 @@ export interface Sketch {
      * @type {string}
      * @memberof Sketch
      */
-    'imageUrl': string;
+    'image_url': string;
     /**
      * 
      * @type {number}
      * @memberof Sketch
      */
-    'userId': number;
+    'user_id': number;
     /**
      * 
      * @type {string}
      * @memberof Sketch
      */
-    'userName': string;
+    'user_name': string;
     /**
      * 
      * @type {string}
      * @memberof Sketch
      */
-    'createdAt': string;
+    'created_at': string;
     /**
      * 
      * @type {string}
      * @memberof Sketch
      */
-    'updatedAt': string;
+    'updated_at': string;
 }
 /**
  * 
@@ -295,13 +295,13 @@ export interface UpdatePostResponse {
      * @type {string}
      * @memberof UpdatePostResponse
      */
-    'createdAt': string;
+    'created_at': string;
     /**
      * 
      * @type {string}
      * @memberof UpdatePostResponse
      */
-    'updatedAt': string;
+    'updated_at': string;
 }
 /**
  * 
@@ -326,13 +326,13 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    'createdAt'?: string;
+    'created_at'?: string;
     /**
      * 
      * @type {string}
      * @memberof User
      */
-    'updatedAt'?: string;
+    'updated_at'?: string;
 }
 
 /**

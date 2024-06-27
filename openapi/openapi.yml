@@ -41,15 +41,15 @@ paths:
                     - id: 1
                       title: 'Hello, World!'
                       body: This is my first post.
-                      userName: John Doe
-                      createdAt: '2021-01-01T00:00:00Z'
-                      updatedAt: '2021-01-01T00:00:00Z'
+                      user_name: John Doe
+                      created_at: '2021-01-01T00:00:00Z'
+                      updated_at: '2021-01-01T00:00:00Z'
                     - id: 2
                       title: 'Hello, World! (2)'
                       body: This is my second post.
-                      userName: John Doe
-                      createdAt: '2021-01-02T00:00:00Z'
-                      updatedAt: '2021-01-02T00:00:00Z'
+                      user_name: John Doe
+                      created_at: '2021-01-02T00:00:00Z'
+                      updated_at: '2021-01-02T00:00:00Z'
       operationId: getAllPosts
       tags:
         - post
@@ -82,8 +82,8 @@ paths:
                     title: "Hello, World!"
                     body: "This is my first post."
                     user_id: 0
-                    createdAt: "2021-01-01T00:00:00Z"
-                    updatedAt: "2021-01-01T00:00:00Z"
+                    created_at: "2021-01-01T00:00:00Z"
+                    updated_at: "2021-01-01T00:00:00Z"
       operationId: postPost
       tags:
         - post
@@ -102,17 +102,17 @@ paths:
                 default:
                   value:
                     - id: 1
-                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/happy.png'
-                      userId: 1
-                      userName: John Doe
-                      createdAt: '2021-01-01T00:00:00Z'
-                      updatedAt: '2021-01-01T00:00:00Z'
+                      image_url: 'https://team-1.member0005.track-bootcamp.run/images/happy.png'
+                      user_id: 1
+                      user_name: John Doe
+                      created_at: '2021-01-01T00:00:00Z'
+                      updated_at: '2021-01-01T00:00:00Z'
                     - id: 2
-                      imageUrl: 'https://team-1.member0005.track-bootcamp.run/images/quickMTG.png'
-                      userId: 1
-                      userName: John Doe
-                      createdAt: '2021-01-02T00:00:00Z'
-                      updatedAt: '2021-01-02T00:00:00Z'
+                      image_url: 'https://team-1.member0005.track-bootcamp.run/images/quickMTG.png'
+                      user_id: 1
+                      user_name: John Doe
+                      created_at: '2021-01-02T00:00:00Z'
+                      updated_at: '2021-01-02T00:00:00Z'
       operationId: getAllSketches
       summary: ''
       tags:
@@ -157,9 +157,9 @@ paths:
                     id: 1
                     title: 'Hello, World! updated'
                     body: This is my updated post.
-                    userName: John Doe
-                    createdAt: '2021-01-01T00:00:00Z'
-                    updatedAt: '2021-01-01T00:00:00Z'
+                    user_name: John Doe
+                    created_at: '2021-01-01T00:00:00Z'
+                    updated_at: '2021-01-01T00:00:00Z'
         '404':
           description: Post not found.
           content:
@@ -209,8 +209,8 @@ paths:
                     title: "Hello, World!"
                     body: "This is my first post."
                     user_id: 0
-                    createdAt: "2021-01-01T00:00:00Z"
-                    updatedAt: "2021-01-01T00:00:00Z"
+                    created_at: "2021-01-01T00:00:00Z"
+                    updated_at: "2021-01-01T00:00:00Z"
         "404":
           description: Post not found.
           content:
@@ -253,17 +253,17 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                user_name:
                   type: string
                 password:
                   type: string
               required:
-                - username
+                - user_name
                 - password    
             examples:
               default:
                 value:
-                  username: John Doe
+                  user_name: John Doe
                   password: password
       responses:
         '201':
@@ -290,17 +290,17 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                user_name:
                   type: string
                 password:
                   type: string
               required:
-                - username
+                - user_name
                 - password    
             examples:
               default:
                 value:
-                  username: John Doe
+                  user_name: John Doe
                   password: password
       responses:
         '200':
@@ -344,8 +344,8 @@ paths:
                   value:
                     id: 1
                     name: John Doe
-                    createdAt: '2021-01-01T00:00:00Z'
-                    updatedAt: '2021-01-01T00:00:00Z'
+                    created_at: '2021-01-01T00:00:00Z'
+                    updated_at: '2021-01-01T00:00:00Z'
         '401':
           description: Unauthorized.
           content:
@@ -402,10 +402,10 @@ components:
           type: integer
         name:
           type: string
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
     Post:
@@ -418,21 +418,21 @@ components:
           type: string
         body:
           type: string
-        userName:
+        user_name:
           type: string
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
       required:
         - id
         - title
         - body
-        - userName
-        - createdAt
-        - updatedAt
+        - user_name
+        - created_at
+        - updated_at
     CreatePostRequest:
       title: CreatePostRequest
       type: object
@@ -460,10 +460,10 @@ components:
           type: string
         user_id:
           type: integer
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
     UpdatePostRequest:
@@ -490,10 +490,10 @@ components:
           type: string
         user_id:
           type: integer
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
       required:
@@ -501,8 +501,8 @@ components:
         - title
         - body
         - user_id
-        - createdAt
-        - updatedAt
+        - created_at
+        - updated_at
     CreateScketchesRequest:
     # まずは最小で
       type: object
@@ -529,25 +529,25 @@ components:
       properties:
         id:
           type: integer
-        imageUrl:
+        image_url:
           type: string
-        userId:
+        user_id:
           type: integer
-        userName:
+        user_name:
           type: string
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
       required:
         - id
-        - imageUrl
-        - userId
-        - userName
-        - createdAt
-        - updatedAt
+        - image_url
+        - user_id
+        - user_name
+        - created_at
+        - updated_at
   responses: {}
 servers:
   - url: 'http://localhost:9000'
