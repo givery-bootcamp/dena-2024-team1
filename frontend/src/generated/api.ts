@@ -51,49 +51,6 @@ export interface CreatePostRequest {
 /**
  * 
  * @export
- * @interface CreatePostResponse
- */
-export interface CreatePostResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePostResponse
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostResponse
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostResponse
-     */
-    'body'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePostResponse
-     */
-    'user_id'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostResponse
-     */
-    'created_at'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostResponse
-     */
-    'updated_at'?: string;
-}
-/**
- * 
- * @export
  * @interface GetHello200Response
  */
 export interface GetHello200Response {
@@ -160,6 +117,12 @@ export interface Post {
      * @memberof Post
      */
     'body': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Post
+     */
+    'user_id': number;
     /**
      * 
      * @type {string}
@@ -259,49 +222,6 @@ export interface UpdatePostRequest {
      * @memberof UpdatePostRequest
      */
     'body': string;
-}
-/**
- * 
- * @export
- * @interface UpdatePostResponse
- */
-export interface UpdatePostResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePostResponse
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePostResponse
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePostResponse
-     */
-    'body': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePostResponse
-     */
-    'user_id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePostResponse
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePostResponse
-     */
-    'updated_at': string;
 }
 /**
  * 
@@ -665,7 +585,7 @@ export const PostApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postPost(createPostRequest: CreatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreatePostResponse>> {
+        async postPost(createPostRequest: CreatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postPost(createPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostApi.postPost']?.[localVarOperationServerIndex]?.url;
@@ -679,7 +599,7 @@ export const PostApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdatePostResponse>> {
+        async putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putPost(postId, updatePostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostApi.putPost']?.[localVarOperationServerIndex]?.url;
@@ -730,7 +650,7 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postPost(createPostRequest: CreatePostRequest, options?: any): AxiosPromise<CreatePostResponse> {
+        postPost(createPostRequest: CreatePostRequest, options?: any): AxiosPromise<Post> {
             return localVarFp.postPost(createPostRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -741,7 +661,7 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: any): AxiosPromise<UpdatePostResponse> {
+        putPost(postId: number, updatePostRequest: UpdatePostRequest, options?: any): AxiosPromise<Post> {
             return localVarFp.putPost(postId, updatePostRequest, options).then((request) => request(axios, basePath));
         },
     };

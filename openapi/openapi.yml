@@ -41,12 +41,14 @@ paths:
                     - id: 1
                       title: 'Hello, World!'
                       body: This is my first post.
+                      user_id: 1
                       user_name: John Doe
                       created_at: '2021-01-01T00:00:00Z'
                       updated_at: '2021-01-01T00:00:00Z'
                     - id: 2
                       title: 'Hello, World! (2)'
                       body: This is my second post.
+                      user_id: 1
                       user_name: John Doe
                       created_at: '2021-01-02T00:00:00Z'
                       updated_at: '2021-01-02T00:00:00Z'
@@ -81,7 +83,8 @@ paths:
                     id: 1
                     title: "Hello, World!"
                     body: "This is my first post."
-                    user_id: 0
+                    user_id: 1
+                    user_name: John Doe
                     created_at: "2021-01-01T00:00:00Z"
                     updated_at: "2021-01-01T00:00:00Z"
       operationId: postPost
@@ -157,6 +160,7 @@ paths:
                     id: 1
                     title: 'Hello, World! updated'
                     body: This is my updated post.
+                    user_id: 1
                     user_name: John Doe
                     created_at: '2021-01-01T00:00:00Z'
                     updated_at: '2021-01-01T00:00:00Z'
@@ -208,7 +212,8 @@ paths:
                     id: 1
                     title: "Hello, World!"
                     body: "This is my first post."
-                    user_id: 0
+                    user_id: 1
+                    user_name: John Doe
                     created_at: "2021-01-01T00:00:00Z"
                     updated_at: "2021-01-01T00:00:00Z"
         "404":
@@ -418,6 +423,8 @@ components:
           type: string
         body:
           type: string
+        user_id:
+          type: integer
         user_name:
           type: string
         created_at:
@@ -430,6 +437,7 @@ components:
         - id
         - title
         - body
+        - user_id
         - user_name
         - created_at
         - updated_at
@@ -449,23 +457,7 @@ components:
         - user_id
     CreatePostResponse:
       title: CreatePostResponse
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-        body:
-          type: string
-        user_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+      $ref: '#/components/schemas/Post'
     UpdatePostRequest:
       title: UpdatePostRequest
       type: object
@@ -479,30 +471,7 @@ components:
         - body
     UpdatePostResponse:
       title: UpdatePostResponse
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-        body:
-          type: string
-        user_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      required:
-        - id
-        - title
-        - body
-        - user_id
-        - created_at
-        - updated_at
+      $ref: '#/components/schemas/Post'
     CreateScketchesRequest:
     # まずは最小で
       type: object
