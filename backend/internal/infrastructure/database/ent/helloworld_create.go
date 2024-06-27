@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/helloworld"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -17,6 +18,34 @@ type HelloWorldCreate struct {
 	config
 	mutation *HelloWorldMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (hwc *HelloWorldCreate) SetCreatedAt(t time.Time) *HelloWorldCreate {
+	hwc.mutation.SetCreatedAt(t)
+	return hwc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (hwc *HelloWorldCreate) SetNillableCreatedAt(t *time.Time) *HelloWorldCreate {
+	if t != nil {
+		hwc.SetCreatedAt(*t)
+	}
+	return hwc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hwc *HelloWorldCreate) SetUpdatedAt(t time.Time) *HelloWorldCreate {
+	hwc.mutation.SetUpdatedAt(t)
+	return hwc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (hwc *HelloWorldCreate) SetNillableUpdatedAt(t *time.Time) *HelloWorldCreate {
+	if t != nil {
+		hwc.SetUpdatedAt(*t)
+	}
+	return hwc
 }
 
 // SetLang sets the "lang" field.
@@ -38,6 +67,7 @@ func (hwc *HelloWorldCreate) Mutation() *HelloWorldMutation {
 
 // Save creates the HelloWorld in the database.
 func (hwc *HelloWorldCreate) Save(ctx context.Context) (*HelloWorld, error) {
+	hwc.defaults()
 	return withHooks(ctx, hwc.sqlSave, hwc.mutation, hwc.hooks)
 }
 
@@ -63,8 +93,26 @@ func (hwc *HelloWorldCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hwc *HelloWorldCreate) defaults() {
+	if _, ok := hwc.mutation.CreatedAt(); !ok {
+		v := helloworld.DefaultCreatedAt()
+		hwc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := hwc.mutation.UpdatedAt(); !ok {
+		v := helloworld.DefaultUpdatedAt()
+		hwc.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (hwc *HelloWorldCreate) check() error {
+	if _, ok := hwc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "HelloWorld.created_at"`)}
+	}
+	if _, ok := hwc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "HelloWorld.updated_at"`)}
+	}
 	if _, ok := hwc.mutation.Lang(); !ok {
 		return &ValidationError{Name: "lang", err: errors.New(`ent: missing required field "HelloWorld.lang"`)}
 	}
@@ -97,6 +145,14 @@ func (hwc *HelloWorldCreate) createSpec() (*HelloWorld, *sqlgraph.CreateSpec) {
 		_node = &HelloWorld{config: hwc.config}
 		_spec = sqlgraph.NewCreateSpec(helloworld.Table, sqlgraph.NewFieldSpec(helloworld.FieldID, field.TypeInt))
 	)
+	if value, ok := hwc.mutation.CreatedAt(); ok {
+		_spec.SetField(helloworld.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := hwc.mutation.UpdatedAt(); ok {
+		_spec.SetField(helloworld.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := hwc.mutation.Lang(); ok {
 		_spec.SetField(helloworld.FieldLang, field.TypeString, value)
 		_node.Lang = value
@@ -126,6 +182,7 @@ func (hwcb *HelloWorldCreateBulk) Save(ctx context.Context) ([]*HelloWorld, erro
 	for i := range hwcb.builders {
 		func(i int, root context.Context) {
 			builder := hwcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HelloWorldMutation)
 				if !ok {

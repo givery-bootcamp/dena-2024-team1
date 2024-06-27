@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/helloworld"
 	"myapp/internal/infrastructure/database/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -24,6 +25,12 @@ type HelloWorldUpdate struct {
 // Where appends a list predicates to the HelloWorldUpdate builder.
 func (hwu *HelloWorldUpdate) Where(ps ...predicate.HelloWorld) *HelloWorldUpdate {
 	hwu.mutation.Where(ps...)
+	return hwu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hwu *HelloWorldUpdate) SetUpdatedAt(t time.Time) *HelloWorldUpdate {
+	hwu.mutation.SetUpdatedAt(t)
 	return hwu
 }
 
@@ -62,6 +69,7 @@ func (hwu *HelloWorldUpdate) Mutation() *HelloWorldMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (hwu *HelloWorldUpdate) Save(ctx context.Context) (int, error) {
+	hwu.defaults()
 	return withHooks(ctx, hwu.sqlSave, hwu.mutation, hwu.hooks)
 }
 
@@ -87,6 +95,14 @@ func (hwu *HelloWorldUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hwu *HelloWorldUpdate) defaults() {
+	if _, ok := hwu.mutation.UpdatedAt(); !ok {
+		v := helloworld.UpdateDefaultUpdatedAt()
+		hwu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (hwu *HelloWorldUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(helloworld.Table, helloworld.Columns, sqlgraph.NewFieldSpec(helloworld.FieldID, field.TypeInt))
 	if ps := hwu.mutation.predicates; len(ps) > 0 {
@@ -95,6 +111,9 @@ func (hwu *HelloWorldUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := hwu.mutation.UpdatedAt(); ok {
+		_spec.SetField(helloworld.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := hwu.mutation.Lang(); ok {
 		_spec.SetField(helloworld.FieldLang, field.TypeString, value)
@@ -120,6 +139,12 @@ type HelloWorldUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *HelloWorldMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hwuo *HelloWorldUpdateOne) SetUpdatedAt(t time.Time) *HelloWorldUpdateOne {
+	hwuo.mutation.SetUpdatedAt(t)
+	return hwuo
 }
 
 // SetLang sets the "lang" field.
@@ -170,6 +195,7 @@ func (hwuo *HelloWorldUpdateOne) Select(field string, fields ...string) *HelloWo
 
 // Save executes the query and returns the updated HelloWorld entity.
 func (hwuo *HelloWorldUpdateOne) Save(ctx context.Context) (*HelloWorld, error) {
+	hwuo.defaults()
 	return withHooks(ctx, hwuo.sqlSave, hwuo.mutation, hwuo.hooks)
 }
 
@@ -192,6 +218,14 @@ func (hwuo *HelloWorldUpdateOne) Exec(ctx context.Context) error {
 func (hwuo *HelloWorldUpdateOne) ExecX(ctx context.Context) {
 	if err := hwuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (hwuo *HelloWorldUpdateOne) defaults() {
+	if _, ok := hwuo.mutation.UpdatedAt(); !ok {
+		v := helloworld.UpdateDefaultUpdatedAt()
+		hwuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -220,6 +254,9 @@ func (hwuo *HelloWorldUpdateOne) sqlSave(ctx context.Context) (_node *HelloWorld
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := hwuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(helloworld.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := hwuo.mutation.Lang(); ok {
 		_spec.SetField(helloworld.FieldLang, field.TypeString, value)

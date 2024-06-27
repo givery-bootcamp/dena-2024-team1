@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -17,6 +18,34 @@ type SketchCreate struct {
 	config
 	mutation *SketchMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (sc *SketchCreate) SetCreatedAt(t time.Time) *SketchCreate {
+	sc.mutation.SetCreatedAt(t)
+	return sc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (sc *SketchCreate) SetNillableCreatedAt(t *time.Time) *SketchCreate {
+	if t != nil {
+		sc.SetCreatedAt(*t)
+	}
+	return sc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (sc *SketchCreate) SetUpdatedAt(t time.Time) *SketchCreate {
+	sc.mutation.SetUpdatedAt(t)
+	return sc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (sc *SketchCreate) SetNillableUpdatedAt(t *time.Time) *SketchCreate {
+	if t != nil {
+		sc.SetUpdatedAt(*t)
+	}
+	return sc
 }
 
 // SetUserID sets the "user_id" field.
@@ -38,6 +67,7 @@ func (sc *SketchCreate) Mutation() *SketchMutation {
 
 // Save creates the Sketch in the database.
 func (sc *SketchCreate) Save(ctx context.Context) (*Sketch, error) {
+	sc.defaults()
 	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
 }
 
@@ -63,8 +93,26 @@ func (sc *SketchCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (sc *SketchCreate) defaults() {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		v := sketch.DefaultCreatedAt()
+		sc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		v := sketch.DefaultUpdatedAt()
+		sc.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (sc *SketchCreate) check() error {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Sketch.created_at"`)}
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Sketch.updated_at"`)}
+	}
 	if _, ok := sc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Sketch.user_id"`)}
 	}
@@ -97,6 +145,14 @@ func (sc *SketchCreate) createSpec() (*Sketch, *sqlgraph.CreateSpec) {
 		_node = &Sketch{config: sc.config}
 		_spec = sqlgraph.NewCreateSpec(sketch.Table, sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt))
 	)
+	if value, ok := sc.mutation.CreatedAt(); ok {
+		_spec.SetField(sketch.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := sc.mutation.UpdatedAt(); ok {
+		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := sc.mutation.UserID(); ok {
 		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)
 		_node.UserID = value
@@ -126,6 +182,7 @@ func (scb *SketchCreateBulk) Save(ctx context.Context) ([]*Sketch, error) {
 	for i := range scb.builders {
 		func(i int, root context.Context) {
 			builder := scb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SketchMutation)
 				if !ok {

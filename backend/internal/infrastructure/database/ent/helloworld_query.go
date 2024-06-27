@@ -261,12 +261,12 @@ func (hwq *HelloWorldQuery) Clone() *HelloWorldQuery {
 // Example:
 //
 //	var v []struct {
-//		Lang string `json:"lang,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.HelloWorld.Query().
-//		GroupBy(helloworld.FieldLang).
+//		GroupBy(helloworld.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (hwq *HelloWorldQuery) GroupBy(field string, fields ...string) *HelloWorldGroupBy {
@@ -284,11 +284,11 @@ func (hwq *HelloWorldQuery) GroupBy(field string, fields ...string) *HelloWorldG
 // Example:
 //
 //	var v []struct {
-//		Lang string `json:"lang,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.HelloWorld.Query().
-//		Select(helloworld.FieldLang).
+//		Select(helloworld.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (hwq *HelloWorldQuery) Select(fields ...string) *HelloWorldSelect {
 	hwq.ctx.Fields = append(hwq.ctx.Fields, fields...)

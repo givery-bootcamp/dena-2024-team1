@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/helloworld"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -16,6 +17,10 @@ type HelloWorld struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Lang holds the value of the "lang" field.
 	Lang string `json:"lang,omitempty"`
 	// Message holds the value of the "message" field.
@@ -32,6 +37,8 @@ func (*HelloWorld) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case helloworld.FieldLang, helloworld.FieldMessage:
 			values[i] = new(sql.NullString)
+		case helloworld.FieldCreatedAt, helloworld.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -53,6 +60,18 @@ func (hw *HelloWorld) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			hw.ID = int(value.Int64)
+		case helloworld.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				hw.CreatedAt = value.Time
+			}
+		case helloworld.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				hw.UpdatedAt = value.Time
+			}
 		case helloworld.FieldLang:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field lang", values[i])
@@ -101,6 +120,12 @@ func (hw *HelloWorld) String() string {
 	var builder strings.Builder
 	builder.WriteString("HelloWorld(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", hw.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(hw.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(hw.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("lang=")
 	builder.WriteString(hw.Lang)
 	builder.WriteString(", ")

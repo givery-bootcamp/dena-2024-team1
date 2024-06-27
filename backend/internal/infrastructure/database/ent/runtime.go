@@ -2,8 +2,77 @@
 
 package ent
 
+import (
+	"myapp/internal/infrastructure/database/ent/helloworld"
+	"myapp/internal/infrastructure/database/ent/post"
+	"myapp/internal/infrastructure/database/ent/schema"
+	"myapp/internal/infrastructure/database/ent/sketch"
+	"myapp/internal/infrastructure/database/ent/user"
+	"time"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	helloworldMixin := schema.HelloWorld{}.Mixin()
+	helloworldMixinFields0 := helloworldMixin[0].Fields()
+	_ = helloworldMixinFields0
+	helloworldFields := schema.HelloWorld{}.Fields()
+	_ = helloworldFields
+	// helloworldDescCreatedAt is the schema descriptor for created_at field.
+	helloworldDescCreatedAt := helloworldMixinFields0[0].Descriptor()
+	// helloworld.DefaultCreatedAt holds the default value on creation for the created_at field.
+	helloworld.DefaultCreatedAt = helloworldDescCreatedAt.Default.(func() time.Time)
+	// helloworldDescUpdatedAt is the schema descriptor for updated_at field.
+	helloworldDescUpdatedAt := helloworldMixinFields0[1].Descriptor()
+	// helloworld.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	helloworld.DefaultUpdatedAt = helloworldDescUpdatedAt.Default.(func() time.Time)
+	// helloworld.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	helloworld.UpdateDefaultUpdatedAt = helloworldDescUpdatedAt.UpdateDefault.(func() time.Time)
+	postMixin := schema.Post{}.Mixin()
+	postMixinFields0 := postMixin[0].Fields()
+	_ = postMixinFields0
+	postFields := schema.Post{}.Fields()
+	_ = postFields
+	// postDescCreatedAt is the schema descriptor for created_at field.
+	postDescCreatedAt := postMixinFields0[0].Descriptor()
+	// post.DefaultCreatedAt holds the default value on creation for the created_at field.
+	post.DefaultCreatedAt = postDescCreatedAt.Default.(func() time.Time)
+	// postDescUpdatedAt is the schema descriptor for updated_at field.
+	postDescUpdatedAt := postMixinFields0[1].Descriptor()
+	// post.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	post.DefaultUpdatedAt = postDescUpdatedAt.Default.(func() time.Time)
+	// post.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	post.UpdateDefaultUpdatedAt = postDescUpdatedAt.UpdateDefault.(func() time.Time)
+	sketchMixin := schema.Sketch{}.Mixin()
+	sketchMixinFields0 := sketchMixin[0].Fields()
+	_ = sketchMixinFields0
+	sketchFields := schema.Sketch{}.Fields()
+	_ = sketchFields
+	// sketchDescCreatedAt is the schema descriptor for created_at field.
+	sketchDescCreatedAt := sketchMixinFields0[0].Descriptor()
+	// sketch.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sketch.DefaultCreatedAt = sketchDescCreatedAt.Default.(func() time.Time)
+	// sketchDescUpdatedAt is the schema descriptor for updated_at field.
+	sketchDescUpdatedAt := sketchMixinFields0[1].Descriptor()
+	// sketch.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sketch.DefaultUpdatedAt = sketchDescUpdatedAt.Default.(func() time.Time)
+	// sketch.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sketch.UpdateDefaultUpdatedAt = sketchDescUpdatedAt.UpdateDefault.(func() time.Time)
+	userMixin := schema.User{}.Mixin()
+	userMixinFields0 := userMixin[0].Fields()
+	_ = userMixinFields0
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescCreatedAt is the schema descriptor for created_at field.
+	userDescCreatedAt := userMixinFields0[0].Descriptor()
+	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
+	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
+	// userDescUpdatedAt is the schema descriptor for updated_at field.
+	userDescUpdatedAt := userMixinFields0[1].Descriptor()
+	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
+	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
 }

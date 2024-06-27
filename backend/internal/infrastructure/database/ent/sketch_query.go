@@ -261,12 +261,12 @@ func (sq *SketchQuery) Clone() *SketchQuery {
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Sketch.Query().
-//		GroupBy(sketch.FieldUserID).
+//		GroupBy(sketch.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (sq *SketchQuery) GroupBy(field string, fields ...string) *SketchGroupBy {
@@ -284,11 +284,11 @@ func (sq *SketchQuery) GroupBy(field string, fields ...string) *SketchGroupBy {
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Sketch.Query().
-//		Select(sketch.FieldUserID).
+//		Select(sketch.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (sq *SketchQuery) Select(fields ...string) *SketchSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)

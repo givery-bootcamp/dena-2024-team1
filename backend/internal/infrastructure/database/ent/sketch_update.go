@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"myapp/internal/infrastructure/database/ent/predicate"
 	"myapp/internal/infrastructure/database/ent/sketch"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -24,6 +25,12 @@ type SketchUpdate struct {
 // Where appends a list predicates to the SketchUpdate builder.
 func (su *SketchUpdate) Where(ps ...predicate.Sketch) *SketchUpdate {
 	su.mutation.Where(ps...)
+	return su
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (su *SketchUpdate) SetUpdatedAt(t time.Time) *SketchUpdate {
+	su.mutation.SetUpdatedAt(t)
 	return su
 }
 
@@ -69,6 +76,7 @@ func (su *SketchUpdate) Mutation() *SketchMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *SketchUpdate) Save(ctx context.Context) (int, error) {
+	su.defaults()
 	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
@@ -94,6 +102,14 @@ func (su *SketchUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (su *SketchUpdate) defaults() {
+	if _, ok := su.mutation.UpdatedAt(); !ok {
+		v := sketch.UpdateDefaultUpdatedAt()
+		su.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (su *SketchUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(sketch.Table, sketch.Columns, sqlgraph.NewFieldSpec(sketch.FieldID, field.TypeInt))
 	if ps := su.mutation.predicates; len(ps) > 0 {
@@ -102,6 +118,9 @@ func (su *SketchUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := su.mutation.UpdatedAt(); ok {
+		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := su.mutation.UserID(); ok {
 		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)
@@ -130,6 +149,12 @@ type SketchUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *SketchMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (suo *SketchUpdateOne) SetUpdatedAt(t time.Time) *SketchUpdateOne {
+	suo.mutation.SetUpdatedAt(t)
+	return suo
 }
 
 // SetUserID sets the "user_id" field.
@@ -187,6 +212,7 @@ func (suo *SketchUpdateOne) Select(field string, fields ...string) *SketchUpdate
 
 // Save executes the query and returns the updated Sketch entity.
 func (suo *SketchUpdateOne) Save(ctx context.Context) (*Sketch, error) {
+	suo.defaults()
 	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
@@ -209,6 +235,14 @@ func (suo *SketchUpdateOne) Exec(ctx context.Context) error {
 func (suo *SketchUpdateOne) ExecX(ctx context.Context) {
 	if err := suo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (suo *SketchUpdateOne) defaults() {
+	if _, ok := suo.mutation.UpdatedAt(); !ok {
+		v := sketch.UpdateDefaultUpdatedAt()
+		suo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -237,6 +271,9 @@ func (suo *SketchUpdateOne) sqlSave(ctx context.Context) (_node *Sketch, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := suo.mutation.UpdatedAt(); ok {
+		_spec.SetField(sketch.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := suo.mutation.UserID(); ok {
 		_spec.SetField(sketch.FieldUserID, field.TypeInt, value)

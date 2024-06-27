@@ -10,6 +10,13 @@ type HelloWorld struct {
 	ent.Schema
 }
 
+// Mixin of the HelloWorld.
+func (HelloWorld) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		TimeMixin{},
+	}
+}
+
 // Fields of the HelloWorld.
 func (HelloWorld) Fields() []ent.Field {
 	return []ent.Field{
