@@ -6,6 +6,6 @@ import (
 )
 
 type SketchRepository interface {
-	CreateSketch(file *multipart.File, userID int) error
+	CreateSketch(file *multipart.File, userID int) (entity.Sketch, error)
 	GetAll() ([]entity.Sketch, error)
 }

@@ -24,24 +24,29 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(file *multipart.File, userID int) error {
+func (r *SketchRepository) CreateSketch(file *multipart.File, userID int) (entity.Sketch, error) {
 	fn := uuid.New().String() + ".png"
 
 	s3FileStorage := filestorage.SetUpS3()
 	err := s3FileStorage.UploadFile(file, fn)
 	if err != nil {
-		return err
+		return entity.Sketch{}, err
 	}
-
 	sketch := model.Sketch{
 		ImageName: fn,
 		UserID:    userID,
 	}
 	sketchResult := r.Conn.Create(&sketch)
 	if sketchResult.Error != nil {
-		return sketchResult.Error
+		return entity.Sketch{}, sketchResult.Error
 	}
-	return nil
+	return entity.Sketch{
+		ID:        int(sketch.ID),
+		ImageName: sketch.ImageName,
+		UserID:    sketch.UserID,
+		CreatedAt: sketch.CreatedAt,
+		UpdatedAt: sketch.UpdatedAt,
+	}, nil
 }
 
 func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {
