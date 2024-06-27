@@ -25,18 +25,15 @@ type SignFormProps = {
   linkTo: string;
 }
 
-export const SignForm = (props: SignFormProps) => {
+export const SignForm = ({ title, submitText, linkText, linkTo, onSubmit }: SignFormProps) => {
   const { register, handleSubmit: handleFormSubmit } = useForm<Schema>({
     resolver: valibotResolver(schema),
   });
-  const { onSubmit } = props; 
 
   const handleSubmit: SubmitHandler<Schema> = useCallback((data) => {
     const { username, password } = data;
     onSubmit(username, password);
   }, [onSubmit]);
-
-  const { title, submitText, linkText, linkTo } = props;
 
   return (
     <form className="mt-10 flex flex-col gap-7" onSubmit={handleFormSubmit(handleSubmit)}>
