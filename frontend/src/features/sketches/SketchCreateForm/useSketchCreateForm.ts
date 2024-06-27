@@ -26,9 +26,7 @@ export const useSketchCreateForm = ({ canvasRef }: Args) => {
 
   const createSketch = async () => {
     const file = await convertCanvasToFile();
-    const result = await sketchApi.postSketch(file, {
-      withCredentials: true,
-    });
+    const result = await sketchApi.postSketch(file);
 
     if (result.status !== 201) {
       throw new Error("画像のアップロードに失敗しました");

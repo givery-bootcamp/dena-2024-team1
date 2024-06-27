@@ -30,6 +30,7 @@ func (h *PostHandler) GetPosts(ctx *gin.Context) {
 			Id:        p.ID,
 			Title:     p.Title,
 			UpdatedAt: p.UpdatedAt,
+			UserId:    p.UserID,
 			UserName:  p.UserName,
 		})
 	}
@@ -61,6 +62,7 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 			Id:        p.ID,
 			Title:     p.Title,
 			UpdatedAt: p.UpdatedAt,
+			UserId:    p.UserID,
 			UserName:  p.UserName,
 		}
 		ctx.JSON(200, response)
@@ -85,14 +87,14 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 		handleError(ctx, 500, err)
 		return
 	}
-	id := int64(createdPost.ID)
 	response := openapi.CreatePostResponse{
-		Body:      &createdPost.Body,
-		CreatedAt: &createdPost.CreatedAt,
-		Id:        &id,
-		Title:     &createdPost.Title,
-		UpdatedAt: &createdPost.UpdatedAt,
-		UserId:    &createdPost.UserID,
+		Body:      createdPost.Body,
+		CreatedAt: createdPost.CreatedAt,
+		Id:        createdPost.ID,
+		Title:     createdPost.Title,
+		UpdatedAt: createdPost.UpdatedAt,
+		UserId:    createdPost.UserID,
+		UserName:  createdPost.UserName,
 	}
 	ctx.JSON(201, response)
 }
@@ -121,10 +123,11 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 	response := openapi.UpdatePostResponse{
 		Body:      updatePost.Body,
 		CreatedAt: updatePost.CreatedAt,
-		Id:        int64(updatePost.ID),
+		Id:        updatePost.ID,
 		Title:     updatePost.Title,
 		UpdatedAt: updatePost.UpdatedAt,
 		UserId:    updatePost.UserID,
+		UserName:  updatePost.UserName,
 	}
 	ctx.JSON(200, response)
 }

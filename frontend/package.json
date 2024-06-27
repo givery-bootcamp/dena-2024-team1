@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --mode production",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "format": "eslint . --fix",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.7.2",
     "classnames": "^2.3.2",
@@ -19,9 +20,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-hook-form": "^7.52.0",
     "react-infinite-canvas": "^1.2.7",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
+    "valibot": "^0.35.0",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {

@@ -1,20 +1,16 @@
 import { useCallback } from "react";
 
 import { Container } from "~/shared/components/Container";
-import { UserApi } from "~/generated";
-import { SignForm } from "~/shared/components/SignForm";
-import { config } from "~/config/api";
-
+import { UserAuthForm } from "~/features/users/UserAuthForm";
+import { userApi } from "~/shared/services/API";
 
 export const SignInPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
-    const userApi = new UserApi();
-    
     try {
       const responnse = await userApi.signIn({
-        username,
+        user_name: username,
         password,
-      }, config);
+      });
   
       if (responnse.status === 200) {
         console.log("Success");
@@ -30,13 +26,7 @@ export const SignInPage = () => {
 
   return (
     <Container>
-      <SignForm
-        onSubmit={handleSubmit}
-        title="ログイン"
-        submitText="ログイン"
-        linkText="アカウントをお持ちでない方はこちら"
-        linkTo="/signup"
-      />
+      <UserAuthForm type="sign-in" onSubmit={handleSubmit} />
     </Container>
   );
 };
