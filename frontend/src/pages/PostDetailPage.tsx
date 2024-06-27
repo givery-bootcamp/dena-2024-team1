@@ -11,7 +11,6 @@ import { useAppSelector, useAppDispatch } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
 import { postApi } from "~/shared/services/API";
 import { formatDateTime } from "~/shared/utils";
-import { config } from "~/config/api";
 
 export function PostDetailPage() {
   const { post } = useAppSelector((state) => state.post);
@@ -24,7 +23,7 @@ export function PostDetailPage() {
   }, [dispatch]);
 
   const handleDelete = async () => {
-    const response = await postApi.deletePost(Number(postId) , config);
+    const response = await postApi.deletePost(Number(postId));
     if (response.status === 204) {
       console.log("Deleted post successfully!");
       window.location.href = "/";
