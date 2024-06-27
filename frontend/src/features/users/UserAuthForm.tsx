@@ -17,7 +17,7 @@ const schema = v.object({
 });
 type Schema = v.InferOutput<typeof schema>
 
-type SignFormProps = {
+type UserAuthFormProps = {
   onSubmit: (username: string, password: string) => void;
   title: string;
   submitText: string;
@@ -25,7 +25,7 @@ type SignFormProps = {
   linkTo: string;
 }
 
-export const SignForm = ({ title, submitText, linkText, linkTo, onSubmit }: SignFormProps) => {
+export const UserAuthForm = ({ title, submitText, linkText, linkTo, onSubmit }: UserAuthFormProps) => {
   const { register, formState, handleSubmit: handleFormSubmit } = useForm<Schema>({
     resolver: valibotResolver(schema),
   });

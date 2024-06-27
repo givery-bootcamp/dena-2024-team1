@@ -2,9 +2,8 @@ import { useCallback } from "react";
 
 import { Container } from "~/shared/components/Container";
 import { UserApi } from "~/generated";
-import { SignForm } from "~/shared/components/SignForm";
 import { config } from "~/config/api";
-
+import { UserAuthForm } from "~/features/users/UserAuthForm";
 
 export const SignInPage = () => {
   const handleSubmit = useCallback(async (username: string, password: string) => {
@@ -30,7 +29,7 @@ export const SignInPage = () => {
 
   return (
     <Container>
-      <SignForm
+      <UserAuthForm
         onSubmit={handleSubmit}
         title="ログイン"
         submitText="ログイン"
