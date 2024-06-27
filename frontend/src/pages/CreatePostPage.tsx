@@ -18,6 +18,8 @@ export function CreatePostPage() {
     const body = formData.get("body") as string;
 
     if (!sessionUser || !sessionUser.id) {
+      console.error("User is not logged in.");
+      navigate("/signin");
       return;
     }
 
