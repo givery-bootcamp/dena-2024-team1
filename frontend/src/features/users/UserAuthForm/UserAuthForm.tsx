@@ -14,7 +14,7 @@ import {
 
 import { Button } from "~/shared/components/Button";
 import { Input } from "~/shared/components/Input";
-import { FormErrorMessage } from "~/shared/components/Form";
+import { FormErrorMessage, FormLabel } from "~/shared/components/Form";
 
 type UserAuthFormProps = {
   type: PageType;
@@ -41,7 +41,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
       <h1 className="text-center text-2xl font-bold">{title}</h1>
       <div className="flex flex-col gap-6 text-lg">
         <label className="flex flex-col gap-2 text-lg">
-          <span className="font-bold">ユーザー名</span>
+          <FormLabel>ユーザー名</FormLabel>
           <div className="flex flex-col gap-1">
             <Input {...register("username")} />
             {formState.errors.username && (
@@ -52,7 +52,7 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
           </div>
         </label>
         <label className="flex flex-col gap-2 text-lg">
-          <span className="font-bold">パスワード</span>
+          <FormLabel>パスワード</FormLabel>
           <div className="flex flex-col gap-1">
             <Input type="password" {...register("password")} />
             {formState.errors.password && (
