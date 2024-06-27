@@ -2,20 +2,8 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useCallback } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import * as v from "valibot";
 
-const schema = v.object({
-  username: v.pipe(
-    v.string(),
-    v.nonEmpty("ユーザー名を入力してください"),
-  ),
-  password: v.pipe(
-    v.string(),
-    v.nonEmpty("パスワードを入力してください"),
-    v.minLength(8, "パスワードは8文字以上で入力してください"),
-  ),
-});
-type Schema = v.InferOutput<typeof schema>
+import { type Schema, schema } from "./schema";
 
 type UserAuthFormProps = {
   onSubmit: (username: string, password: string) => void;
