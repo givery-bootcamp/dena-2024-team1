@@ -19,6 +19,40 @@ func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
 	}
 }
 
+func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
+	const MaxUploadSize = 10 * 1024 * 1024 // 10MB
+
+	requestFile, err := ctx.FormFile("file")
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+
+	// Check file size
+	if requestFile.Size > MaxUploadSize {
+		handleError(ctx, 400, errors.New("file size too large"))
+		return
+	}
+	// Check file type
+	if requestFile.Header.Get("Content-Type") != "image/png" && requestFile.Header.Get("Content-Type") != "image/jpeg" {
+		handleError(ctx, 400, errors.New("file type not allowed"))
+		return
+	}
+
+	file, err := requestFile.Open()
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	}
+
+	err = h.su.CreateSketch(&file)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(201, nil)
+	}
+}
+
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
 	ss, err := h.su.GetSketches()
 	var response openapi.GetAllSketchesResponse

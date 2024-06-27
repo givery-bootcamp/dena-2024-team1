@@ -5,6 +5,8 @@ package openapi
 
 import (
 	"time"
+
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 // CreatePostRequest defines model for CreatePostRequest.
@@ -22,6 +24,11 @@ type CreatePostResponse struct {
 	Title     *string    `json:"title,omitempty"`
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	UserId    *int       `json:"user_id,omitempty"`
+}
+
+// CreateScketchesRequest defines model for CreateScketchesRequest.
+type CreateScketchesRequest struct {
+	File openapi_types.File `json:"file"`
 }
 
 // GetAllPostsResponse defines model for GetAllPostsResponse.
@@ -100,3 +107,6 @@ type SignInJSONRequestBody SignInJSONBody
 
 // SignUpJSONRequestBody defines body for SignUp for application/json ContentType.
 type SignUpJSONRequestBody SignUpJSONBody
+
+// PostSketchMultipartRequestBody defines body for PostSketch for multipart/form-data ContentType.
+type PostSketchMultipartRequestBody = CreateScketchesRequest

@@ -6,9 +6,10 @@ import { sessionUserSlice  } from "~/shared/store/SessionUserSlice";
 import { UserApi } from "~/generated";
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { Header, HeaderNoAuth } from "~/shared/components/Header";
+import { config } from "~/config/api";
 
 export const AuthProvider = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { sessionUser } = useAppSelector((state) => state.sessionUser);
   const dispatch = useAppDispatch();  
@@ -17,17 +18,20 @@ export const AuthProvider = () => {
     setLoading(true);
 
     const userApi = new UserApi();
-    const response = await userApi.getSessionUser({
-      withCredentials: true,
-    });
-
-    // 取得に成功した場合
-    if (response.status === 200) {
-        const user = response.data;
-
-        // ユーザー情報をセット
-        dispatch(sessionUserSlice.actions.setSessionUser(user));
+    try {
+      const response = await userApi.getSessionUser(config);
+  
+      // 取得に成功した場合
+      if (response.status === 200) {
+          const user = response.data.user;
+  
+          // ユーザー情報をセット
+          dispatch(sessionUserSlice.actions.setSessionUser(user));
+      }
+    } catch (error) {
+      return;
     }
+    
   }, []);
 
   useEffect(() => {
@@ -36,8 +40,6 @@ export const AuthProvider = () => {
     }
 
     getSessionUser()
-    .then(() => {})
-    .catch(() => {})
     .finally(() => {
       setLoading(false);
     });

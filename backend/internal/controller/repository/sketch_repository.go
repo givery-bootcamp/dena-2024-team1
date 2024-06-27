@@ -2,10 +2,15 @@ package repository
 
 import (
 	"errors"
+	"mime/multipart"
+
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
+	"myapp/internal/infrastructure/filestorage"
+
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -17,6 +22,27 @@ func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
 	return &SketchRepository{
 		Conn: conn,
 	}
+}
+
+func (r *SketchRepository) CreateSketch(file *multipart.File) error {
+	fn := uuid.New().String() + ".png"
+
+	s3FileStorage := filestorage.SetUpS3()
+	err := s3FileStorage.UploadFile(file, fn)
+	if err != nil {
+		return err
+	}
+
+	sketch := model.Sketch{
+		ImageName: fn,
+		// TODO：ここでUserIDをどうやって取得するか
+		UserID: 1,
+	}
+	sketchResult := r.Conn.Create(&sketch)
+	if sketchResult.Error != nil {
+		return sketchResult.Error
+	}
+	return nil
 }
 
 func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {

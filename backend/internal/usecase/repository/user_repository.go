@@ -8,7 +8,7 @@ import (
 
 type UserRepository interface {
 	GetAll() ([]entity.User, error)
-	CreateUser(username, password string) error
+	CreateUser(username, password string) (entity.User, error)
 	GetUserByUsername(username string) (entity.User, error)
 	SaveSession(session sessions.Session, user entity.User) error
 	GetSessionUser(session sessions.Session) (entity.User, error)

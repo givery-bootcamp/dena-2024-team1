@@ -8,8 +8,8 @@ import {
 import { useCanvas } from "~/shared/hooks/useCanvas";
 
 const canvasSetting = {
-  width: 1020,
-  height: 400,
+  width: 900,
+  height: 600,
 };
 
 type Args = {

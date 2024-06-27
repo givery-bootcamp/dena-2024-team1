@@ -25,7 +25,9 @@ func (h UserHandler) Signup(ctx *gin.Context) {
 		return
 	}
 
-	err := h.uu.Signup(req.Username, req.Password)
+	session := sessions.Default(ctx)
+
+	err := h.uu.Signup(session, req.Username, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
