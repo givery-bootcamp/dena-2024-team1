@@ -12,6 +12,7 @@ import (
 
 type SketchHandler struct {
 	su usecase.SketchUsecase
+	uu usecase.UserUsecase
 }
 
 func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
@@ -46,10 +47,13 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		return
 	}
 	session := sessions.Default(ctx)
+	user, err := h.uu.GetSessionUser(session)
 
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
+	} else {
+		ctx.JSON(200, gin.H{"user_id": user.ID})
 	}
 
 	err = h.su.CreateSketch(&file, session)
