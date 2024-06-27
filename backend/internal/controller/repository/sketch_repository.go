@@ -8,7 +8,7 @@ import (
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
-	"myapp/internal/infrastructure/database/ent"
+	"myapp/internal/controller/repository/ent"
 	"myapp/internal/infrastructure/filestorage"
 
 	"github.com/google/uuid"

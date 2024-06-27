@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"myapp/internal/config"
-	"myapp/internal/infrastructure/database/ent"
+	"myapp/internal/controller/repository/ent"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"

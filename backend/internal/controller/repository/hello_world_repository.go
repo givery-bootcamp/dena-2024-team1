@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"fmt"
+	"myapp/internal/controller/repository/ent"
+	helloworldEntity "myapp/internal/controller/repository/ent/helloworld"
 	"myapp/internal/entity"
-	"myapp/internal/infrastructure/database/ent"
-	helloworldEntity "myapp/internal/infrastructure/database/ent/helloworld"
 
 	repositoryIF "myapp/internal/usecase/repository"
 )

@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"fmt"
+	"myapp/internal/controller/repository/ent"
+	postEntity "myapp/internal/controller/repository/ent/post"
 	"myapp/internal/entity"
-	"myapp/internal/infrastructure/database/ent"
-	postEntity "myapp/internal/infrastructure/database/ent/post"
 	repositoryIF "myapp/internal/usecase/repository"
 )
 

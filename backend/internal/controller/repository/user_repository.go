@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"myapp/internal/config"
+	"myapp/internal/controller/repository/ent"
+	userEntity "myapp/internal/controller/repository/ent/user"
 	"myapp/internal/entity"
-	"myapp/internal/infrastructure/database/ent"
-	userEntity "myapp/internal/infrastructure/database/ent/user"
 	repositoryIF "myapp/internal/usecase/repository"
 
 	"github.com/gin-contrib/sessions"
