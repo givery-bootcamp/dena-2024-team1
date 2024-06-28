@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"myapp/internal/controller/repository/model"
 	"myapp/internal/entity"
 
@@ -24,8 +23,6 @@ func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
 func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
 	var obj model.HelloWorld
 	result := r.Conn.Where("lang = ?", lang).First(&obj)
-	fmt.Printf("%+v\n", result)
-	fmt.Printf("%+v\n", obj)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
