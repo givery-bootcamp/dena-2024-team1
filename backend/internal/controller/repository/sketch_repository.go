@@ -37,7 +37,7 @@ func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.Fil
 	sketch, err := r.Conn.Sketch.
 		Create().
 		SetImageName(fn).
-		SetUserID(1).
+		SetUserID(userID).
 		Save(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create sketch: %w", err)
@@ -47,6 +47,9 @@ func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.Fil
 		Query().
 		Where(userEntity.IDEQ(userID)).
 		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
 
 	return &entity.Sketch{
 		ID:        sketch.ID,
