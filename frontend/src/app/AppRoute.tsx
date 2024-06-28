@@ -9,6 +9,7 @@ import { PostDetailPage } from "~/pages/PostDetailPage";
 import { CreatePostPage } from "~/pages/CreatePostPage";
 import { PostEditPage } from "~/pages/PostEditPage";
 import { PostListPage } from "~/pages/PostListPage";
+import { Event } from "~/app/Event";
 
 export const AppRoute = () => {
   return (
@@ -29,6 +30,7 @@ export const AppRouteNoAuth = () => {
   return (
     <Routes>
       <Route path="/" element={<SketchListPage/>} />
+      <Route path="/event" element={<Event />} />
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<Navigate to={"/"} />} />
