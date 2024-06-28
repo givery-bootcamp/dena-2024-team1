@@ -25,7 +25,7 @@ export const useSketchCreateForm = ({ canvasRef }: Args) => {
   };
 
   const createSketch = async () => {
-    const showAlert = () => console.log("投稿に失敗しました");
+    const showAlert = () => window.alert("投稿に失敗しました");
     const file = await convertCanvasToFile();
     try {
       const result = await sketchApi.postSketch(file);
@@ -34,12 +34,10 @@ export const useSketchCreateForm = ({ canvasRef }: Args) => {
         navigate("/");
       } else {
         showAlert();
-        console.error("スケッチの投稿に失敗しました");
       }
 
     } catch (error) {
       showAlert();
-      console.error(error);
     }
   };
 
