@@ -139,8 +139,7 @@ paths:
       summary: ''
       tags:
         - sketch
-
-     delete:
+    delete:
       description: Delete a sketch.
       operationId: deleteSketch
       parameters:
