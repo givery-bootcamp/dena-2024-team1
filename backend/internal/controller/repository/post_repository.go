@@ -86,7 +86,7 @@ func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	userResult := r.Conn.Find(&users)
 	if userResult.Error != nil {
 		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return []entity.Post{}, nil
 		}
 		return nil, userResult.Error
 	}

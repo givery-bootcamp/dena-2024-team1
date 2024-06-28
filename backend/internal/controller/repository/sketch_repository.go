@@ -65,7 +65,7 @@ func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {
 	userResult := r.Conn.Find(&users)
 	if userResult.Error != nil {
 		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return []entity.Sketch{}, nil
 		}
 		return nil, userResult.Error
 	}
