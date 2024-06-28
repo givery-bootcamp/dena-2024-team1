@@ -5,6 +5,7 @@ import (
 	"myapp/internal/config"
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
+	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -91,5 +92,19 @@ func (h *SketchHandler) GetSketches(ctx *gin.Context) {
 		handleError(ctx, 500, err)
 	} else {
 		ctx.JSON(200, response)
+	}
+}
+
+func (h *SketchHandler) DeleteSketch(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+	err = h.su.DeleteSketch(ctx, id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(204, nil)
 	}
 }

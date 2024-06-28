@@ -42,4 +42,5 @@ func setupEndpoints(router *gin.Engine) {
 	router.POST("/signout", authMiddleware, apiHandler.UserHandler.Signout)
 	router.GET("/session_user", authMiddleware, apiHandler.UserHandler.GetSessionUser)
 	router.POST("/sketches", authMiddleware, apiHandler.SketchHandler.CreateSketch)
+	router.DELETE("/sketches/:id", authMiddleware, apiHandler.SketchHandler.DeleteSketch)
 }
