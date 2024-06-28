@@ -1,13 +1,15 @@
 import { Modal } from "~/shared/components/Modal";
+import { Sketch } from "~/generated";
 type Props = {
-  selectedSketchUrl: string;
-  setSelectedSketchUrl: (url: string | null) => void;
+  selectedSketch: Sketch;
+  setSelectedSketch: (sketch: Sketch | null) => void;
 };
 
-export const SketchModal = ({ selectedSketchUrl, setSelectedSketchUrl }: Props) => {
+export const SketchModal = ({ selectedSketch, setSelectedSketch }: Props) => {
   return (
-    <Modal isOpen={true} onClose={() => setSelectedSketchUrl(null)}>
-      <img src={selectedSketchUrl} alt={selectedSketchUrl} />
+    <Modal isOpen={true} onClose={() => setSelectedSketch(null)}>
+      <img src={selectedSketch.image_url} alt={selectedSketch.image_url} />
+      <h1>{selectedSketch.user_name}</h1>
     </Modal>
   );
 };
