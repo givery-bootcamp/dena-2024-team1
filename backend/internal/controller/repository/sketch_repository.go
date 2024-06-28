@@ -84,3 +84,14 @@ func (r *SketchRepository) GetAll(ctx context.Context) ([]entity.Sketch, error) 
 
 	return sketches, nil
 }
+
+func (r *SketchRepository) DeleteSketch(ctx context.Context, id int) error {
+	err := r.Conn.Sketch.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to delete sketch: %w", err)
+	}
+
+	//TODO: delete s3 file
+
+	return nil
+}
