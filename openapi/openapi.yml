@@ -131,6 +131,10 @@ paths:
       responses:
         '201':
           description: Sketch image uploaded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScketchesResponse'
       operationId: postSketch
       summary: ''
       tags:
@@ -449,12 +453,9 @@ components:
           type: string
         body:
           type: string
-        user_id:
-          type: integer
       required:
         - title
         - body
-        - user_id
     CreatePostResponse:
       title: CreatePostResponse
       $ref: '#/components/schemas/Post'
@@ -473,7 +474,6 @@ components:
       title: UpdatePostResponse
       $ref: '#/components/schemas/Post'
     CreateScketchesRequest:
-    # まずは最小で
       type: object
       properties:
         file:
@@ -481,6 +481,31 @@ components:
           format: binary
       required:
         - file
+    CreateScketchesResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+        userId:
+          type: integer
+        userName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - imageUrl
+        - userId
+        - userName
+        - createdAt
+        - updatedAt
+
     GetPostResponse:
       $ref: '#/components/schemas/Post'
     GetAllPostsResponse:

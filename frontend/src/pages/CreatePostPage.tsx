@@ -14,15 +14,14 @@ export function CreatePostPage() {
     const formData = new FormData(form);
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
-    const user_id = 1;
+
     const response = await postApi.postPost({
       title,
       body,
-      user_id,
     });
     if (response.status === 201) {
       console.log("Created post successfully!");
-      navigate("/");
+      navigate("/posts");
     }
 
   }, []);

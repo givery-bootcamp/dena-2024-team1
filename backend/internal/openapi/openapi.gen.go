@@ -11,9 +11,8 @@ import (
 
 // CreatePostRequest defines model for CreatePostRequest.
 type CreatePostRequest struct {
-	Body   string `json:"body"`
-	Title  string `json:"title"`
-	UserId int    `json:"user_id"`
+	Body  string `json:"body"`
+	Title string `json:"title"`
 }
 
 // CreatePostResponse defines model for CreatePostResponse.
@@ -22,6 +21,16 @@ type CreatePostResponse = Post
 // CreateScketchesRequest defines model for CreateScketchesRequest.
 type CreateScketchesRequest struct {
 	File openapi_types.File `json:"file"`
+}
+
+// CreateScketchesResponse defines model for CreateScketchesResponse.
+type CreateScketchesResponse struct {
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int       `json:"id"`
+	ImageUrl  string    `json:"imageUrl"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"userId"`
+	UserName  string    `json:"userName"`
 }
 
 // GetAllPostsResponse defines model for GetAllPostsResponse.

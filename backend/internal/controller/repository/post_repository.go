@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"myapp/internal/controller/repository/ent"
 	postEntity "myapp/internal/controller/repository/ent/post"
+	userEntity "myapp/internal/controller/repository/ent/user"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 )
@@ -29,12 +30,20 @@ func (r *PostRepository) CreatePost(ctx context.Context, p *entity.Post) (*entit
 	if err != nil {
 		return nil, fmt.Errorf("failed to create post: %w", err)
 	}
+	user, err := r.Conn.User.
+		Query().
+		Where(userEntity.IDEQ(p.UserID)).
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
 
 	resultPost := entity.Post{
 		ID:        post.ID,
 		Title:     post.Title,
 		Body:      post.Body,
 		UserID:    post.UserID,
+		UserName:  user.Name,
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 	}
@@ -51,11 +60,17 @@ func (r *PostRepository) UpdatePost(ctx context.Context, id int, title string, b
 		return nil, fmt.Errorf("failed to update post: %w", err)
 	}
 
+	user, err := r.Conn.User.
+		Query().
+		Where(userEntity.IDEQ(post.UserID)).
+		Only(ctx)
+
 	resultPost := entity.Post{
 		ID:        post.ID,
 		Title:     post.Title,
 		Body:      post.Body,
 		UserID:    post.UserID,
+		UserName:  user.Name,
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 	}

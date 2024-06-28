@@ -7,6 +7,7 @@ import (
 	"myapp/internal/usecase"
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -77,16 +78,17 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
+	session := sessions.Default(ctx)
 
 	createdPost, err := h.pu.CreatePost(ctx, entity.Post{
-		Title:  request.Title,
-		Body:   request.Body,
-		UserID: request.UserId,
-	})
+		Title: request.Title,
+		Body:  request.Body,
+	}, session)
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
 	}
+
 	response := openapi.CreatePostResponse{
 		Body:      createdPost.Body,
 		CreatedAt: createdPost.CreatedAt,
@@ -106,6 +108,8 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
+	session := sessions.Default(ctx)
+
 	// idを取得、エラーがあればエラーを返す
 	// getPostからそのまま持ってきている
 	id, err := strconv.Atoi(ctx.Param("id"))
@@ -114,7 +118,7 @@ func (h *PostHandler) UpdatePost(ctx *gin.Context) {
 	}
 
 	// 代入したものでupdateする
-	updatePost, err := h.pu.UpdatePost(ctx, id, request.Title, request.Body)
+	updatePost, err := h.pu.UpdatePost(ctx, id, request.Title, request.Body, session)
 	if err != nil {
 		handleError(ctx, 500, err)
 		return
@@ -137,8 +141,9 @@ func (h *PostHandler) DeletePost(ctx *gin.Context) {
 	if err != nil {
 		handleError(ctx, 400, err)
 	}
+	session := sessions.Default(ctx)
 
-	err = h.pu.DeletePost(ctx, id)
+	err = h.pu.DeletePost(ctx, id, session)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {

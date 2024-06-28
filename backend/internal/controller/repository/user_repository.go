@@ -71,9 +71,7 @@ func (r *UserRepository) CreateUser(ctx context.Context, username, password stri
 }
 
 func (r *UserRepository) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
-	fmt.Println("get user by username")
 	u, err := r.Conn.User.Query().Where(userEntity.Name(username)).First(ctx)
-	fmt.Println(err)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -143,7 +141,6 @@ func (r *UserRepository) GetSessionUser(ctx context.Context, session sessions.Se
 
 	// ユーザー情報を取得
 	user, err := r.GetUserByUsername(ctx, sessionUser.Name)
-	fmt.Printf("get session user: %+v\n", user)
 
 	if err != nil {
 		return nil, err

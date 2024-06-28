@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"mime/multipart"
 
+	userEntity "myapp/internal/controller/repository/ent/user"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
@@ -24,25 +25,37 @@ func NewSketchRepository(conn *ent.Client) repositoryIF.SketchRepository {
 	}
 }
 
-func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.File) error {
+func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.File, userID int) (*entity.Sketch, error) {
 	fn := uuid.New().String() + ".png"
 
 	s3FileStorage := filestorage.SetUpS3()
 	err := s3FileStorage.UploadFile(file, fn)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("failed to create s3: %w", err)
 	}
 
-	_, err = r.Conn.Sketch.
+	sketch, err := r.Conn.Sketch.
 		Create().
 		SetImageName(fn).
 		SetUserID(1).
 		Save(ctx)
 	if err != nil {
-		return fmt.Errorf("failed to create sketch: %w", err)
+		return nil, fmt.Errorf("failed to create sketch: %w", err)
 	}
 
-	return nil
+	user, err := r.Conn.User.
+		Query().
+		Where(userEntity.IDEQ(userID)).
+		Only(ctx)
+
+	return &entity.Sketch{
+		ID:        sketch.ID,
+		ImageName: sketch.ImageName,
+		UserID:    sketch.UserID,
+		UserName:  user.Name,
+		CreatedAt: sketch.CreatedAt,
+		UpdatedAt: sketch.UpdatedAt,
+	}, nil
 }
 
 func (r *SketchRepository) GetAll(ctx context.Context) ([]entity.Sketch, error) {

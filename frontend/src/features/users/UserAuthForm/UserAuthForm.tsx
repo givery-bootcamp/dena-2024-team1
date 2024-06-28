@@ -13,6 +13,12 @@ import {
 } from "./mapping";
 
 import { Button } from "~/shared/components/Button";
+import { Input } from "~/shared/components/Input";
+import {
+  FormErrorMessage,
+  FormField,
+  FormLabel,
+} from "~/shared/components/Form";
 
 type UserAuthFormProps = {
   type: PageType;
@@ -20,7 +26,11 @@ type UserAuthFormProps = {
 }
 
 export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
-  const { register, formState, handleSubmit: handleFormSubmit } = useForm<Schema>({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit: handleFormSubmit,
+  } = useForm<Schema>({
     resolver: valibotResolver(schema),
   });
 
@@ -38,28 +48,20 @@ export const UserAuthForm = ({ type, onSubmit }: UserAuthFormProps) => {
     <form className="mt-10 flex flex-col gap-10" onSubmit={handleFormSubmit(handleSubmit)}>
       <h1 className="text-center text-2xl font-bold">{title}</h1>
       <div className="flex flex-col gap-6 text-lg">
-        <label className="flex flex-col gap-2 text-lg">
-          <span className="font-bold">ユーザー名</span>
-          <div className="flex flex-col gap-1">
-            <input className="border border-border p-2" type="text" {...register("username")} />
-            {formState.errors.username && (
-              <span className="text-sm font-semibold text-alert">
-                {formState.errors.username.message}
-              </span>
-            )}
-          </div>
-        </label>
-        <label className="flex flex-col gap-2 text-lg">
-          <span className="font-bold">パスワード</span>
-          <div className="flex flex-col gap-1">
-            <input className="border border-border p-2" type="password" {...register("password")} />
-            {formState.errors.password && (
-              <span className="text-sm font-semibold text-alert">
-                {formState.errors.password.message}
-              </span>
-            )}
-          </div>
-        </label>
+        <FormField>
+          <FormLabel>ユーザー名</FormLabel>
+          <Input {...register("username")} />
+          {errors.username && (
+            <FormErrorMessage>{errors.username.message}</FormErrorMessage>
+          )}
+        </FormField>
+        <FormField>
+          <FormLabel>パスワード</FormLabel>
+          <Input type="password" {...register("password")} />
+          {errors.password && (
+            <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+          )}
+        </FormField>
         <Button type="submit">{buttonLabel}</Button>
       </div>
       <div>
