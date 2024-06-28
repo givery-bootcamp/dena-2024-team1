@@ -120,7 +120,7 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	postResult := r.Conn.Where("id = ?", id).First(&post)
 	if postResult.Error != nil {
 		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return &entity.Post{}, nil
 		}
 		return nil, postResult.Error
 	}
@@ -128,7 +128,7 @@ func (r *PostRepository) Get(id int) (*entity.Post, error) {
 	userResult := r.Conn.Where("id = ?", post.UserID).First(&user)
 	if userResult.Error != nil {
 		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return &entity.Post{}, nil
 		}
 		return nil, userResult.Error
 	}
