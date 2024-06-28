@@ -1,19 +1,12 @@
-import type { ChangeEventHandler, FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 
 import { SketchColorPicker } from "./SketchColorPicker";
 
-import { Input } from "~/shared/components/Input";
 import { useStrokeSetting } from "~/shared/hooks/useStrokeSetting";
+import { Slider } from "~/shared/components/Slider";
 
 export const SketchTool = () => {
-  const { strokeWidth, setStrokeWidth } = useStrokeSetting();
-
-  const handleStorkeWidthChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    // 太さは1未満にはできない
-    const value = Math.max(1, Number(event.target.value));
-
-    setStrokeWidth(value);
-  };
+  const { setStrokeWidth } = useStrokeSetting();
 
   return (
     <div className="flex w-56 flex-col gap-8">
@@ -25,11 +18,10 @@ export const SketchTool = () => {
         </Section>
         <Section>
           <SectionTitle>線の太さ</SectionTitle>
-          <Input
-            className="w-full"
-            type="number"
-            value={strokeWidth}
-            onChange={handleStorkeWidthChange}
+          <Slider
+            min={1}
+            max={10}
+            onValueChange={(value) => setStrokeWidth(value[0])}
           />
         </Section>
       </div>
