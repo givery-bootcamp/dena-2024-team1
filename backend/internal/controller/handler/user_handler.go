@@ -54,6 +54,7 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 }
 
 func (h UserHandler) GetSessionUser(ctx *gin.Context) {
+	// セッションからユーザー情報を取得
 	session := sessions.Default(ctx)
 	user, err := h.uu.GetSessionUser(session)
 

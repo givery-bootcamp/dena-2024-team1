@@ -27,7 +27,7 @@ func newAPIHandler(u apiUsecase) *APIHandler {
 	hh := handler.NewHelloWorldHandler(u.hu)
 	ph := handler.NewPostHandler(u.ph)
 	uh := handler.NewUserHandler(u.uh)
-	sh := handler.NewSketchHandler(u.sh)
+	sh := handler.NewSketchHandler(u.sh, u.uh)
 
 	return &APIHandler{
 		HelloWorldHandler: hh,
@@ -48,7 +48,7 @@ func newAPIUsecase(r apiRepository) *apiUsecase {
 	hu := usecase.NewHelloWorldUsecase(r.hr)
 	ph := usecase.NewPostUsecase(r.pr)
 	uh := usecase.NewUserUsecase(r.ur)
-	sh := usecase.NewSketchUsecase(r.sh)
+	sh := usecase.NewSketchUsecase(r.sh, r.ur)
 
 	return &apiUsecase{
 		hu: hu,

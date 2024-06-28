@@ -24,6 +24,16 @@ type CreateScketchesRequest struct {
 	File openapi_types.File `json:"file"`
 }
 
+// CreateScketchesResponse defines model for CreateScketchesResponse.
+type CreateScketchesResponse struct {
+	CreatedAt time.Time `json:"createdAt"`
+	Id        int       `json:"id"`
+	ImageUrl  string    `json:"imageUrl"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	UserId    int       `json:"userId"`
+	UserName  string    `json:"userName"`
+}
+
 // GetAllPostsResponse defines model for GetAllPostsResponse.
 type GetAllPostsResponse = []Post
 

@@ -6,16 +6,19 @@ import (
 	"myapp/internal/openapi"
 	"myapp/internal/usecase"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 type SketchHandler struct {
 	su usecase.SketchUsecase
+	uu usecase.UserUsecase
 }
 
-func NewSketchHandler(su usecase.SketchUsecase) SketchHandler {
+func NewSketchHandler(su usecase.SketchUsecase, uu usecase.UserUsecase) SketchHandler {
 	return SketchHandler{
 		su: su,
+		uu: uu,
 	}
 }
 
@@ -44,12 +47,27 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 		handleError(ctx, 500, err)
 		return
 	}
+	// userを取得
+	session := sessions.Default(ctx)
+	user, err := h.uu.GetSessionUser(session)
 
-	err = h.su.CreateSketch(&file)
+	if err != nil {
+		handleError(ctx, 500, err)
+		return
+	}
+
+	sketch, err := h.su.CreateSketch(&file, user.ID)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else {
-		ctx.JSON(201, nil)
+		ctx.JSON(201, openapi.CreateScketchesResponse{
+			Id:        sketch.ID,
+			ImageUrl:  config.S3BucketURL + sketch.ImageName,
+			UserId:    sketch.UserID,
+			UserName:  user.Name,
+			CreatedAt: sketch.CreatedAt,
+			UpdatedAt: sketch.UpdatedAt,
+		})
 	}
 }
 
