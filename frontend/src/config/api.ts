@@ -11,4 +11,8 @@ export const config = new Configuration({
 export const axiosInstance = axios.create({
   baseURL: API_ENDPOINT_PATH,
   withCredentials: true,
+  headers: {
+    // Preflightリクエストを送信させるためにカスタムヘッダーを追加
+    "X-Custom-Header-For-Preflight": "true",
+  },
 });
