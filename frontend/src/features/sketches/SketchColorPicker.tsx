@@ -1,13 +1,13 @@
 import type { ChangeEventHandler } from "react";
 
-import { useColorPicker } from "~/shared/hooks/useColorPicker";
+import { useStrokeSetting } from "~/shared/hooks/useStrokeSetting";
 
 export const SketchColorPicker = () => {
-  const { setStrokeColor } = useColorPicker();
+  const { strokeColor, setStrokeColor } = useStrokeSetting();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setStrokeColor(event.target.value);
   };
 
-  return <input className="size-8 rounded p-0.5" type="color" onChange={handleChange} />;
+  return <input className="size-8 rounded p-0.5" type="color" value={strokeColor} onChange={handleChange} />;
 };

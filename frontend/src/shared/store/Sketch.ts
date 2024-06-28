@@ -1,3 +1,5 @@
 import { atom } from "jotai";
 
-export const selectedSketchUrlAtom = atom<string | null>(null);
+import { Sketch } from "~/generated";
+
+export const selectedSketchAtom = atom<Sketch | null>(null);

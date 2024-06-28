@@ -1,13 +1,13 @@
 import type { RefObject } from "react";
 
-import { useColorPicker } from "./useColorPicker";
+import { useStrokeSetting } from "./useStrokeSetting";
 
 type Args = {
   canvasRef: RefObject<HTMLCanvasElement>;
 }
 
 export const useCanvas = ({ canvasRef }: Args) => {
-  const { strokeColor } = useColorPicker();
+  const { strokeColor, strokeWidth } = useStrokeSetting();
 
   const getContext = (): CanvasRenderingContext2D => {
     if (!canvasRef.current) {
@@ -19,8 +19,8 @@ export const useCanvas = ({ canvasRef }: Args) => {
       throw new Error("Failed to get 2d context");
     }
 
-    // 線の色を指定する
-    ctx.strokeStyle = strokeColor;
+    ctx.strokeStyle = strokeColor; // 線の色を指定する
+    ctx.lineWidth = strokeWidth; // 線の太さを指定する
 
     return ctx;
   };
