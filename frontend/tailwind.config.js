@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       height: {
-        "screen-minus-h20": "calc(100vh - 80px)",
+        "screen-without-header": "calc(100vh - 80px)",
       },
     },
     colors: {
