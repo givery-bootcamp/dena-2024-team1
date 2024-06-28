@@ -11,14 +11,16 @@ import (
 )
 
 type SketchHandler struct {
-	su usecase.SketchUsecase
-	uu usecase.UserUsecase
+	su  usecase.SketchUsecase
+	uu  usecase.UserUsecase
+	ssu usecase.SSEUsecase
 }
 
-func NewSketchHandler(su usecase.SketchUsecase, uu usecase.UserUsecase) SketchHandler {
+func NewSketchHandler(su usecase.SketchUsecase, uu usecase.UserUsecase, ssu usecase.SSEUsecase) SketchHandler {
 	return SketchHandler{
-		su: su,
-		uu: uu,
+		su:  su,
+		uu:  uu,
+		ssu: ssu,
 	}
 }
 
@@ -59,16 +61,19 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 	sketch, err := h.su.CreateSketch(ctx, &file, user.ID)
 	if err != nil {
 		handleError(ctx, 500, err)
-	} else {
-		ctx.JSON(201, openapi.CreateScketchesResponse{
-			Id:        sketch.ID,
-			ImageUrl:  config.S3BucketURL + sketch.ImageName,
-			UserId:    sketch.UserID,
-			UserName:  user.Name,
-			CreatedAt: sketch.CreatedAt,
-			UpdatedAt: sketch.UpdatedAt,
-		})
 	}
+
+	// SSE
+	h.ssu.NotifyClients("sketch created")
+
+	ctx.JSON(201, openapi.CreateScketchesResponse{
+		Id:        sketch.ID,
+		ImageUrl:  config.S3BucketURL + sketch.ImageName,
+		UserId:    sketch.UserID,
+		UserName:  user.Name,
+		CreatedAt: sketch.CreatedAt,
+		UpdatedAt: sketch.UpdatedAt,
+	})
 }
 
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
