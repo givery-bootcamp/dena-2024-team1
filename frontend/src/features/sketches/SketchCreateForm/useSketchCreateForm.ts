@@ -25,14 +25,22 @@ export const useSketchCreateForm = ({ canvasRef }: Args) => {
   };
 
   const createSketch = async () => {
+    const showAlert = () => console.log("投稿に失敗しました");
     const file = await convertCanvasToFile();
-    const result = await sketchApi.postSketch(file);
+    try {
+      const result = await sketchApi.postSketch(file);
 
-    if (result.status !== 201) {
-      throw new Error("画像のアップロードに失敗しました");
+      if (result.status === 201) {
+        navigate("/");
+      } else {
+        showAlert();
+        console.error("スケッチの投稿に失敗しました");
+      }
+
+    } catch (error) {
+      showAlert();
+      console.error(error);
     }
-
-    navigate("/sketches");
   };
 
   return { createSketch };
