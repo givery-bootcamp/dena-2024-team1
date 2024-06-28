@@ -74,13 +74,13 @@ func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.
 
 func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	var posts []model.Post
-	var ErrDatabase = errors.New("database error")
+
 	postResult := r.Conn.Find(&posts)
 	if postResult.Error != nil {
 		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
 			return []entity.Post{}, nil
 		}
-		return nil, ErrDatabase
+		return nil, postResult.Error
 	}
 	var users []model.User
 	userResult := r.Conn.Find(&users)
