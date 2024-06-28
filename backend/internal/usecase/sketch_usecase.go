@@ -24,3 +24,7 @@ func (u *SketchUsecase) CreateSketch(ctx context.Context, file *multipart.File, 
 func (u *SketchUsecase) GetSketches(ctx context.Context) ([]entity.Sketch, error) {
 	return u.sketchRepository.GetAll(ctx)
 }
+
+func (u *SketchUsecase) DeleteSketch(ctx context.Context, id int) error {
+	return u.sketchRepository.DeleteSketch(ctx, id)
+}
