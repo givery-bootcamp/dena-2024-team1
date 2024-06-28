@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 const strokeColorAtom = atom<string>("black");
 const strokeWidthAtom = atom<number>(1);
 
-export const useColorPicker = () => {
+export const useStrokeSetting = () => {
   const [strokeColor, setStrokeColor] = useAtom(strokeColorAtom);
   const [strokeWidth, setStrokeWidth] = useAtom(strokeWidthAtom);
 

@@ -1,13 +1,13 @@
 import type { RefObject } from "react";
 
-import { useColorPicker } from "./useColorPicker";
+import { useStrokeSetting } from "./useStrokeSetting";
 
 type Args = {
   canvasRef: RefObject<HTMLCanvasElement>;
 }
 
 export const useCanvas = ({ canvasRef }: Args) => {
-  const { strokeColor, strokeWidth } = useColorPicker();
+  const { strokeColor, strokeWidth } = useStrokeSetting();
 
   const getContext = (): CanvasRenderingContext2D => {
     if (!canvasRef.current) {

@@ -3,10 +3,10 @@ import type { FC, ReactNode } from "react";
 import { SketchColorPicker } from "./SketchColorPicker";
 
 import { Input } from "~/shared/components/Input";
-import { useColorPicker } from "~/shared/hooks/useColorPicker";
+import { useStrokeSetting } from "~/shared/hooks/useStrokeSetting";
 
 export const SketchTool = () => {
-  const { strokeWidth, setStrokeWidth } = useColorPicker();
+  const { strokeWidth, setStrokeWidth } = useStrokeSetting();
 
   return (
     <div className="flex w-56 flex-col gap-8">
