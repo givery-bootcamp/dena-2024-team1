@@ -35,7 +35,7 @@ func (r *PostRepository) CreatePost(ctx context.Context, p *entity.Post) (*entit
 		Where(userEntity.IDEQ(p.UserID)).
 		Only(ctx)
 	if err != nil {
-		return &entity.Post{}, fmt.Errorf("failed to get user: %w", err)
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	resultPost := entity.Post{
