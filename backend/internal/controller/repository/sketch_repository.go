@@ -51,12 +51,15 @@ func (r *SketchRepository) CreateSketch(file *multipart.File, userID int) (entit
 
 func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {
 	var sketches []model.Sketch
+	// データベースのエラー定義
+	var ErrDatabase = errors.New("database error")
 	sketchResult := r.Conn.Find(&sketches)
 	if sketchResult.Error != nil {
+		// レコードが見つからない場合のエラー定義
 		if errors.Is(sketchResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return []entity.Sketch{}, nil
 		}
-		return nil, sketchResult.Error
+		return nil, ErrDatabase
 	}
 	var users []model.User
 	userResult := r.Conn.Find(&users)
