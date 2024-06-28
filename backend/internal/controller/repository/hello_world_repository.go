@@ -1,41 +1,35 @@
 package repository
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"myapp/internal/controller/repository/model"
+	"myapp/internal/controller/repository/ent"
+	helloworldEntity "myapp/internal/controller/repository/ent/helloworld"
 	"myapp/internal/entity"
 
 	repositoryIF "myapp/internal/usecase/repository"
-
-	"gorm.io/gorm"
 )
 
 type HelloWorldRepository struct {
-	Conn *gorm.DB
+	Conn *ent.Client
 }
 
-func NewHelloWorldRepository(conn *gorm.DB) repositoryIF.HelloWorldRepository {
+func NewHelloWorldRepository(conn *ent.Client) repositoryIF.HelloWorldRepository {
 	return &HelloWorldRepository{
 		Conn: conn,
 	}
 }
 
-func (r *HelloWorldRepository) Get(lang string) (*entity.HelloWorld, error) {
-	var obj model.HelloWorld
-	result := r.Conn.Where("lang = ?", lang).First(&obj)
-	fmt.Printf("%+v\n", result)
-	fmt.Printf("%+v\n", obj)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, result.Error
+func (r *HelloWorldRepository) Get(ctx context.Context, lang string) (*entity.HelloWorld, error) {
+	hw, err := r.Conn.HelloWorld.Query().Where(helloworldEntity.Lang(lang)).First(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hello world message: %w", err)
 	}
-	return convertHelloWorldRepositoryModelToEntity(&obj), nil
+
+	return convertHelloWorldRepositoryModelToEntity(hw), nil
 }
 
-func convertHelloWorldRepositoryModelToEntity(v *model.HelloWorld) *entity.HelloWorld {
+func convertHelloWorldRepositoryModelToEntity(v *ent.HelloWorld) *entity.HelloWorld {
 	return &entity.HelloWorld{
 		Lang:    v.Lang,
 		Message: v.Message,

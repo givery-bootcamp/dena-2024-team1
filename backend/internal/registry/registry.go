@@ -46,7 +46,7 @@ type apiUsecase struct {
 
 func newAPIUsecase(r apiRepository) *apiUsecase {
 	hu := usecase.NewHelloWorldUsecase(r.hr)
-	ph := usecase.NewPostUsecase(r.pr)
+	ph := usecase.NewPostUsecase(r.pr, r.ur)
 	uh := usecase.NewUserUsecase(r.ur)
 	sh := usecase.NewSketchUsecase(r.sh, r.ur)
 
