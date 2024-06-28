@@ -139,6 +139,25 @@ paths:
       summary: ''
       tags:
         - sketch
+    delete:
+      description: Delete a sketch.
+      operationId: deleteSketch
+      parameters:
+        - name: sketchId
+          in: path
+          description: The unique identifier of the sketch.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: no content.
+        "400":
+          description: Failed to delete a sketch.
+      tags:
+        - sketch
   '/posts/{postId}':
     get:
       description: Retrieve post information by ID.
