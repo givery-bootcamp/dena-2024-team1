@@ -18,6 +18,9 @@ export function SketchListPage() {
   }, [dispatch]);
 
   if (!sketches) return <p>Loading...</p>;
+  if (sketches.length === 0) {
+    return <div className="flex h-screen items-center justify-center text-4xl text-gray-200">まだ投稿がありません</div>;
+  }
   return (
     <div className="h-screen-without-header w-screen">
       <InfiniteCanvas>
