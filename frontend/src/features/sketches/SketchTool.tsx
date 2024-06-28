@@ -2,7 +2,12 @@ import type { FC, ReactNode } from "react";
 
 import { SketchColorPicker } from "./SketchColorPicker";
 
+import { Input } from "~/shared/components/Input";
+import { useColorPicker } from "~/shared/hooks/useColorPicker";
+
 export const SketchTool = () => {
+  const { strokeWidth, setStrokeWidth } = useColorPicker();
+
   return (
     <div className="flex w-56 flex-col gap-8">
       <h5 className="text-lg font-bold">お絵描きツール</h5>
@@ -13,7 +18,7 @@ export const SketchTool = () => {
         </Section>
         <Section>
           <SectionTitle>線の太さ</SectionTitle>
-          <p className="text-sm font-semibold">Coming soon...</p>
+          <Input className="w-full" type="number" value={strokeWidth} onChange={(event) => setStrokeWidth(Number(event.target.value))} />
         </Section>
       </div>
     </div>
