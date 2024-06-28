@@ -19,7 +19,7 @@ export function SketchListPage() {
 
   if (!sketches) return <p>Loading...</p>;
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen-without-header w-screen">
       <InfiniteCanvas>
         <div className="p-10">
           <SketchList sketches={sketches} />

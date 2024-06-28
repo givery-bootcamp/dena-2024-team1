@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
@@ -20,16 +21,16 @@ func NewPostUsecase(pr repository.PostRepository, ur repository.UserRepository) 
 	}
 }
 
-func (u *PostUsecase) GetPosts() ([]entity.Post, error) {
-	return u.postRepository.GetAll()
+func (u *PostUsecase) GetPosts(ctx context.Context) ([]entity.Post, error) {
+	return u.postRepository.GetAll(ctx)
 }
 
-func (u *PostUsecase) GetPost(id int) (*entity.Post, error) {
-	return u.postRepository.Get(id)
+func (u *PostUsecase) GetPost(ctx context.Context, id int) (*entity.Post, error) {
+	return u.postRepository.Get(ctx, id)
 }
 
-func (u *PostUsecase) CreatePost(post entity.Post, session sessions.Session) (*entity.Post, error) {
-	user, err := u.userRepository.GetSessionUser(session)
+func (u *PostUsecase) CreatePost(ctx context.Context, post entity.Post, session sessions.Session) (*entity.Post, error) {
+	user, err := u.userRepository.GetSessionUser(ctx, session)
 	if err != nil {
 		return nil, err
 	}
@@ -37,11 +38,11 @@ func (u *PostUsecase) CreatePost(post entity.Post, session sessions.Session) (*e
 	post.UserID = user.ID
 	post.UserName = user.Name
 
-	return u.postRepository.CreatePost(&post)
+	return u.postRepository.CreatePost(ctx, &post)
 }
 
-func (u *PostUsecase) UpdatePost(id int, title string, body string, session sessions.Session) (*entity.Post, error) {
-	canModify, err := u.canModifyPostBySessionUser(id, session)
+func (u *PostUsecase) UpdatePost(ctx context.Context, id int, title string, body string, session sessions.Session) (*entity.Post, error) {
+	canModify, err := u.canModifyPostBySessionUser(ctx, id, session)
 	if err != nil {
 		return nil, err
 	}
@@ -49,11 +50,11 @@ func (u *PostUsecase) UpdatePost(id int, title string, body string, session sess
 		return nil, errors.New("cannot modify post")
 	}
 
-	return u.postRepository.UpdatePost(id, title, body)
+	return u.postRepository.UpdatePost(ctx, id, title, body)
 }
 
-func (u *PostUsecase) DeletePost(id int, session sessions.Session) error {
-	canModify, err := u.canModifyPostBySessionUser(id, session)
+func (u *PostUsecase) DeletePost(ctx context.Context, id int, session sessions.Session) error {
+	canModify, err := u.canModifyPostBySessionUser(ctx, id, session)
 	if err != nil {
 		return err
 	}
@@ -61,16 +62,16 @@ func (u *PostUsecase) DeletePost(id int, session sessions.Session) error {
 		return errors.New("cannot modify post")
 	}
 
-	return u.postRepository.DeletePost(id)
+	return u.postRepository.DeletePost(ctx, id)
 }
 
-func (u *PostUsecase) canModifyPostBySessionUser(postID int, session sessions.Session) (bool, error) {
-	post, err := u.postRepository.Get(postID)
+func (u *PostUsecase) canModifyPostBySessionUser(ctx context.Context, postID int, session sessions.Session) (bool, error) {
+	post, err := u.postRepository.Get(ctx, postID)
 	if err != nil {
 		return false, err
 	}
 
-	user, err := u.userRepository.GetSessionUser(session)
+	user, err := u.userRepository.GetSessionUser(ctx, session)
 	if err != nil {
 		return false, err
 	}

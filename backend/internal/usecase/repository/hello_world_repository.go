@@ -2,9 +2,10 @@
 package repository
 
 import (
+	"context"
 	"myapp/internal/entity"
 )
 
 type HelloWorldRepository interface {
-	Get(lang string) (*entity.HelloWorld, error)
+	Get(ctx context.Context, lang string) (*entity.HelloWorld, error)
 }
