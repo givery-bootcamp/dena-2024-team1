@@ -74,6 +74,8 @@ func (h *SketchHandler) CreateSketch(ctx *gin.Context) {
 func (h *SketchHandler) GetSketches(ctx *gin.Context) {
 	ss, err := h.su.GetSketches(ctx)
 	var response openapi.GetAllSketchesResponse
+	response = []openapi.Sketch{}
+
 	for _, s := range ss {
 		imageURL := config.S3BucketURL + s.ImageName
 		response = append(response, openapi.Sketch{
