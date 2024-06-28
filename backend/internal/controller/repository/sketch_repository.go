@@ -40,7 +40,7 @@ func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.Fil
 		SetUserID(userID).
 		Save(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create sketch: %w", err)
+		return &entity.Sketch{}, fmt.Errorf("failed to create sketch: %w", err)
 	}
 
 	user, err := r.Conn.User.
@@ -48,7 +48,7 @@ func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.Fil
 		Where(userEntity.IDEQ(userID)).
 		Only(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user: %w", err)
+		return &entity.Sketch{}, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	return &entity.Sketch{
@@ -67,7 +67,7 @@ func (r *SketchRepository) GetAll(ctx context.Context) ([]entity.Sketch, error) 
 		WithUser().
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get all sketches: %w", err)
+		return []entity.Sketch{}, fmt.Errorf("failed to get all sketches: %w", err)
 	}
 
 	var sketches []entity.Sketch
