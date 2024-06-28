@@ -11,7 +11,7 @@ export const SketchModal = ({ selectedSketch, setSelectedSketch }: Props) => {
     <Modal isOpen={true} onClose={() => setSelectedSketch(null)}>
       <div className="flex h-full flex-col">
         <img src={selectedSketch.image_url} alt={selectedSketch.image_url} />
-        <div className="absolute bottom-2 right-2 text-xl font-semibold text-gray-200">
+        <div className="absolute bottom-3 right-4 text-xl font-semibold text-gray-200">
           {selectedSketch.user_name}
         </div>
       </div>
