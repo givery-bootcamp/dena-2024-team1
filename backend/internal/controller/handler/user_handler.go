@@ -27,7 +27,7 @@ func (h UserHandler) Signup(ctx *gin.Context) {
 
 	session := sessions.Default(ctx)
 
-	err := h.uu.Signup(session, req.UserName, req.Password)
+	err := h.uu.Signup(ctx, session, req.UserName, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -44,7 +44,7 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 	}
 
 	session := sessions.Default(ctx)
-	err := h.uu.Signin(session, req.UserName, req.Password)
+	err := h.uu.Signin(ctx, session, req.UserName, req.Password)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -56,7 +56,7 @@ func (h UserHandler) Signin(ctx *gin.Context) {
 func (h UserHandler) GetSessionUser(ctx *gin.Context) {
 	// セッションからユーザー情報を取得
 	session := sessions.Default(ctx)
-	user, err := h.uu.GetSessionUser(session)
+	user, err := h.uu.GetSessionUser(ctx, session)
 
 	if err != nil {
 		handleError(ctx, 500, err)
@@ -67,7 +67,7 @@ func (h UserHandler) GetSessionUser(ctx *gin.Context) {
 
 func (h UserHandler) Signout(ctx *gin.Context) {
 	session := sessions.Default(ctx)
-	err := h.uu.Signout(session)
+	err := h.uu.Signout(ctx, session)
 
 	if err != nil {
 		handleError(ctx, 500, err)

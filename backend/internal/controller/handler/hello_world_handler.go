@@ -24,7 +24,7 @@ func (h *HelloWorldHandler) HelloWorld(ctx *gin.Context) {
 		handleError(ctx, 400, err)
 		return
 	}
-	result, err := h.hu.Execute(lang)
+	result, err := h.hu.Execute(ctx, lang)
 	if err != nil {
 		handleError(ctx, 500, err)
 	} else if result != nil {
