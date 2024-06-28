@@ -9,7 +9,6 @@ import { PostDetailPage } from "~/pages/PostDetailPage";
 import { CreatePostPage } from "~/pages/CreatePostPage";
 import { PostEditPage } from "~/pages/PostEditPage";
 import { PostListPage } from "~/pages/PostListPage";
-import { Event } from "~/app/Event";
 
 export const AppRoute = () => {
   return (
@@ -20,7 +19,7 @@ export const AppRoute = () => {
       <Route path="/posts" element={<PostListPage />} />
       <Route path="/posts/:postId" element={<PostDetailPage />} />
       <Route path="/posts/create" element={<CreatePostPage />} />
-      <Route path="/posts/:postId/edit" element={<PostEditPage />} />
+      <Route path="/posts/:postId/edit" element={<PostEditPage />} />z
       <Route path="*" element={<Navigate to={"/"} />} />
     </Routes>
   );
@@ -30,7 +29,6 @@ export const AppRouteNoAuth = () => {
   return (
     <Routes>
       <Route path="/" element={<SketchListPage/>} />
-      <Route path="/event" element={<Event />} />
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<Navigate to={"/"} />} />
