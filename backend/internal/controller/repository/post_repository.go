@@ -50,16 +50,13 @@ func (r *PostRepository) CreatePost(post *entity.Post) (*entity.Post, error) {
 func (r *PostRepository) UpdatePost(id int, title string, body string) (*entity.Post, error) {
 	var existngPost model.Post
 
-	// postIDが存在するかを確認するためのクエリを作っている
 	q := r.Conn.Where("id = ?", id)
-	// クエリの内容を下にして、特定のIDの投稿を探している
 	err := q.Find(&existngPost).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	// 存在していたら書き込み
 	if err := r.Conn.Model(&existngPost).Updates(model.Post{Title: title, Body: body}).Error; err != nil {
 		return nil, err
 	}
@@ -80,7 +77,7 @@ func (r *PostRepository) GetAll() ([]entity.Post, error) {
 	postResult := r.Conn.Find(&posts)
 	if postResult.Error != nil {
 		if errors.Is(postResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return []entity.Post{}, nil
 		}
 		return nil, postResult.Error
 	}
