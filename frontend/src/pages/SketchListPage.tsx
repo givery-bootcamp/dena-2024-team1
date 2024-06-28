@@ -14,7 +14,19 @@ export function SketchListPage() {
   const [selectedSketchUrl, setSelectedSketchUrl] = useAtom(selectedSketchUrlAtom);
 
   useEffect(() => {
-    dispatch(APIService.getSketches());
+    // スケッチを取得する関数
+    const fetchSketches = () => {
+      dispatch(APIService.getSketches());
+    };
+
+    // コンポーネントがマウントされた時にスケッチを取得
+    fetchSketches();
+
+    // 定期的にスケッチを更新
+    const interval = setInterval(fetchSketches, 1000); // 1秒ごとに更新
+
+    // コンポーネントのアンマウント時にインターバルをクリア
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   if (!sketches) return <p>Loading...</p>;
