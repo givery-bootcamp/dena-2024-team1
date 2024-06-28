@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from "react";
+import type { ChangeEventHandler, FC, ReactNode } from "react";
 
 import { SketchColorPicker } from "./SketchColorPicker";
 
@@ -7,6 +7,13 @@ import { useStrokeSetting } from "~/shared/hooks/useStrokeSetting";
 
 export const SketchTool = () => {
   const { strokeWidth, setStrokeWidth } = useStrokeSetting();
+
+  const handleStorkeWidthChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    // 太さは0未満にはできない
+    const value = Math.min(0, Number(event.target.value));
+
+    setStrokeWidth(value);
+  };
 
   return (
     <div className="flex w-56 flex-col gap-8">
@@ -18,7 +25,12 @@ export const SketchTool = () => {
         </Section>
         <Section>
           <SectionTitle>線の太さ</SectionTitle>
-          <Input className="w-full" type="number" value={strokeWidth} onChange={(event) => setStrokeWidth(Number(event.target.value))} />
+          <Input
+            className="w-full"
+            type="number"
+            value={strokeWidth}
+            onChange={handleStorkeWidthChange}
+          />
         </Section>
       </div>
     </div>
