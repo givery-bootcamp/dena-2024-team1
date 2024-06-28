@@ -9,8 +9,8 @@ export const SketchTool = () => {
   const { strokeWidth, setStrokeWidth } = useStrokeSetting();
 
   const handleStorkeWidthChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    // 太さは0未満にはできない
-    const value = Math.min(0, Number(event.target.value));
+    // 太さは1未満にはできない
+    const value = Math.max(1, Number(event.target.value));
 
     setStrokeWidth(value);
   };
