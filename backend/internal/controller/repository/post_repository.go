@@ -64,6 +64,9 @@ func (r *PostRepository) UpdatePost(ctx context.Context, id int, title string, b
 		Query().
 		Where(userEntity.IDEQ(post.UserID)).
 		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
 
 	resultPost := entity.Post{
 		ID:        post.ID,
