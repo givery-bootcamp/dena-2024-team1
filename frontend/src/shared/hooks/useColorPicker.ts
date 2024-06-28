@@ -1,13 +1,9 @@
 import { atom, useAtom } from "jotai";
 
-const strokeColorAtom = atom<"black" | "red">("black");
+const strokeColorAtom = atom<string>("black");
 
 export const useColorPicker = () => {
   const [strokeColor, setStrokeColor] = useAtom(strokeColorAtom);
 
-  const toggleStrokeColor = () => {
-    setStrokeColor((prev) => (prev === "black" ? "red" : "black"));
-  };
-
-  return { strokeColor, toggleStrokeColor };
+  return { strokeColor, setStrokeColor };
 };
