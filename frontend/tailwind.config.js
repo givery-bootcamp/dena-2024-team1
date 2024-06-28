@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        "screen-without-header": "calc(100vh - 80px)",
+      },
+    },
     colors: {
       black: "#333333",
       white: "#FFFFFF",
@@ -16,6 +20,9 @@ export default {
       },
       border: "#CACACA",
       alert: "#DD5757",
+    },
+    zIndex: {
+      modal: 10,
     },
   },
   plugins: [],

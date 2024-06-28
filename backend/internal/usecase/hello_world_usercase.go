@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"myapp/internal/entity"
 	"myapp/internal/usecase/repository"
 )
@@ -15,6 +16,6 @@ func NewHelloWorldUsecase(r repository.HelloWorldRepository) HelloWorldUsecase {
 	}
 }
 
-func (u *HelloWorldUsecase) Execute(lang string) (*entity.HelloWorld, error) {
-	return u.repository.Get(lang)
+func (u *HelloWorldUsecase) Execute(ctx context.Context, lang string) (*entity.HelloWorld, error) {
+	return u.repository.Get(ctx, lang)
 }

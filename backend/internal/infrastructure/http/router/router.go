@@ -1,7 +1,6 @@
 package router
 
 import (
-	"myapp/internal/infrastructure/database"
 	"myapp/internal/infrastructure/http/middleware"
 	"myapp/internal/registry"
 
@@ -9,10 +8,7 @@ import (
 )
 
 func NewRouter() *gin.Engine {
-	db := database.SetupDB()
-
 	router := gin.Default()
-	router.Use(middleware.Transaction(db))
 	router.Use(middleware.Cors())
 	router.Use(middleware.Session())
 

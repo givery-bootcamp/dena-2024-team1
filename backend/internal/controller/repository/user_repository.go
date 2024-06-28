@@ -1,11 +1,13 @@
 package repository
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"myapp/internal/config"
-	"myapp/internal/controller/repository/model"
+	"myapp/internal/controller/repository/ent"
+	userEntity "myapp/internal/controller/repository/ent/user"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
@@ -14,7 +16,7 @@ import (
 )
 
 type UserRepository struct {
-	Conn *gorm.DB
+	Conn *ent.Client
 }
 
 // This struct is same as entity model
@@ -25,84 +27,71 @@ type User struct {
 	gorm.Model
 }
 
-func NewUserRepository(conn *gorm.DB) repositoryIF.UserRepository {
+func NewUserRepository(conn *ent.Client) repositoryIF.UserRepository {
 	return &UserRepository{
 		Conn: conn,
 	}
 }
 
-func (r *UserRepository) GetAll() ([]entity.User, error) {
-	var users []model.User
-	result := r.Conn.Find(&users)
-	fmt.Printf("%+v\n", result)
-	fmt.Printf("%+v\n", users)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, result.Error
+func (r *UserRepository) GetAll(ctx context.Context) ([]entity.User, error) {
+	us, err := r.Conn.User.Query().All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get all users: %w", err)
 	}
-	return convertUserRepositoryModelToEntity(users), nil
-}
 
-func convertUserRepositoryModelToEntity(ps []model.User) []entity.User {
 	var users []entity.User
-
-	for _, p := range ps {
+	for _, u := range us {
 		users = append(users, entity.User{
-			ID:        int(p.ID),
-			Name:      p.Name,
-			CreatedAt: p.CreatedAt,
-			UpdatedAt: p.UpdatedAt,
+			ID:        u.ID,
+			Name:      u.Name,
+			CreatedAt: u.CreatedAt,
+			UpdatedAt: u.UpdatedAt,
 		})
 	}
-	return users
+	return users, nil
 }
 
-func (r *UserRepository) CreateUser(username, password string) (entity.User, error) {
-	user := User{
-		Name:     username,
-		Password: password,
+func (r *UserRepository) CreateUser(ctx context.Context, username, password string) (*entity.User, error) {
+	u, err := r.Conn.User.
+		Create().
+		SetName(username).
+		SetPassword(password).
+		Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
-	result := r.Conn.Create(&user)
-	if result.Error != nil {
-		return entity.User{}, result.Error
+
+	user := entity.User{
+		ID:        u.ID,
+		Name:      u.Name,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
 	}
-	return entity.User{
-		ID:        int(user.ID),
-		Name:      user.Name,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+	return &user, nil
 }
 
-func (r *UserRepository) GetUserByUsername(username string) (entity.User, error) {
-	var user User
-	result := r.Conn.Where("name = ?", username).First(&user)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return entity.User{}, nil
-		}
-		return entity.User{}, result.Error
+func (r *UserRepository) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
+	u, err := r.Conn.User.Query().Where(userEntity.Name(username)).First(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
-	return entity.User{
-		ID:        int(user.ID),
-		Name:      user.Name,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+
+	user := entity.User{
+		ID:        u.ID,
+		Name:      u.Name,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
+	}
+	return &user, nil
 }
 
-func (r *UserRepository) GetUserPassword(username string) (string, error) {
-	var user User
-	result := r.Conn.Where("name = ?", username).First(&user)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return "", nil
-		}
-		return "", result.Error
+func (r *UserRepository) GetUserPassword(ctx context.Context, username string) (*string, error) {
+	u, err := r.Conn.User.Query().Where(userEntity.Name(username)).First(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
-	return user.Password, nil
+
+	return &u.Password, nil
 }
 
 // Sessionに保存するユーザー情報の構造体
@@ -111,7 +100,7 @@ type SesssionUser struct {
 	Name string
 }
 
-func (r *UserRepository) SaveSession(session sessions.Session, user entity.User) error {
+func (r *UserRepository) SaveSession(ctx context.Context, session sessions.Session, user entity.User) error {
 	// セッションに保存するユーザー情報
 	sessionUser := SesssionUser{
 		ID:   user.ID,
@@ -136,32 +125,31 @@ func (r *UserRepository) SaveSession(session sessions.Session, user entity.User)
 	return nil
 }
 
-func (r *UserRepository) GetSessionUser(session sessions.Session) (entity.User, error) {
+func (r *UserRepository) GetSessionUser(ctx context.Context, session sessions.Session) (*entity.User, error) {
 	// セッションからユーザー情報を取得
 	sessionUserJson, ok := session.Get(config.SessionKey).(string)
 	if !ok {
-		return entity.User{}, errors.New("session is empty")
+		return nil, errors.New("session is empty")
 	}
 
 	// セッションから取得したユーザー情報を構造体に変換
 	var sessionUser SesssionUser
 	err := json.Unmarshal([]byte(sessionUserJson), &sessionUser)
 	if err != nil {
-		return entity.User{}, err
+		return nil, err
 	}
 
 	// ユーザー情報を取得
-	user, err := r.GetUserByUsername(sessionUser.Name)
-	fmt.Printf("get session user: %+v\n", user)
+	user, err := r.GetUserByUsername(ctx, sessionUser.Name)
 
 	if err != nil {
-		return entity.User{}, err
+		return nil, err
 	}
 
 	return user, nil
 }
 
-func (r *UserRepository) DeleteSessionUser(session sessions.Session) error {
+func (r *UserRepository) DeleteSessionUser(ctx context.Context, session sessions.Session) error {
 	// セッションを削除
 	session.Clear()
 	err := session.Save()

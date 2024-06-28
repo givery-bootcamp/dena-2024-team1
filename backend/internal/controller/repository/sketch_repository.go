@@ -1,88 +1,86 @@
 package repository
 
 import (
-	"errors"
+	"context"
+	"fmt"
 	"mime/multipart"
 
-	"myapp/internal/controller/repository/model"
+	userEntity "myapp/internal/controller/repository/ent/user"
 	"myapp/internal/entity"
 	repositoryIF "myapp/internal/usecase/repository"
 
+	"myapp/internal/controller/repository/ent"
 	"myapp/internal/infrastructure/filestorage"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type SketchRepository struct {
-	Conn *gorm.DB
+	Conn *ent.Client
 }
 
-func NewSketchRepository(conn *gorm.DB) repositoryIF.SketchRepository {
+func NewSketchRepository(conn *ent.Client) repositoryIF.SketchRepository {
 	return &SketchRepository{
 		Conn: conn,
 	}
 }
 
-func (r *SketchRepository) CreateSketch(file *multipart.File) error {
+func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.File, userID int) (*entity.Sketch, error) {
 	fn := uuid.New().String() + ".png"
 
 	s3FileStorage := filestorage.SetUpS3()
 	err := s3FileStorage.UploadFile(file, fn)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("failed to create s3: %w", err)
 	}
 
-	sketch := model.Sketch{
-		ImageName: fn,
-		// TODO：ここでUserIDをどうやって取得するか
-		UserID: 1,
+	sketch, err := r.Conn.Sketch.
+		Create().
+		SetImageName(fn).
+		SetUserID(userID).
+		Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create sketch: %w", err)
 	}
-	sketchResult := r.Conn.Create(&sketch)
-	if sketchResult.Error != nil {
-		return sketchResult.Error
+
+	user, err := r.Conn.User.
+		Query().
+		Where(userEntity.IDEQ(userID)).
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
-	return nil
+
+	return &entity.Sketch{
+		ID:        sketch.ID,
+		ImageName: sketch.ImageName,
+		UserID:    sketch.UserID,
+		UserName:  user.Name,
+		CreatedAt: sketch.CreatedAt,
+		UpdatedAt: sketch.UpdatedAt,
+	}, nil
 }
 
-func (r *SketchRepository) GetAll() ([]entity.Sketch, error) {
-	var sketches []model.Sketch
-	sketchResult := r.Conn.Find(&sketches)
-	if sketchResult.Error != nil {
-		if errors.Is(sketchResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, sketchResult.Error
+func (r *SketchRepository) GetAll(ctx context.Context) ([]entity.Sketch, error) {
+	ss, err := r.Conn.Sketch.
+		Query().
+		WithUser().
+		All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get all sketches: %w", err)
 	}
-	var users []model.User
-	userResult := r.Conn.Find(&users)
-	if userResult.Error != nil {
-		if errors.Is(userResult.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, userResult.Error
-	}
-	return convertSketchesRepositoryModelToEntities(sketches, users), nil
-}
 
-func convertSketchesRepositoryModelToEntities(ss []model.Sketch, us []model.User) []entity.Sketch {
 	var sketches []entity.Sketch
-
 	for _, s := range ss {
-		sketch := entity.Sketch{
-			ID:        int(s.ID),
+		sketches = append(sketches, entity.Sketch{
+			ID:        s.ID,
 			ImageName: s.ImageName,
 			UserID:    s.UserID,
+			UserName:  s.Edges.User.Name,
 			CreatedAt: s.CreatedAt,
 			UpdatedAt: s.UpdatedAt,
-		}
-		for _, u := range us {
-			if s.UserID == int(u.ID) {
-				sketch.UserName = u.Name
-				break
-			}
-		}
-		sketches = append(sketches, sketch)
+		})
 	}
-	return sketches
+
+	return sketches, nil
 }
