@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        "screen-minus-h20": "calc(100vh - 80px)",
+      },
+    },
     colors: {
       black: "#333333",
       white: "#FFFFFF",
