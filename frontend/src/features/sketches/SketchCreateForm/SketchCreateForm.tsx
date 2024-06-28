@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import { useSketchCreateForm } from "./useSketchCreateForm";
 
-import { SketchColorPicker } from "~/features/sketches/SketchColorPicker";
+import { SketchTool } from "~/features/sketches/SketchTool";
 import { SketchHandWriter } from "~/features/sketches/SketchHandWriter";
 import { Button } from "~/shared/components/Button";
 import { useCanvas } from "~/shared/hooks/useCanvas";
@@ -18,14 +18,14 @@ export const SketchCreateForm = () => {
         <div>
           <SketchHandWriter canvasRef={canvasRef} />
         </div>
-
         <div className="flex flex-col gap-2">
           <Button variant="secondary" onClick={clearCanvas}>リセット</Button>
           <Button onClick={createSketch}>投稿する</Button>
         </div>
       </div>
-      <div className="ml-10">
-        <SketchColorPicker />
+
+      <div className="ml-8">
+        <SketchTool />
       </div>
     </div>
   );
