@@ -14,6 +14,7 @@ func Session() gin.HandlerFunc {
 	store.Options(sessions.Options{
 		MaxAge:   60 * 60 * 24 * 7,
 		HttpOnly: true,
+		Secure:   true,
 	})
 
 	return sessions.Sessions(config.SessionName, store)
