@@ -19,7 +19,7 @@ export const AppRoute = () => {
       <Route path="/posts" element={<PostListPage />} />
       <Route path="/posts/:postId" element={<PostDetailPage />} />
       <Route path="/posts/create" element={<CreatePostPage />} />
-      <Route path="/posts/:postId/edit" element={<PostEditPage />} />z
+      <Route path="/posts/:postId/edit" element={<PostEditPage />} />
       <Route path="*" element={<Navigate to={"/"} />} />
     </Routes>
   );
