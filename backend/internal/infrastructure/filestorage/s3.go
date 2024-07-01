@@ -5,16 +5,13 @@ import (
 	"log"
 	"mime/multipart"
 	"myapp/internal/config"
+	filestorageIF "myapp/internal/controller/repository/filestorage"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
-
-type FileStorage interface {
-	UploadFile(file *multipart.File, fileName string) error
-}
 
 func setUpFileStorage() (*s3.S3, error) {
 	cred := credentials.NewStaticCredentials(config.AwsAccessKeyID, config.AwsSecretAccessKey, "")
@@ -73,6 +70,6 @@ func (S3FileStorage S3FileStorage) UploadFile(file *multipart.File, fileName str
 	return nil
 }
 
-func SetUpS3() (fileStorage FileStorage) {
+func SetUpS3() filestorageIF.FileStorage {
 	return S3FileStorage{}
 }

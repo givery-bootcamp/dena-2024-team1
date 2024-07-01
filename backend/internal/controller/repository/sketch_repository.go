@@ -10,26 +10,27 @@ import (
 	repositoryIF "myapp/internal/usecase/repository"
 
 	"myapp/internal/controller/repository/ent"
-	"myapp/internal/infrastructure/filestorage"
+	"myapp/internal/controller/repository/filestorage"
 
 	"github.com/google/uuid"
 )
 
 type SketchRepository struct {
-	Conn *ent.Client
+	Conn    *ent.Client
+	Storage filestorage.FileStorage
 }
 
-func NewSketchRepository(conn *ent.Client) repositoryIF.SketchRepository {
+func NewSketchRepository(conn *ent.Client, stor filestorage.FileStorage) repositoryIF.SketchRepository {
 	return &SketchRepository{
-		Conn: conn,
+		Conn:    conn,
+		Storage: stor,
 	}
 }
 
 func (r *SketchRepository) CreateSketch(ctx context.Context, file *multipart.File, userID int) (*entity.Sketch, error) {
 	fn := uuid.New().String() + ".png"
 
-	s3FileStorage := filestorage.SetUpS3()
-	err := s3FileStorage.UploadFile(file, fn)
+	err := r.Storage.UploadFile(file, fn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create s3: %w", err)
 	}

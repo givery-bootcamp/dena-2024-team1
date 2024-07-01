@@ -5,6 +5,7 @@ import (
 	"myapp/internal/controller/handler"
 	repoImp "myapp/internal/controller/repository"
 	"myapp/internal/infrastructure/database"
+	"myapp/internal/infrastructure/filestorage"
 	"myapp/internal/usecase"
 	repoIf "myapp/internal/usecase/repository"
 )
@@ -73,11 +74,12 @@ type apiRepository struct {
 
 func newAPIRepository() *apiRepository {
 	db := database.SetupDB()
+	str := filestorage.SetUpS3()
 
 	hr := repoImp.NewHelloWorldRepository(db)
 	pr := repoImp.NewPostRepository(db)
 	ur := repoImp.NewUserRepository(db)
-	sh := repoImp.NewSketchRepository(db)
+	sh := repoImp.NewSketchRepository(db, str)
 
 	return &apiRepository{
 		hr: hr,
