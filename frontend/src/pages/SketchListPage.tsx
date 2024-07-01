@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useAtom } from "jotai";
+import { AlertCircle } from "react-feather";
 
 import { useAppDispatch, useAppSelector } from "~/shared/hooks";
 import { APIService } from "~/shared/services";
@@ -46,6 +47,14 @@ export function SketchListPage() {
   useSketchObserver(onSketchCreated);
 
   if (!sketches) return <p>Loading...</p>;
+  if (sketches.length === 0) {
+    return (
+      <div className="flex h-screen-without-header flex-col items-center justify-center space-y-4 text-gray-200">
+        <AlertCircle size={80} />
+        <p className="text-4xl font-semibold">まだ投稿がありません</p>
+      </div>
+    );
+  }
   return (
     <div className="h-screen-without-header w-screen">
       <InfiniteCanvas>
