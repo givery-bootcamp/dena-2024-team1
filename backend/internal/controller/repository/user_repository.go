@@ -12,19 +12,10 @@ import (
 	repositoryIF "myapp/internal/usecase/repository"
 
 	"github.com/gin-contrib/sessions"
-	"gorm.io/gorm"
 )
 
 type UserRepository struct {
 	Conn *ent.Client
-}
-
-// This struct is same as entity model
-// However define again for training
-type User struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	gorm.Model
 }
 
 func NewUserRepository(conn *ent.Client) repositoryIF.UserRepository {
