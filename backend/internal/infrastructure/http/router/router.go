@@ -28,6 +28,7 @@ func setupEndpoints(router *gin.Engine) {
 	router.POST("/signup", apiHandler.UserHandler.Signup)
 	router.POST("/signin", apiHandler.UserHandler.Signin)
 	router.GET("/sketches", apiHandler.SketchHandler.GetSketches)
+	router.GET("/events", apiHandler.SSEHandler.ServeHTTP)
 
 	authMiddleware := middleware.Auth()
 
