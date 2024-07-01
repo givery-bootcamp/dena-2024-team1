@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 
 import { useSketchCreateForm } from "./useSketchCreateForm";
 
@@ -11,6 +11,13 @@ export const SketchCreateForm = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { clearCanvas } = useCanvas({ canvasRef });
   const { createSketch } = useSketchCreateForm({ canvasRef });
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+
+  const handleCreateSketch = async () => {
+    setIsSubmitting(true);
+    await createSketch();
+    setIsSubmitting(false);
+  };
 
   return (
     <div className="flex">
@@ -20,7 +27,7 @@ export const SketchCreateForm = () => {
         </div>
         <div className="flex gap-2">
           <Button className="w-full" variant="secondary" onClick={clearCanvas}>リセットする</Button>
-          <Button className="w-full" onClick={createSketch}>投稿する</Button>
+          <Button className="w-full" onClick={handleCreateSketch} disabled={isSubmitting}>投稿する</Button>
         </div>
       </div>
 
