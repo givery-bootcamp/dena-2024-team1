@@ -85,6 +85,7 @@ func (r *PostRepository) GetAll(ctx context.Context) ([]entity.Post, error) {
 		Query().
 		WithUser().
 		All(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get posts: %w", err)
 	}

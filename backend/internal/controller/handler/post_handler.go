@@ -23,7 +23,7 @@ func NewPostHandler(pu usecase.PostUsecase) PostHandler {
 
 func (h *PostHandler) GetPosts(ctx *gin.Context) {
 	ps, err := h.pu.GetPosts(ctx)
-	var response openapi.GetAllPostsResponse
+	response := make([]openapi.Post, 0)
 	for _, p := range ps {
 		response = append(response, openapi.Post{
 			Body:      p.Body,
@@ -38,10 +38,8 @@ func (h *PostHandler) GetPosts(ctx *gin.Context) {
 
 	if err != nil {
 		handleError(ctx, 500, err)
-	} else if response != nil {
-		ctx.JSON(200, response)
 	} else {
-		handleError(ctx, 404, errors.New("not found"))
+		ctx.JSON(200, response)
 	}
 }
 

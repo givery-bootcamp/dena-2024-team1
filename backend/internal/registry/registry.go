@@ -14,6 +14,7 @@ type APIHandler struct {
 	PostHandler       handler.PostHandler
 	UserHandler       handler.UserHandler
 	SketchHandler     handler.SketchHandler
+	SSEHandler        handler.SSEHandler
 }
 
 func NewAPIHandler() *APIHandler {
@@ -27,21 +28,24 @@ func newAPIHandler(u apiUsecase) *APIHandler {
 	hh := handler.NewHelloWorldHandler(u.hu)
 	ph := handler.NewPostHandler(u.ph)
 	uh := handler.NewUserHandler(u.uh)
-	sh := handler.NewSketchHandler(u.sh, u.uh)
+	sh := handler.NewSketchHandler(u.sh, u.uh, u.ssu)
+	ssh := handler.NewSSEHandler(u.ssu)
 
 	return &APIHandler{
 		HelloWorldHandler: hh,
 		PostHandler:       ph,
 		UserHandler:       uh,
 		SketchHandler:     sh,
+		SSEHandler:        ssh,
 	}
 }
 
 type apiUsecase struct {
-	hu usecase.HelloWorldUsecase
-	ph usecase.PostUsecase
-	uh usecase.UserUsecase
-	sh usecase.SketchUsecase
+	hu  usecase.HelloWorldUsecase
+	ph  usecase.PostUsecase
+	uh  usecase.UserUsecase
+	sh  usecase.SketchUsecase
+	ssu usecase.SSEUsecase
 }
 
 func newAPIUsecase(r apiRepository) *apiUsecase {
@@ -49,12 +53,14 @@ func newAPIUsecase(r apiRepository) *apiUsecase {
 	ph := usecase.NewPostUsecase(r.pr, r.ur)
 	uh := usecase.NewUserUsecase(r.ur)
 	sh := usecase.NewSketchUsecase(r.sh, r.ur)
+	ssu := usecase.NewSSEUsecase()
 
 	return &apiUsecase{
-		hu: hu,
-		ph: ph,
-		uh: uh,
-		sh: sh,
+		hu:  hu,
+		ph:  ph,
+		uh:  uh,
+		sh:  sh,
+		ssu: ssu,
 	}
 }
 
